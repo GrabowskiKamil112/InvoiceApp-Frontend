@@ -11,7 +11,7 @@ module.exports = {
 
     plugins: [
         new webpack.DefinePlugin({
-            'process.env.name': JSON.stringify('Vishwas'),
+            'process.env.name': JSON.stringify('WIP'),
         }),
         new ReactRefreshWebpackPlugin(),
     ],
