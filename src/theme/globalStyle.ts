@@ -14,7 +14,6 @@ const GlobalStyle = createGlobalStyle`
     }
     body{
         font-size: 1.6rem;
-        background-color: purple;
         font-family: 'Spartan', sans-serif;
     }
 `
