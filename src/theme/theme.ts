@@ -1,4 +1,10 @@
 const theme = {
+    sizes: {
+        s: '1rem',
+        m: '1.2rem',
+        l: '1.5rem',
+        xl: '1.8rem',
+    },
     light: {
         body: {
             bg: '#f8f8fb',
