@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         outline: 0;
+        outline: 1px dashed rgba(255, 0, 0, 0.3)
     }
     html{
         font-size:62.5%;
