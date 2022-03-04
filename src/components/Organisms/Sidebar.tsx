@@ -15,6 +15,12 @@ const StyledWrapper = styled.div`
     width: 110px;
     height: 100%;
     display: flex;
+
+    @media (max-width: 900px) {
+        flex-direction: row;
+        height: 80px;
+        width: 100%;
+    }
 `
 
 const Sidebar = () => {

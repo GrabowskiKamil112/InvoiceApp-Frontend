@@ -17,6 +17,15 @@ const StyledWrapper = styled.div`
         bottom: 0;
         border-radius: 20px 0 20px 0;
     }
+
+    @media (max-width: 900px) {
+        height: 100%;
+        width: 80px;
+        ::before {
+            content: '';
+            height: 40px;
+        }
+    }
 `
 const Img = styled.img`
     width: 40px;
@@ -24,6 +33,9 @@ const Img = styled.img`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    @media (max-width: 900px) {
+        width: 31px;
+    }
 `
 
 const Logo = () => {

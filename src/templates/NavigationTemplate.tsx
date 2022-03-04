@@ -4,6 +4,10 @@ import Sidebar from '../components/Organisms/Sidebar'
 
 const StyledWrapper = styled.div`
     margin-left: 110px;
+
+    @media (max-width: 900px) {
+        margin: 110px 0 0 0;
+    }
 `
 
 const NavigationTemplate: React.FC = ({ children }) => {
