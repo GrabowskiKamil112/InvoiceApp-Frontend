@@ -17,6 +17,7 @@ const StyledWrapper = styled.div`
     display: flex;
 
     @media (max-width: 900px) {
+        border-radius: 0;
         flex-direction: row;
         height: 80px;
         width: 100%;

@@ -21,6 +21,7 @@ const StyledWrapper = styled.div`
     @media (max-width: 900px) {
         height: 100%;
         width: 80px;
+        border-radius: 0 20px 20px 0;
         ::before {
             content: '';
             height: 40px;
