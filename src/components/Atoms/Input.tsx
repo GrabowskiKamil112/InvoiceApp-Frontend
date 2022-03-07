@@ -7,43 +7,46 @@ import { Field } from 'formik'
 import { CSSTransition } from 'react-transition-group'
 
 const StyledLabel = styled.label`
-    font-size: 1rem;
-    // enter from
+    color: #c90000;
+    font-size: 1.1rem;
+    margin-top: 4px;
     &.fade-enter {
         opacity: 0;
         transition: opacity 900ms;
     }
-
-    // enter to
     &.fade-enter-active {
         opacity: 1;
-        transition: opacity 900ms;
     }
-
-    // exit from
     &.fade-exit {
         opacity: 1;
         transition: opacity 900ms;
     }
-
-    // exit to
     &.fade-exit-active {
         opacity: 0;
-        transition: opacity 900ms;
     }
 `
 const StyledInput = styled(Field)`
-    margin-top: 10px;
+    font-size: ${({ theme }) => theme.sizes.l};
+    font-weight: 700;
+    margin-top: 18px;
     height: 38px;
-    width: 220px;
-    background-color: #bdbdbd;
-    border-radius: 50px;
+    width: 260px;
+    color: #dfe3fa;
+    background-color: #17192e;
     border: none;
     background-image: url(${usernameIcon});
     background-size: 15px;
     background-position: 15px 50%;
     background-repeat: no-repeat;
     padding: 10px 20px 10px 40px;
+    position: relative;
+    &:hover + div {
+        transform: scaleX(1);
+    }
+
+    &::placeholder {
+        font-weight: 500;
+    }
 
     ${({ name }) =>
         name !== 'username' &&
@@ -56,6 +59,16 @@ const StyledInput = styled(Field)`
               `)}
 `
 
+const FancyBar = styled.div`
+    margin: 0;
+    width: 260px;
+    height: 1px;
+    background-color: #d86074;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.2s ease-in-out;
+`
+
 interface InputProps {
     validationError?: string
     value?: string
@@ -66,15 +79,26 @@ interface InputProps {
 }
 
 const Input: React.FC<InputProps> = ({ type, placeholder, name, validationError, value }) => {
-    const [active, setActive] = useState(true)
+    const [active, setActive] = useState(false)
 
     useEffect(() => {
+        if (active) {
+            return
+        }
+
         setActive(!active)
     }, [validationError])
 
     return (
         <>
-            <StyledInput type={type} placeholder={placeholder} name={name} value={value} />
+            <StyledInput
+                type={type}
+                placeholder={placeholder}
+                name={name}
+                value={value}
+                autocomplete="off"
+            />
+            <FancyBar />
             {validationError && (
                 <CSSTransition in={active} classNames="fade" timeout={900} unmountOnExit>
                     <StyledLabel htmlFor={name}>{validationError}</StyledLabel>

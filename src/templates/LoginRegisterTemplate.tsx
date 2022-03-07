@@ -10,11 +10,12 @@ const StyledBg = styled.div`
     position: relative;
 `
 const StyledContainer = styled.div`
+    font-family: 'Poppins', sans-serif;
     width: 85%;
-    max-width: 360px;
-    box-shadow: 0px 0px 11px 3px rgba(66, 68, 90, 0.5);
+    max-width: 400px;
+    box-shadow: 0px 0px 11px 3px #1e213988;
     border-radius: 15px;
-    background-color: ${({ theme }) => theme.light.body.bg};
+    background-color: ${({ theme }) => theme.dark.sidebar.bg};
     position: absolute;
     top: 50%;
     left: 50%;

@@ -2,7 +2,7 @@ const theme = {
     sizes: {
         s: '1rem',
         m: '1.2rem',
-        l: '1.5rem',
+        l: '1.4rem',
         xl: '1.8rem',
     },
     light: {
