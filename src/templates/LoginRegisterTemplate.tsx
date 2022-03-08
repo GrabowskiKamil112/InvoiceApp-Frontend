@@ -9,10 +9,21 @@ const StyledBg = styled.div`
     width: 100%;
     position: relative;
 `
-const StyledContainer = styled.div`
+interface IStyledContainer {
+    isRegister: boolean
+    numOfErrors: number
+}
+const StyledContainer = styled.div<IStyledContainer>`
     font-family: 'Poppins', sans-serif;
+    transition: max-height 0.5s ease;
     width: 85%;
     max-width: 400px;
+    overflow-y: hidden;
+    max-height: ${({ isRegister, numOfErrors }) => {
+        return isRegister ? `${430 + numOfErrors * 17}px` : `${310 + numOfErrors * 17}px`
+    }};
+
+    transform: scaleY(4);
     box-shadow: 0px 0px 11px 3px #1e213988;
     border-radius: 15px;
     background-color: ${({ theme }) => theme.dark.sidebar.bg};
@@ -25,11 +36,20 @@ const StyledContainer = styled.div`
     align-items: center;
     padding: 20px;
 `
-
-const LoginRegisterTemplate: React.FC = ({ children }) => {
+interface ILoginRegisterTemplate {
+    isRegister: boolean
+    numOfErrors: number
+}
+const LoginRegisterTemplate: React.FC<ILoginRegisterTemplate> = ({
+    children,
+    isRegister,
+    numOfErrors,
+}) => {
     return (
         <StyledBg>
-            <StyledContainer>{children}</StyledContainer>
+            <StyledContainer numOfErrors={numOfErrors} isRegister={isRegister}>
+                {children}
+            </StyledContainer>
         </StyledBg>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { Children, useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Input from '../components/Atoms/Input'
 import LoginRegisterTemplate from '../templates/LoginRegisterTemplate'
@@ -19,6 +19,14 @@ const StyledForm = styled(Form)`
     flex-direction: column;
     transition: all 0.5s ease-in-out;
 `
+const MagicDiv = styled.div`
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
 interface Values {
     username: string
     email: string
@@ -28,9 +36,25 @@ interface Values {
 
 export default function LoginRegister() {
     const [isRegister, toggleRegister] = useState<boolean>(false)
+    const [numOfErrors, setNumOfErrors] = useState<number>(0)
+    const formRef = useRef(null)
+
+    const handleNumOfErrors = () => {
+        setTimeout(() => {
+            if (formRef.current == null) {
+                return
+            } else {
+                setNumOfErrors(formRef.current?.getElementsByTagName('label').length)
+            }
+        }, 1)
+    }
+
+    useEffect(() => {
+        console.log('useeeeeeeeeeeeeeeffect')
+    })
 
     return (
-        <LoginRegisterTemplate>
+        <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={isRegister}>
             <StyledHeader>{isRegister ? 'Create your account' : 'welcome'}</StyledHeader>
             <Formik
                 validateOnChange={false}
@@ -43,10 +67,12 @@ export default function LoginRegister() {
                 }}
                 validationSchema={SignupSchema}
                 onSubmit={(values: Values) => {
+                    console.log(formRef.current)
+
                     alert(JSON.stringify(values, null, 2))
                 }}>
                 {({ errors, values }) => (
-                    <StyledForm>
+                    <StyledForm ref={formRef}>
                         <Input
                             validationError={errors.username}
                             type="text"
@@ -81,13 +107,17 @@ export default function LoginRegister() {
                         )}
 
                         <Button width="150px" type="submit">
-                            Submit
+                            <MagicDiv onClick={() => handleNumOfErrors()}>Submit</MagicDiv>
                         </Button>
                     </StyledForm>
                 )}
             </Formik>
-            <Paragraph>Don't have an account?</Paragraph>
-            <Button loginToggle onClick={() => toggleRegister(!isRegister)}>
+            <Paragraph>Don&apos;t have an account?</Paragraph>
+            <Button
+                loginToggle
+                onClick={() => {
+                    return toggleRegister(!isRegister)
+                }}>
                 Sign up
             </Button>
         </LoginRegisterTemplate>

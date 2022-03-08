@@ -20,6 +20,7 @@ module.exports = {
         'prettier',
         'plugin:prettier/recommended',
     ],
+    plugins: ['react-hooks'],
     rules: {
         'no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars': ['error'],
@@ -28,5 +29,7 @@ module.exports = {
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off',
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
     },
 }

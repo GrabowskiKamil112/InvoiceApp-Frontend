@@ -40,6 +40,13 @@ const StyledInput = styled(Field)`
     background-repeat: no-repeat;
     padding: 10px 20px 10px 40px;
     position: relative;
+    @media (max-width: 340px) {
+        width: 190px;
+    }
+    &:focus {
+        outline: none;
+    }
+
     &:hover + div {
         transform: scaleX(1);
     }
@@ -67,6 +74,9 @@ const FancyBar = styled.div`
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.2s ease-in-out;
+    @media (max-width: 340px) {
+        width: 190px;
+    }
 `
 
 interface InputProps {
