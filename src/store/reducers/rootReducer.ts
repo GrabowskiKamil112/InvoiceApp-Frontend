@@ -1,6 +1,9 @@
-const initial = { userID: '123' }
+const initialState = { userID: '1234' }
 
-const rootReducer = (state: any = initial, action: any): any => {
+export interface IRootState {
+    [key: string]: string | null
+}
+const rootReducer = (state: IRootState = initialState, action: any): any => {
     return { ...state }
 }
 
