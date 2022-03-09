@@ -1,4 +1,4 @@
-import React, { Children, useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 import Input from '../components/Atoms/Input'
 import LoginRegisterTemplate from '../templates/LoginRegisterTemplate'
@@ -41,17 +41,9 @@ export default function LoginRegister() {
 
     const handleNumOfErrors = () => {
         setTimeout(() => {
-            if (formRef.current == null) {
-                return
-            } else {
-                setNumOfErrors(formRef.current?.getElementsByTagName('label').length)
-            }
+            setNumOfErrors(formRef.current?.getElementsByTagName('label').length)
         }, 1)
     }
-
-    useEffect(() => {
-        console.log('useeeeeeeeeeeeeeeffect')
-    })
 
     return (
         <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={isRegister}>
