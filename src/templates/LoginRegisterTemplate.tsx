@@ -20,7 +20,7 @@ const StyledContainer = styled.div<IStyledContainer>`
     max-width: 400px;
     overflow-y: hidden;
     max-height: ${({ isRegister, numOfErrors }) => {
-        return isRegister ? `${430 + numOfErrors * 17}px` : `${310 + numOfErrors * 17}px`
+        return isRegister ? `${440 + numOfErrors * 17}px` : `${310 + numOfErrors * 17}px`
     }};
 
     transform: scaleY(4);

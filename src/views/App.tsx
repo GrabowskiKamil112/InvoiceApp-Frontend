@@ -3,9 +3,10 @@ import MainTemplate from '../templates/mainTemplate'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginRegister from './LoginRegister'
 import Home from './Home'
-import store from '../store'
+import { store } from '../store'
 import { connect, Provider } from 'react-redux'
 import { IRootState } from '../store/reducers/rootReducer'
+import 'bulma/css/bulma.min.css'
 
 const App = () => {
     return (
@@ -20,7 +21,7 @@ const App = () => {
                             path={'/home'}
                             element={
                                 <ProtectedRoute redirectTo="/login" userID={null}>
-                                    <Home user={null} />
+                                    <Home />
                                 </ProtectedRoute>
                             }
                         />

@@ -1,9 +1,18 @@
-const initialState = { userID: '1234' }
-
-export interface IRootState {
-    [key: string]: string | null
+const initialState = {
+    userID: '1234',
+    invoices: [
+        {
+            BillTo: 'kamil',
+            sentTo: 'me',
+        },
+        {
+            BillTo: 'kamdsfgdfgil',
+            sentTo: 'medfgdfg',
+        },
+    ],
 }
-const rootReducer = (state: IRootState = initialState, action: any): any => {
+
+const rootReducer = (state = initialState, action: any) => {
     return { ...state }
 }
 

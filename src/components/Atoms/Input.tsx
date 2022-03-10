@@ -31,6 +31,7 @@ const StyledInput = styled(Field)`
     margin-top: 18px;
     height: 38px;
     width: 260px;
+    border-radius: 1px;
     color: #dfe3fa;
     background-color: #17192e;
     border: none;

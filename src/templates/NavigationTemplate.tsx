@@ -4,7 +4,8 @@ import Sidebar from '../components/Organisms/Sidebar'
 
 const StyledWrapper = styled.div`
     margin-left: 110px;
-
+    padding: 50px;
+    height: 100%;
     @media (max-width: 900px) {
         margin: 110px 0 0 0;
     }

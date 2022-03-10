@@ -57,9 +57,9 @@ export default function LoginRegister() {
                     password: '',
                     passwordConfirm: '',
                 }}
-                validationSchema={SignupSchema}
+                validationSchema={isRegister ? SignupSchema : undefined}
                 onSubmit={(values: Values) => {
-                    console.log(formRef.current)
+                    console.log(isRegister, values)
 
                     alert(JSON.stringify(values, null, 2))
                 }}>
