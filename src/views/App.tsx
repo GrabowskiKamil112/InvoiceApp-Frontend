@@ -3,10 +3,9 @@ import MainTemplate from '../templates/mainTemplate'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginRegister from './LoginRegister'
 import Home from './Home'
-import { store } from '../store'
-import { connect, Provider } from 'react-redux'
-import { IRootState } from '../store/reducers/rootReducer'
-import 'bulma/css/bulma.min.css'
+import { store, useAppSelector } from '../store'
+import { Provider } from 'react-redux'
+import InvoiceDetails from './InvoiceDetails'
 
 const App = () => {
     return (
@@ -20,9 +19,17 @@ const App = () => {
                         <Route
                             path={'/home'}
                             element={
-                                <ProtectedRoute redirectTo="/login" userID={null}>
+                                <RequireAuth redirectTo="/login">
                                     <Home />
-                                </ProtectedRoute>
+                                </RequireAuth>
+                            }
+                        />
+                        <Route
+                            path={'/invoice/:id'}
+                            element={
+                                <RequireAuth redirectTo="/login">
+                                    <InvoiceDetails />
+                                </RequireAuth>
                             }
                         />
                     </Routes>
@@ -31,21 +38,13 @@ const App = () => {
         </Provider>
     )
 }
-
 type RequireAuthProps = {
     redirectTo: string
     children: JSX.Element
-    userID: string | null
 }
-const RequireAuth = ({ children, redirectTo, userID }: RequireAuthProps) => {
-    const child = React.cloneElement(children, { user: userID })
-    return userID ? child : <Navigate to={redirectTo} />
-}
-
-const mapStateToProps = (state: IRootState) => {
-    const { userID } = state
-    return { userID }
+const RequireAuth = ({ children, redirectTo }: RequireAuthProps) => {
+    const isAuthenticated = useAppSelector((state) => state.userID)
+    return isAuthenticated ? children : <Navigate to={redirectTo} />
 }
 
-const ProtectedRoute = connect(mapStateToProps, null)(RequireAuth)
 export default App
