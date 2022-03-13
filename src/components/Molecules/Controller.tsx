@@ -33,7 +33,7 @@ const StyledWrapper = styled.div`
     }
 `
 
-function Controller() {
+const Controller = () => {
     const { activeTheme, toggleTheme } = useContext(PageContext)
 
     return (

@@ -98,7 +98,7 @@ export default function LoginRegister() {
                             />
                         )}
 
-                        <Button width="150px" type="submit">
+                        <Button type="submit" variant="submit">
                             <MagicDiv onClick={() => handleNumOfErrors()}>Submit</MagicDiv>
                         </Button>
                     </StyledForm>
@@ -106,7 +106,7 @@ export default function LoginRegister() {
             </Formik>
             <Paragraph>Don&apos;t have an account?</Paragraph>
             <Button
-                loginToggle
+                variant="loginToggle"
                 onClick={() => {
                     return toggleRegister(!isRegister)
                 }}>

@@ -1,6 +1,10 @@
 import styled, { css } from 'styled-components'
 
-const Button = styled.button<any>`
+const Button = styled.button<{
+    width?: string
+    color?: string
+    variant?: 'loginToggle' | 'submit'
+}>`
     cursor: pointer;
     text-decoration: none;
     padding: 0;
@@ -14,8 +18,8 @@ const Button = styled.button<any>`
     text-transform: uppercase;
     align-self: center;
 
-    ${({ loginToggle }) =>
-        loginToggle &&
+    ${({ variant }) =>
+        variant == 'loginToggle' &&
         css`
             color: #c55164;
             background: none;
@@ -23,8 +27,8 @@ const Button = styled.button<any>`
             margin-top: 5px;
         `};
 
-    ${({ type }) =>
-        type === 'submit' &&
+    ${({ variant }) =>
+        variant == 'submit' &&
         css`
             margin: 15px 0 30px 0;
             background-color: #c55164;

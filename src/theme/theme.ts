@@ -3,7 +3,7 @@ const theme = {
         s: '1rem',
         m: '1.2rem',
         l: '1.4rem',
-        xl: '1.8rem',
+        header: '3.2rem',
     },
     light: {
         body: {

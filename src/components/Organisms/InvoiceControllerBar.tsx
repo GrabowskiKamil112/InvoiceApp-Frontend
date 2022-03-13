@@ -2,25 +2,36 @@ import React from 'react'
 import styled from 'styled-components'
 import Button from '../Atoms/Button'
 import Paragraph from '../Atoms/Paragraph'
+import Header from '../Atoms/Header'
+import FilterBy from '../Atoms/FilterBy'
 
 const StyledWrapper = styled.div`
     margin-bottom: 64px;
+    height: 58px;
     display: flex;
+    align-items: center;
     flex-direction: row;
     justify-content: space-between;
+    position: relative;
+`
+const StyledButton = styled(Button)`
+    //display: inline-block;
+`
+const StyledDiv = styled.div`
+    display: flex;
 `
 
-export const InvoiceControllerBar = () => {
+const InvoiceControllerBar = () => {
     return (
         <StyledWrapper>
             <div>
-                <h3>header</h3>
+                <Header size="big">Invoices</Header>
                 <Paragraph>asdfdasdf</Paragraph>
             </div>
-            <div>
-                <div>fil;terbystatus</div>
-                <Button>btn</Button>
-            </div>
+            <StyledDiv>
+                <FilterBy />
+                <StyledButton width="140px">btn</StyledButton>
+            </StyledDiv>
         </StyledWrapper>
     )
 }
