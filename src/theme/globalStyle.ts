@@ -14,9 +14,11 @@ const GlobalStyle = createGlobalStyle`
         font-size:62.5%;
     }
     body{
-       
+        line-height: 1.125;
+    letter-spacing: -0.25px;
         font-size: 1.6rem;
         font-family: 'Spartan', sans-serif;
+       
     }
 `
 

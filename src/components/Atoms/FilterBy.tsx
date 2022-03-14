@@ -11,7 +11,6 @@ const StyledWrapper = styled.div`
     cursor: pointer;
     position: relative;
 `
-
 const StyledButton = styled.button`
     cursor: pointer;
     display: flex;
@@ -44,7 +43,7 @@ const Dropdown = styled.div<{ themeCtx: string }>`
     top: 65px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
     padding: 24px;
     border-radius: 8px;
     width: 192px;
@@ -67,6 +66,39 @@ const StyledInput = styled.input`
     width: 16px;
     height: 16px;
     border: none;
+    &[type='radio'] {
+        background-color: rgb(30, 33, 57);
+        border-radius: 2px;
+        overflow: hidden;
+        cursor: pointer;
+        display: inline-block;
+        height: 15px;
+        margin-right: 15px;
+        position: relative;
+        width: 15px;
+        -webkit-appearance: none;
+        &:hover {
+            outline: 1px solid rgb(124, 93, 250);
+        }
+    }
+    &[type='radio']:after {
+        content: '';
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        position: relative;
+        color: white;
+        width: 100%;
+    }
+    &[type='radio']:checked:after {
+        color: white;
+        background-color: rgb(124, 93, 250);
+        background-image: url('../../../public/assets/icon-check.svg');
+        background-size: 40px 40px;
+        height: 40px;
+        width: 40px;
+    }
 `
 
 const FilterBy = () => {
@@ -74,10 +106,10 @@ const FilterBy = () => {
     const [invoiceFilter, setInvoiceFilter] = useState<string>('')
     const { activeTheme } = useContext(PageContext)
 
-    const onChangeFunc = ({ target }: { target: HTMLInputElement }) => {
-        const { value } = target
+    const handleRadioInput = (e: React.MouseEvent<HTMLInputElement>) => {
+        const { value } = e.target as HTMLInputElement
         if (invoiceFilter === value) {
-            target.checked = false
+            ;(e.target as HTMLInputElement).checked = false
             setInvoiceFilter('')
             return
         }
@@ -99,7 +131,7 @@ const FilterBy = () => {
                             value="paid"
                             id="paid"
                             name="invoiceFilter"
-                            onClick={(e) => onChangeFunc(e)}
+                            onClick={(e) => handleRadioInput(e)}
                         />
                         Paid
                     </label>
@@ -109,7 +141,7 @@ const FilterBy = () => {
                             value="pending"
                             id="pending"
                             name="invoiceFilter"
-                            onClick={(e) => onChangeFunc(e)}
+                            onClick={(e) => handleRadioInput(e)}
                         />
                         Pending
                     </label>
@@ -119,7 +151,7 @@ const FilterBy = () => {
                             value="draft"
                             id="draft"
                             name="invoiceFilter"
-                            onClick={(e) => onChangeFunc(e)}
+                            onClick={(e) => handleRadioInput(e)}
                         />
                         Draft
                     </label>

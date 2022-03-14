@@ -28,7 +28,8 @@ const StyledWrapper = styled.div`
 `
 const mockedInvoices = [
     {
-        type: 'asdf', // draft, pending, paid
+        type: 'paid', // draft, pending, paid
+        id: '2zf8dj90dp',
         from: {
             street: 'asdf',
             city: 'asdf',
@@ -43,14 +44,15 @@ const mockedInvoices = [
             country: 'dfgxcvbxc',
         },
         invoice_date: 'dfgxcvbxc',
-        payment_term: 'asdf',
+        payment_term: '05 Mar 2022',
         description: 'asdf',
         items_list: [],
         userID: 'asdf',
         created: 'asdf',
     },
     {
-        type: 'asdf', // draft, pending, paid
+        type: 'pending', // draft, pending, paid
+        id: '2zf8dj90dp',
         from: {
             street: 'asdf',
             city: 'asdf',
@@ -65,7 +67,7 @@ const mockedInvoices = [
             country: 'dfgxcvbxc',
         },
         invoice_date: 'dfgxcvbxc',
-        payment_term: 'asdf',
+        payment_term: '08 Mar 2922',
         description: 'asdf',
         items_list: [],
         userID: 'asdf',
@@ -88,9 +90,7 @@ const Home: React.FC = () => {
                 <InvoiceControllerBar />
                 <StyledWrapper>
                     {mockedInvoices.map((invoice) => (
-                        <InvoiceShort key={mockedInvoices.indexOf(invoice)}>
-                            {invoice.to.name}
-                        </InvoiceShort>
+                        <InvoiceShort key={mockedInvoices.indexOf(invoice)} content={invoice} />
                     ))}
                 </StyledWrapper>
             </NavigationTemplate>

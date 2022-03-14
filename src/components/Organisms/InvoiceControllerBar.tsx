@@ -13,6 +13,9 @@ const StyledWrapper = styled.div`
     flex-direction: row;
     justify-content: space-between;
     position: relative;
+    & > div > header {
+        margin-bottom: 5px;
+    }
 `
 const StyledButton = styled(Button)`
     //display: inline-block;
@@ -26,7 +29,7 @@ const InvoiceControllerBar = () => {
         <StyledWrapper>
             <div>
                 <Header size="big">Invoices</Header>
-                <Paragraph>asdfdasdf</Paragraph>
+                <Paragraph>There are 2 total invoices.</Paragraph>
             </div>
             <StyledDiv>
                 <FilterBy />
