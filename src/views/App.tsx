@@ -3,9 +3,10 @@ import MainTemplate from '../templates/mainTemplate'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginRegister from './LoginRegister'
 import Home from './Home'
-import { store, useAppSelector } from '../store'
+import { store } from '../store'
 import { Provider } from 'react-redux'
 import InvoiceDetails from './InvoiceDetails'
+import { useAppSelector } from '../store/hooks/hooks'
 
 const App = () => {
     return (
@@ -20,7 +21,7 @@ const App = () => {
                             path={'/home'}
                             element={
                                 <RequireAuth redirectTo="/login">
-                                    <Home />
+                                    <Home invoices={undefined} filterBy={''} />
                                 </RequireAuth>
                             }
                         />

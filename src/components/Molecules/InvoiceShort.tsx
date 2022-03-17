@@ -5,6 +5,7 @@ import { themeNavigator } from '../../utils/utils'
 import Header from '../Atoms/Header'
 import Status from '../Atoms/Status'
 import arrowRight from '../../../public/assets/icon-arrow-right.svg'
+import { Invoice } from '../../Types/Invoice'
 
 const StyledWrapper = styled.div<{ themeCtx: string }>`
     width: 100%;
@@ -35,7 +36,7 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
     }
 `
 interface Props {
-    content: any
+    content: Invoice
 }
 const InvoiceShort: React.FC<Props> = ({ content }) => {
     const { activeTheme } = useContext(PageContext)
@@ -47,7 +48,7 @@ const InvoiceShort: React.FC<Props> = ({ content }) => {
                 {id.substring(0, 6)}
             </Header>
             <div>Due {payment_term}</div>
-            <div>{to.name}</div>
+            <div>{to?.name}</div>
             <Header size="medium">&#163;345</Header>
             <Status type={type}>{type}</Status>
             <img src={arrowRight} alt="arrowRight" />

@@ -1,3 +1,5 @@
+import { CHANGE_FILTER } from '../actions'
+
 const testItems = [
     { name: 'somasdename', quantity: '234', price: '234' },
     { name: 'nafghjme' },
@@ -127,7 +129,16 @@ const initialState = {
 }
 
 const rootReducer = (state = initialState, action: any) => {
-    return { ...state }
+    switch (action.type) {
+        case CHANGE_FILTER:
+            return {
+                ...state,
+                filterBy: action.payload.filter,
+            }
+
+        default:
+            return { ...state }
+    }
 }
 
 export default rootReducer

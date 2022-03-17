@@ -7,6 +7,12 @@ export const themeNavigator = (path: string) => {
     }, theme)
 }
 
+export const generateInfo = (invoiceFilter: string, amount: number) => {
+    return `There ${amount > 1 ? 'are' : 'is'} ${amount} ${invoiceFilter} ${
+        amount > 1 ? 'invoices' : 'invoice'
+    }`
+}
+
 export const SignupSchema = Yup.object().shape({
     username: Yup.string()
         .min(4, 'Too Short! Minimum is 4 signs')

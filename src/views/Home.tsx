@@ -3,7 +3,9 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
 import InvoiceControllerBar from '../components/Organisms/InvoiceControllerBar'
+import { RootState } from '../store'
 import NavigationTemplate from '../templates/NavigationTemplate'
+import { Invoice } from '../Types/Invoice'
 
 const Loading = styled.button<{ visible: boolean }>`
     transition: all 0.6s ease-in;
@@ -27,12 +29,15 @@ const StyledWrapper = styled.div`
     flex-direction: column;
     gap: 1.6rem;
 `
-interface props {
-    invoices: any
-    userID: string
+
+interface HomeProps {
+    invoices: Array<Invoice>
     filterBy: string
 }
-const Home: React.FC<props> = ({ invoices, userID, filterBy }) => {
+
+const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
+    console.log('rerender')
+
     const [isLoading, toggleLoading] = useState(true)
 
     useEffect(() => {
@@ -47,18 +52,22 @@ const Home: React.FC<props> = ({ invoices, userID, filterBy }) => {
             <NavigationTemplate>
                 <InvoiceControllerBar />
                 <StyledWrapper>
-                    {invoices.map((invoice) => (
-                        <InvoiceShort key={invoices.indexOf(invoice)} content={invoice} />
-                    ))}
+                    {invoices
+                        .filter(({ type }: { type: string }) =>
+                            filterBy !== 'total' ? type === filterBy : true
+                        )
+                        .map((invoice: Invoice) => (
+                            <InvoiceShort key={invoices.indexOf(invoice)} content={invoice} />
+                        ))}
                 </StyledWrapper>
             </NavigationTemplate>
         </>
     )
 }
 
-const mapStateToProps = (state) => {
-    console.log(state)
-    return state
+const mapStateToProps = (state: RootState) => {
+    const { invoices, filterBy } = state
+    return { invoices, filterBy }
 }
 
 export default connect(mapStateToProps, null)(Home)

@@ -2,7 +2,7 @@ import React from 'react'
 import styled, { css } from 'styled-components'
 
 interface Props {
-    type: 'draft' | 'pending' | 'green'
+    type: 'draft' | 'pending' | 'paid'
 }
 const switchColor = (type: string) => {
     switch (type) {
