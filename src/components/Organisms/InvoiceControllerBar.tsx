@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Button from '../Atoms/Button'
 import Paragraph from '../Atoms/Paragraph'
@@ -25,14 +25,27 @@ const StyledDiv = styled.div`
 `
 
 const InvoiceControllerBar = () => {
+    const [invoiceFilter, setInvoiceFilter] = useState<string>('total')
+
+    const handleRadioInput = (e: React.MouseEvent<HTMLInputElement>) => {
+        const { value } = e.target as HTMLInputElement
+        if (invoiceFilter === value) {
+            ;(e.target as HTMLInputElement).checked = false
+            setInvoiceFilter('total')
+            return
+        }
+
+        setInvoiceFilter(value)
+    }
+
     return (
         <StyledWrapper>
             <div>
                 <Header size="big">Invoices</Header>
-                <Paragraph>There are 2 total invoices.</Paragraph>
+                <Paragraph>{`There are 2 ${invoiceFilter} invoices.`}</Paragraph>
             </div>
             <StyledDiv>
-                <FilterBy />
+                <FilterBy handleRadioInput={handleRadioInput} />
                 <StyledButton width="140px">btn</StyledButton>
             </StyledDiv>
         </StyledWrapper>

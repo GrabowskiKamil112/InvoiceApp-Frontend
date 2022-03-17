@@ -5,26 +5,125 @@ const testItems = [
 ]
 
 const initialState = {
-    type: 'draft',
-    from: {
-        street: 'wyszynskikiego11a',
-        city: 'oswiecim',
-        post_code: '32-626',
-        country: 'polamnd',
-    },
-    to: {
-        name: 'kamil',
-        email: 'abc$123',
-        city: 'warsaw',
-        post_code: '32-626',
-        country: 'ukraine',
-    },
-    invoice_date: '55.34.1212',
-    payment_term: '12.12.2222',
-    description: 'reeeeeeeeeeeeeeeeee',
-    items_list: testItems,
-    userID: '621bb49dab967326a06a880c',
-    created: 'now',
+    filterBy: 'total',
+    userID: '1234',
+    invoices: [
+        {
+            type: 'paid', // draft, pending, paid
+            id: '2zf8dj90dp',
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'fghjvbngh',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '05 Mar 2022',
+            description: 'asdf',
+            items_list: [testItems],
+            userID: 'asdf',
+            created: 'asdf',
+        },
+        {
+            type: 'pending', // draft, pending, paid
+            id: '2zf8dj90dp',
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'aaaaaaaaa',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '08 Mar 2922',
+            description: 'asdf',
+            items_list: [testItems],
+            userID: 'asdf',
+            created: 'asdf',
+        },
+        {
+            type: 'pending', // draft, pending, paid
+            id: '2zf8dj90dp',
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'aaaaaaaaa',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '08 Mar 2922',
+            description: 'asdf',
+            items_list: [testItems],
+            userID: 'asdf',
+            created: 'asdf',
+        },
+        {
+            type: 'draft', // draft, pending, paid
+            id: '2zf8dj90dp',
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'aaaaaaaaa',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '08 Mar 2922',
+            description: 'asdf',
+            items_list: [testItems],
+            userID: 'asdf',
+            created: 'asdf',
+        },
+        {
+            type: 'paid', // draft, pending, paid
+            id: '2zf8dj90dp',
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'aaaaaaaaa',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '08 Mar 2922',
+            description: 'asdf',
+            items_list: [testItems],
+            userID: 'asdf',
+            created: 'asdf',
+        },
+    ],
 }
 
 const rootReducer = (state = initialState, action: any) => {

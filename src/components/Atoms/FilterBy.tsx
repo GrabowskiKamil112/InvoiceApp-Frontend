@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 import arrowDown from '../../../public/assets/icon-arrow-down.svg'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
+import iconCheck from '../../../public/assets/icon-check.svg'
 
 const StyledWrapper = styled.div`
     height: 47px;
@@ -69,8 +70,8 @@ const StyledInput = styled.input`
     &[type='radio'] {
         background-color: rgb(30, 33, 57);
         border-radius: 2px;
-        overflow: hidden;
         cursor: pointer;
+        overflow: hidden;
         display: inline-block;
         height: 15px;
         margin-right: 15px;
@@ -92,30 +93,22 @@ const StyledInput = styled.input`
         width: 100%;
     }
     &[type='radio']:checked:after {
+        z-index: 999;
         color: white;
         background-color: rgb(124, 93, 250);
-        background-image: url('../../../public/assets/icon-check.svg');
-        background-size: 40px 40px;
-        height: 40px;
-        width: 40px;
+        background-image: url(${iconCheck});
+        background-repeat: no-repeat;
+        background-position: 2px center;
+        background-size: 10px;
+        height: 15px;
+        width: 15px;
     }
 `
+type FilterByProps = { handleRadioInput: (e: React.MouseEvent<HTMLInputElement>) => void }
 
-const FilterBy = () => {
+const FilterBy = ({ handleRadioInput }: FilterByProps) => {
     const [isFilterOpen, toggleFilterOpen] = useState<boolean>(false)
-    const [invoiceFilter, setInvoiceFilter] = useState<string>('')
     const { activeTheme } = useContext(PageContext)
-
-    const handleRadioInput = (e: React.MouseEvent<HTMLInputElement>) => {
-        const { value } = e.target as HTMLInputElement
-        if (invoiceFilter === value) {
-            ;(e.target as HTMLInputElement).checked = false
-            setInvoiceFilter('')
-            return
-        }
-
-        setInvoiceFilter(value)
-    }
 
     return (
         <StyledWrapper onClick={() => toggleFilterOpen(!isFilterOpen)}>
