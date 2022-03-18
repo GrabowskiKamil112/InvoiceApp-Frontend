@@ -6,19 +6,21 @@ import { themeNavigator } from '../../utils/utils'
 const StyledHeader = styled.header<{ themeCtx: string }>`
     font-weight: 700;
     margin: 0;
-    line-height: 36px;
     color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.heading`)};
 
     h1 {
         font-size: 3.2rem;
+        height: 32px;
         font-weight: inherit;
     }
     h2 {
         font-size: 1.6rem;
+        height: 16px;
         font-weight: inherit;
     }
     h3 {
         font-size: 1.2rem;
+        height: 12px;
         font-weight: inherit;
     }
 `

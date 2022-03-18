@@ -21,7 +21,7 @@ const App = () => {
                             path={'/home'}
                             element={
                                 <RequireAuth redirectTo="/login">
-                                    <Home invoices={undefined} filterBy={''} />
+                                    <Home filterBy="total" />
                                 </RequireAuth>
                             }
                         />

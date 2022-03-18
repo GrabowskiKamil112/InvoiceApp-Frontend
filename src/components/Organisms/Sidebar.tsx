@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import Logo from '../Atoms/Logo'
-import Controller from '../Molecules/Controller'
+import AsideController from '../Molecules/AsideController'
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.aside`
     background-color: ${({ theme }) => theme.dark.sidebar.bg};
     justify-content: space-between;
     border-radius: 0 20px 20px 0;
@@ -28,7 +28,7 @@ const Sidebar = () => {
     return (
         <StyledWrapper>
             <Logo />
-            <Controller />
+            <AsideController />
         </StyledWrapper>
     )
 }

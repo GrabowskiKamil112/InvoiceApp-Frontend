@@ -7,7 +7,7 @@ export const themeNavigator = (path: string) => {
     }, theme)
 }
 
-export const generateInfo = (invoiceFilter: string, amount: number) => {
+export const generateInfo = (invoiceFilter: string, amount = 1) => {
     return `There ${amount > 1 ? 'are' : 'is'} ${amount} ${invoiceFilter} ${
         amount > 1 ? 'invoices' : 'invoice'
     }`

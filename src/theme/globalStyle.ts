@@ -11,11 +11,14 @@ const GlobalStyle = createGlobalStyle`
        // outline: 1px dashed rgba(255, 0, 0, 0.5)
     }
     html{
+        overflow: hidden;
         font-size:62.5%;
     }
-    body{
+    body{ 
+        -webkit-font-smoothing: antialiased;
+         -moz-osx-font-smoothing: grayscale;
         line-height: 1.125;
-    letter-spacing: -0.25px;
+        letter-spacing: -0.25px;
         font-size: 1.6rem;
         font-family: 'Spartan', sans-serif;
        

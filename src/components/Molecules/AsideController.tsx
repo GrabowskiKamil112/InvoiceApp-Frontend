@@ -33,7 +33,7 @@ const StyledWrapper = styled.div`
     }
 `
 
-const Controller = () => {
+const AsideController = () => {
     const { activeTheme, toggleTheme } = useContext(PageContext)
 
     return (
@@ -50,4 +50,4 @@ const Controller = () => {
     )
 }
 
-export default Controller
+export default AsideController

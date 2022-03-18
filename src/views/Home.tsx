@@ -31,13 +31,11 @@ const StyledWrapper = styled.div`
 `
 
 interface HomeProps {
-    invoices: Array<Invoice>
-    filterBy: string
+    invoices?: Array<Invoice>
+    filterBy: 'total' | 'pending' | 'draft' | 'paid'
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    console.log('rerender')
-
     const [isLoading, toggleLoading] = useState(true)
 
     useEffect(() => {
@@ -53,7 +51,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                 <InvoiceControllerBar />
                 <StyledWrapper>
                     {invoices
-                        .filter(({ type }: { type: string }) =>
+                        ?.filter(({ type }: { type: string }) =>
                             filterBy !== 'total' ? type === filterBy : true
                         )
                         .map((invoice: Invoice) => (

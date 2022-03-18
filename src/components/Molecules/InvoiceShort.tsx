@@ -7,11 +7,12 @@ import Status from '../Atoms/Status'
 import arrowRight from '../../../public/assets/icon-arrow-right.svg'
 import { Invoice } from '../../Types/Invoice'
 
-const StyledWrapper = styled.div<{ themeCtx: string }>`
+const StyledWrapper = styled.a<{ themeCtx: string }>`
     width: 100%;
     height: 74px;
     border-radius: 8px;
     cursor: pointer;
+
     gap: 10px;
     display: grid;
     align-items: center;
@@ -20,10 +21,14 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
     outline: 1px solid rgba(124, 93, 250, 0);
     padding: 16px 24px;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceItem.bg`)};
+
     font-size: 1.2rem;
-    color: white;
-    & > div:nth-child(2) {
+    color: #ffffff;
+    & > div {
         color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceStatus.text`)};
+        &:nth-child(3) {
+            color: #ffffff;
+        }
     }
     &:hover {
         outline: 1px solid #7c5dfa;
