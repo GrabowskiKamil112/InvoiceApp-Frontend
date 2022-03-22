@@ -1,9 +1,4 @@
-import { Invoice } from '../../Types/Invoice'
-import {
-     ADD_INVOICE_REQUEST, ADD_INVOICE_SUCCESS, ADD_INVOICE_FAILURE,
-     REMOVE_INVOICE_REQUEST, REMOVE_INVOICE_SUCCESS, REMOVE_INVOICE_FAILURE
-} from '../actions'
-import { CHANGE_FILTER } from '../actions'
+import { ADD_INVOICE_REQUEST, REMOVE_INVOICE_REQUEST, CHANGE_FILTER } from '../actions'
 
 const testItems = [
     { name: 'somasdename', quantity: '234', price: '234' },
@@ -133,29 +128,29 @@ const initialState = {
     ],
 }
 
-const rootReducer = (state:InvoiceType = initialState, action: any) => {
-    const {type, payload} = action
+const rootReducer = (state = initialState, action: any) => {
+    const { type, payload } = action
     switch (type) {
         case CHANGE_FILTER:
             return {
                 ...state,
                 filterBy: action.payload.filter,
             }
-            
+
         case ADD_INVOICE_REQUEST:
             const newInvoice = payload.invoice
-                return {
-                    ...state,
-                    [state.invoices.push(newInvoice)]
-                }
+            return {
+                ...state,
+                invoices: state.invoices.push(newInvoice),
+            }
 
         case REMOVE_INVOICE_REQUEST:
-            const newInvoices = state.invoices.filter((invoice)=> (invoice.id !== payload.id))
-                return {
-                    ...state,
-                    [newInvoices]
-                }
-        
+            const newInvoices = state.invoices.filter((invoice) => invoice.id !== payload.id)
+            return {
+                ...state,
+                invoices: newInvoices,
+            }
+
         default:
             return { ...state }
     }

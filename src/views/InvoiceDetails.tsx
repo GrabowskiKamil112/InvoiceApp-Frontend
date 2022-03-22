@@ -1,19 +1,19 @@
 import React from 'react'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import NavigationTemplate from '../templates/NavigationTemplate'
 
+const StyledWrapper = styled.div`
+    background-color: purple;
+`
 const InvoiceDetails = () => {
+    const { id } = useParams()
 
-    let { id } = useParams();
-  useEffect(() => {
-    const fetchedInvoice = await fetchInvoice(id);
-  }, [location]);
-
-    
-    return 
-    <StyledWrapper>
-<div></div>
-    </StyledWrapper>
+    return (
+        <NavigationTemplate>
+            <div></div>
+        </NavigationTemplate>
+    )
 }
 
 export default InvoiceDetails

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
-import {NavLink} from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
 import Header from '../Atoms/Header'
@@ -48,9 +48,8 @@ const InvoiceShort: React.FC<Props> = ({ content }) => {
     const { activeTheme } = useContext(PageContext)
     const { type, id, payment_term, to } = content
     return (
-        <NavLink
-        to={`/invoice/:${id}`}>
-            <StyledWrapper themeCtx={activeTheme} onClick={}>
+        <NavLink to={`/invoice/:${id}`}>
+            <StyledWrapper themeCtx={activeTheme}>
                 <Header size="small">
                     <span>#</span>
                     {id.substring(0, 6)}
@@ -62,8 +61,6 @@ const InvoiceShort: React.FC<Props> = ({ content }) => {
                 <img src={arrowRight} alt="arrowRight" />
             </StyledWrapper>
         </NavLink>
-
-        
     )
 }
 
