@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import styled from 'styled-components'
+import {NavLink} from 'react-router-dom'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
 import Header from '../Atoms/Header'
@@ -47,17 +48,22 @@ const InvoiceShort: React.FC<Props> = ({ content }) => {
     const { activeTheme } = useContext(PageContext)
     const { type, id, payment_term, to } = content
     return (
-        <StyledWrapper themeCtx={activeTheme}>
-            <Header size="small">
-                <span>#</span>
-                {id.substring(0, 6)}
-            </Header>
-            <div>Due {payment_term}</div>
-            <div>{to?.name}</div>
-            <Header size="medium">&#163;345</Header>
-            <Status type={type}>{type}</Status>
-            <img src={arrowRight} alt="arrowRight" />
-        </StyledWrapper>
+        <NavLink
+        to={`/invoice/:${id}`}>
+            <StyledWrapper themeCtx={activeTheme} onClick={}>
+                <Header size="small">
+                    <span>#</span>
+                    {id.substring(0, 6)}
+                </Header>
+                <div>Due {payment_term}</div>
+                <div>{to?.name}</div>
+                <Header size="medium">&#163;345</Header>
+                <Status type={type}>{type}</Status>
+                <img src={arrowRight} alt="arrowRight" />
+            </StyledWrapper>
+        </NavLink>
+
+        
     )
 }
 

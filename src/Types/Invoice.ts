@@ -1,4 +1,4 @@
-﻿export interface Invoice {
+﻿export interface InvoiceType {
     type: 'draft' | 'pending' | 'paid'
     id: string
     from?: From
