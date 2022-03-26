@@ -7,8 +7,9 @@ import Header from '../Atoms/Header'
 import Status from '../Atoms/Status'
 import arrowRight from '../../../public/assets/icon-arrow-right.svg'
 import { Invoice } from '../../Types/Invoice'
+import { useAppSelector } from '../../store/hooks/hooks'
 
-const StyledWrapper = styled.a<{ themeCtx: string }>`
+const StyledWrapper = styled.div<{ themeCtx: string }>`
     width: 100%;
     height: 74px;
     border-radius: 8px;
@@ -46,13 +47,16 @@ interface Props {
 }
 const InvoiceShort: React.FC<Props> = ({ content }) => {
     const { activeTheme } = useContext(PageContext)
-    const { type, id, payment_term, to } = content
+    const { type, _id: id, payment_term, to } = content
+
+    const invoices = useAppSelector((state) => state.invoices)
+
     return (
-        <NavLink to={`/invoice/:${id}`}>
+        <NavLink to={`/invoice/${id}`}>
             <StyledWrapper themeCtx={activeTheme}>
                 <Header size="small">
                     <span>#</span>
-                    {id.substring(0, 6)}
+                    {invoices[0]._id.substring(0, 6)}
                 </Header>
                 <div>Due {payment_term}</div>
                 <div>{to?.name}</div>

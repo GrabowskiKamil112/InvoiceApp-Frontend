@@ -1,5 +1,5 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import thunk from 'redux-thunk'
+import { createStore, applyMiddleware, compose, AnyAction } from 'redux'
+import thunk, { ThunkAction } from 'redux-thunk'
 import rootReducer from './reducers/rootReducer'
 
 declare global {
@@ -13,3 +13,4 @@ export const store = createStore(rootReducer, composeEnhancers(applyMiddleware(t
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, AnyAction>

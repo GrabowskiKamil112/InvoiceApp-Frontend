@@ -1,13 +1,12 @@
 ﻿export interface Invoice {
+    _id: string
     type: 'draft' | 'pending' | 'paid'
-    id: string
     from?: From
     to?: To
     invoice_date?: string
     payment_term?: string
     description?: string
     items_list?: ItemsListEntity[] | null
-    user_id: string
     created: string
 }
 
@@ -28,4 +27,8 @@ interface ItemsListEntity {
     name: string
     quantity: string | number
     price: string
+}
+
+export interface newInvoice extends Invoice {
+    userID: string
 }

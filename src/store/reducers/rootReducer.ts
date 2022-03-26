@@ -1,4 +1,4 @@
-import { ADD_INVOICE_REQUEST, REMOVE_INVOICE_REQUEST, CHANGE_FILTER } from '../actions'
+import { ActionType } from '../actions'
 
 const testItems = [
     { name: 'somasdename', quantity: '234', price: '234' },
@@ -11,8 +11,9 @@ const initialState = {
     userID: '1234',
     invoices: [
         {
+            _id: '2zf8dj90dp',
+            userID: 'asdf',
             type: 'paid', // draft, pending, paid
-            id: '2zf8dj90dp',
             from: {
                 street: 'asdf',
                 city: 'asdf',
@@ -30,99 +31,6 @@ const initialState = {
             payment_term: '05 Mar 2022',
             description: 'asdf',
             items_list: [testItems],
-            userID: 'asdf',
-            created: 'asdf',
-        },
-        {
-            type: 'pending', // draft, pending, paid
-            id: '2zf8dj90dp',
-            from: {
-                street: 'asdf',
-                city: 'asdf',
-                post_code: 'asdf',
-                country: 'asdf',
-            },
-            to: {
-                name: 'aaaaaaaaa',
-                email: 'fghjvbngh',
-                city: 'fghjvbngh',
-                post_code: 'dfgxcvbxc',
-                country: 'dfgxcvbxc',
-            },
-            invoice_date: 'dfgxcvbxc',
-            payment_term: '08 Mar 2922',
-            description: 'asdf',
-            items_list: [testItems],
-            userID: 'asdf',
-            created: 'asdf',
-        },
-        {
-            type: 'pending', // draft, pending, paid
-            id: '2zf8dj90dp',
-            from: {
-                street: 'asdf',
-                city: 'asdf',
-                post_code: 'asdf',
-                country: 'asdf',
-            },
-            to: {
-                name: 'aaaaaaaaa',
-                email: 'fghjvbngh',
-                city: 'fghjvbngh',
-                post_code: 'dfgxcvbxc',
-                country: 'dfgxcvbxc',
-            },
-            invoice_date: 'dfgxcvbxc',
-            payment_term: '08 Mar 2922',
-            description: 'asdf',
-            items_list: [testItems],
-            userID: 'asdf',
-            created: 'asdf',
-        },
-        {
-            type: 'draft', // draft, pending, paid
-            id: '2zf8dj90dp',
-            from: {
-                street: 'asdf',
-                city: 'asdf',
-                post_code: 'asdf',
-                country: 'asdf',
-            },
-            to: {
-                name: 'aaaaaaaaa',
-                email: 'fghjvbngh',
-                city: 'fghjvbngh',
-                post_code: 'dfgxcvbxc',
-                country: 'dfgxcvbxc',
-            },
-            invoice_date: 'dfgxcvbxc',
-            payment_term: '08 Mar 2922',
-            description: 'asdf',
-            items_list: [testItems],
-            userID: 'asdf',
-            created: 'asdf',
-        },
-        {
-            type: 'paid', // draft, pending, paid
-            id: '2zf8dj90dp',
-            from: {
-                street: 'asdf',
-                city: 'asdf',
-                post_code: 'asdf',
-                country: 'asdf',
-            },
-            to: {
-                name: 'aaaaaaaaa',
-                email: 'fghjvbngh',
-                city: 'fghjvbngh',
-                post_code: 'dfgxcvbxc',
-                country: 'dfgxcvbxc',
-            },
-            invoice_date: 'dfgxcvbxc',
-            payment_term: '08 Mar 2922',
-            description: 'asdf',
-            items_list: [testItems],
-            userID: 'asdf',
             created: 'asdf',
         },
     ],
@@ -131,27 +39,34 @@ const initialState = {
 const rootReducer = (state = initialState, action: any) => {
     const { type, payload } = action
     switch (type) {
-        case CHANGE_FILTER:
+        case ActionType.CHANGE_FILTER:
             return {
                 ...state,
                 filterBy: action.payload.filter,
             }
 
-        case ADD_INVOICE_REQUEST:
-            const newInvoice = payload.invoice
+        case ActionType.ADD_INVOICE_SUCCESS:
+            console.log(action.type)
+
+            const newInvoice = payload.data
+            console.log(newInvoice)
+
             return {
                 ...state,
-                invoices: state.invoices.push(newInvoice),
+                invoices: [...state.invoices, newInvoice],
             }
 
-        case REMOVE_INVOICE_REQUEST:
-            const newInvoices = state.invoices.filter((invoice) => invoice.id !== payload.id)
+        case ActionType.REMOVE_INVOICE_SUCCESS:
+            console.log(action.type)
+
+            //  const newInvoices = state.invoices.filter((invoice) => invoice.id !== payload.id)
             return {
                 ...state,
-                invoices: newInvoices,
             }
 
         default:
+            console.log(type)
+
             return { ...state }
     }
 }
