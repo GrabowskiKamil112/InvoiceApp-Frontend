@@ -22,6 +22,7 @@ const StyledInfo = styled.div<{ type: string }>`
     align-items: center;
     border-radius: 6px;
     font-weight: 700;
+    font-size: ${({ theme }) => theme.sizes.m};
 
     & > span {
         transform: translateX(5px);

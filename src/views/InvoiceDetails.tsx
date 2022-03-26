@@ -1,7 +1,19 @@
 import axios from 'axios'
 import React, { MutableRefObject, useEffect, useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, NavLink } from 'react-router-dom'
 import NavigationTemplate from '../templates/NavigationTemplate'
+import styled from 'styled-components'
+import Button from '../components/Atoms/Button'
+import arrowLeft from '../../public/assets/icon-arrow-left.svg'
+import DetailsController from '../components/Molecules/DetailsController'
+
+const StyledWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    max-width: 635px;
+    height: 100%;
+    margin: auto;
+`
 
 const InvoiceDetails = () => {
     const { id } = useParams()
@@ -33,7 +45,19 @@ const InvoiceDetails = () => {
 
     return (
         <NavigationTemplate>
-            <div ref={ref}></div>
+            <StyledWrapper>
+                <NavLink to={`/home`}>
+                    <Button variant="back">
+                        <img src={arrowLeft} alt="arrow-left"></img>
+                        <span>Go back</span>
+                    </Button>
+                </NavLink>
+
+                <DetailsController type="pending" />
+
+                <detailsInfo />
+                <div ref={ref}></div>
+            </StyledWrapper>
         </NavigationTemplate>
     )
 }

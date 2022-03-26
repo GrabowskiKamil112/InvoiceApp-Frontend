@@ -16,12 +16,11 @@ interface IStyledContainer {
 const StyledContainer = styled.div<IStyledContainer>`
     font-family: 'Poppins', sans-serif;
     transition: max-height 0.5s ease;
-    width: 85%;
+    width: ${({ isRegister, numOfErrors }) => {
+        return isRegister ? `${440 + numOfErrors * 20}px` : `${310 + numOfErrors * 20}px`
+    }};
     max-width: 400px;
     overflow-y: hidden;
-    max-height: ${({ isRegister, numOfErrors }) => {
-        return isRegister ? `${440 + numOfErrors * 17}px` : `${310 + numOfErrors * 17}px`
-    }};
 
     transform: scaleY(4);
     box-shadow: 0px 0px 11px 3px #1e213988;

@@ -8,7 +8,7 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-       // outline: 1px dashed rgba(255, 0, 0, 0.5)
+       //outline: 1px dashed rgba(255, 0, 0, 0.5)
     }
     html{
         overflow: hidden;
