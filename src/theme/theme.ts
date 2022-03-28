@@ -1,6 +1,6 @@
 const theme = {
     sizes: {
-        s: '1rem',
+        s: '1.1rem',
         m: '1.2rem',
         l: '1.4rem',
         header: '3.2rem',

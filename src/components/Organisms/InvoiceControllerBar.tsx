@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Button from '../Atoms/Button'
 import Paragraph from '../Atoms/Paragraph'
@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../store/hooks/hooks'
 import { changeFilter } from '../../store/actions'
 import { generateInfo } from '../../utils/utils'
 import plusIcon from '../../../public/assets/icon-plus.svg'
+import PageContext from '../../context/pageContext'
 
 const StyledWrapper = styled.div`
     margin-bottom: 64px;
@@ -50,6 +51,7 @@ const StyledDiv = styled.div`
 const InvoiceControllerBar = () => {
     const [invoiceFilter, setInvoiceFilter] = useState<string>('total')
     const [numOfInvoices, setNumOfInvoices] = useState<number>()
+    const { activeTheme } = useContext(PageContext)
     const ref1 = useRef<HTMLDivElement>(null)
 
     const dispatch = useAppDispatch()
@@ -78,7 +80,9 @@ const InvoiceControllerBar = () => {
         <StyledWrapper ref={ref1}>
             <div>
                 <Header size="big">Invoices</Header>
-                <Paragraph>{generateInfo(invoiceFilter, numOfInvoices)}</Paragraph>
+                <Paragraph themeCtx={activeTheme}>
+                    {generateInfo(invoiceFilter, numOfInvoices)}
+                </Paragraph>
             </div>
             <StyledDiv>
                 <FilterBy handleRadioInput={handleRadioInput} />

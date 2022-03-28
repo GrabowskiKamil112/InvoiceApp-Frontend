@@ -1,12 +1,11 @@
 import styled from 'styled-components'
+import { themeNavigator } from '../../utils/utils'
 
-const Paragraph = styled.p`
-    color: ${({ theme }) => theme.dark.text.bodyA};
-    font-size: ${({ theme }) => theme.sizes.m};
+const Paragraph = styled.p<{ themeCtx: string; small?: boolean }>`
+    color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.bodyA`)};
+    font-size: ${({ theme, small }) => (small ? theme.sizes.s : theme.sizes.m)};
     text-shadow: 0px 0px 1px #ffffff;
-    ::first-letter {
-        text-transform: uppercase;
-    }
+    font-weight: 300;
 `
 
 export default Paragraph

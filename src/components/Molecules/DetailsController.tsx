@@ -28,9 +28,9 @@ const Container = styled.div<{ themeCtx?: string }>`
 `
 
 interface Props {
-    type: 'draft' | 'paid' | 'pending'
+    type?: 'draft' | 'paid' | 'pending'
 }
-const DetailsController: React.FC<Props> = ({ type }) => {
+const DetailsController: React.FC<Props> = ({ type = 'draft' }) => {
     const { activeTheme } = useContext(PageContext)
     console.log('type:', type)
 

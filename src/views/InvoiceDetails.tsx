@@ -1,11 +1,13 @@
 import axios from 'axios'
-import React, { MutableRefObject, useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, NavLink } from 'react-router-dom'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import styled from 'styled-components'
 import Button from '../components/Atoms/Button'
 import arrowLeft from '../../public/assets/icon-arrow-left.svg'
 import DetailsController from '../components/Molecules/DetailsController'
+import { Invoice } from '../Types/Invoice'
+import DetailsBody from '../components/Molecules/DetailsBody'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -17,15 +19,14 @@ const StyledWrapper = styled.div`
 
 const InvoiceDetails = () => {
     const { id } = useParams()
-    const ref = useRef(null) as unknown as MutableRefObject<HTMLDivElement>
+    const [invoice, setInvoice] = useState<Invoice>()
     console.log(id)
 
     const fetchSingleInvoice = async () => {
         try {
             const { data } = await axios.get(
-                `http://localhost:9001/api/invoice/623f48681d70aa28f456e329`
+                `http://localhost:9001/api/invoice/6240970ff86c142ab8041416`
             )
-            console.log('data:', data)
             return data
         } catch (e) {
             console.error(e)
@@ -35,9 +36,7 @@ const InvoiceDetails = () => {
     useEffect(() => {
         const fetch = async () => {
             const inside = await fetchSingleInvoice()
-
-            console.log(inside)
-            ref.current.innerText = JSON.stringify(inside)
+            setInvoice(inside)
         }
 
         fetch()
@@ -45,19 +44,20 @@ const InvoiceDetails = () => {
 
     return (
         <NavigationTemplate>
-            <StyledWrapper>
-                <NavLink to={`/home`}>
-                    <Button variant="back">
-                        <img src={arrowLeft} alt="arrow-left"></img>
-                        <span>Go back</span>
-                    </Button>
-                </NavLink>
+            {invoice && (
+                <StyledWrapper>
+                    <NavLink to={`/home`}>
+                        <Button variant="back">
+                            <img src={arrowLeft} alt="arrow-left"></img>
+                            <span>Go back</span>
+                        </Button>
+                    </NavLink>
 
-                <DetailsController type="pending" />
+                    <DetailsController type={invoice.type} />
 
-                <detailsInfo />
-                <div ref={ref}></div>
-            </StyledWrapper>
+                    <DetailsBody content={invoice} />
+                </StyledWrapper>
+            )}
         </NavigationTemplate>
     )
 }
