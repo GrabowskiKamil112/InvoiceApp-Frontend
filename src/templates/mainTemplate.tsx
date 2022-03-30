@@ -10,7 +10,7 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
     height: 100vh;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.body.bg`)};
     transition: background-color 0.4s ease;
-    overflow: hidden;
+    //  overflow: hidden;
 `
 
 const MainTemplate: React.FC = ({ children }) => {

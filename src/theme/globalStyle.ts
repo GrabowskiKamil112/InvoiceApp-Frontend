@@ -11,8 +11,10 @@ const GlobalStyle = createGlobalStyle`
        //outline: 1px dashed rgba(255, 0, 0, 0.5)
     }
     html{
-        overflow: hidden;
+       height:100vh;
         font-size:62.5%;
+        width: 100vw;
+        overflow-y:scroll;
     }
     body{ 
         -webkit-font-smoothing: antialiased;

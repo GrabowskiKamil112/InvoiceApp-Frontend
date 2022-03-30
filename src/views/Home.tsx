@@ -13,7 +13,7 @@ const Loading = styled.button<{ visible: boolean }>`
     top: 0;
     left: 0;
     z-index: 999;
-    height: 100%;
+    height: 100vh;
     width: 100%;
     opacity: ${({ visible }) => (visible ? '1' : '0')};
     transform: scale(2.5);

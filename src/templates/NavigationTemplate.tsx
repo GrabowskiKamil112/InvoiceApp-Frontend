@@ -5,15 +5,15 @@ import Sidebar from '../components/Organisms/Sidebar'
 const StyledWrapper = styled.div`
     margin-left: 110px;
     height: 100%;
-    padding: 0 6% 0 6%;
+    padding: 8% 5% 0 5%;
     @media (max-width: 900px) {
-        margin: 110px 0 0 0;
+        margin: 80px 0 0 0;
     }
 `
 const StyledContainer = styled.div`
     max-width: 730px;
-    padding: 8% 0 0 0;
     margin: auto;
+
     height: 100%;
 `
 

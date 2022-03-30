@@ -10,6 +10,7 @@ import ItemsList from './ItemsList'
 
 const StyledWrapper = styled.section<{ themeCtx: string }>`
     width: 100%;
+    margin: auto;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceItem.bg`)};
     min-height: 440px;
     padding: 24px;

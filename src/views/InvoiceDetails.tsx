@@ -12,6 +12,7 @@ import DetailsBody from '../components/Molecules/DetailsBody'
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    width: 90%;
     max-width: 635px;
     height: 100%;
     margin: auto;
