@@ -33,6 +33,70 @@ const initialState = {
             items_list: [testItems],
             created: 'asdf',
         },
+        {
+            _id: '2zf8dj90dp',
+            userID: 'asdf',
+            type: 'paid', // draft, pending, paid
+
+            to: {
+                name: 'fghjvbngh',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '06 Mar 2022',
+            description: 'asdf',
+            items_list: [testItems],
+            created: 'asdf',
+        },
+        {
+            _id: '2zf8dj90dp',
+            userID: 'asdf',
+            type: 'paid', // draft, pending, paid
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'fghjvbngh',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '05 Mar 2022',
+            description: 'asdf',
+            items_list: [testItems],
+            created: 'asdf',
+        },
+        {
+            _id: '2zf8dj90dp',
+            userID: 'asdf',
+            type: 'paid', // draft, pending, paid
+            from: {
+                street: 'asdf',
+                city: 'asdf',
+                post_code: 'asdf',
+                country: 'asdf',
+            },
+            to: {
+                name: 'fghjvbngh',
+                email: 'fghjvbngh',
+                city: 'fghjvbngh',
+                post_code: 'dfgxcvbxc',
+                country: 'dfgxcvbxc',
+            },
+            invoice_date: 'dfgxcvbxc',
+            payment_term: '05 Mar 2022',
+            description: 'asdf',
+            items_list: [testItems],
+            created: 'asdf',
+        },
     ],
 }
 

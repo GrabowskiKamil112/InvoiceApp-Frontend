@@ -14,7 +14,8 @@ const GlobalStyle = createGlobalStyle`
        height:100vh;
         font-size:62.5%;
         width: 100vw;
-        overflow-y:scroll;
+        overflow-y: auto;
+        overflow-y: initial;
     }
     body{ 
         -webkit-font-smoothing: antialiased;

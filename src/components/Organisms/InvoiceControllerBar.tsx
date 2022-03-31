@@ -19,7 +19,7 @@ const StyledWrapper = styled.div`
     justify-content: space-between;
     position: relative;
     & > div > header {
-        margin-bottom: 5px;
+        margin-bottom: 8px;
     }
 `
 const StyledButton = styled(Button)`
@@ -71,7 +71,6 @@ const InvoiceControllerBar = () => {
         dispatch(changeFilter(invoiceFilter))
     }, [dispatch, invoiceFilter])
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useLayoutEffect(() => {
         setNumOfInvoices(ref1.current?.nextElementSibling?.getElementsByTagName('a').length)
     })

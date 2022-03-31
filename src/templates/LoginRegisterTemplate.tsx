@@ -5,8 +5,8 @@ import bg from '../../public/assets/signup-bg.jpg'
 const StyledBg = styled.div`
     background: url(${bg}) no-repeat;
     background-size: cover;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     position: relative;
 `
 interface IStyledContainer {

@@ -1,6 +1,6 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import { useParams, NavLink } from 'react-router-dom'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { NavLink } from 'react-router-dom'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import styled from 'styled-components'
 import Button from '../components/Atoms/Button'
@@ -8,25 +8,26 @@ import arrowLeft from '../../public/assets/icon-arrow-left.svg'
 import DetailsController from '../components/Molecules/DetailsController'
 import { Invoice } from '../Types/Invoice'
 import DetailsBody from '../components/Molecules/DetailsBody'
+import { getWindowWidth } from '../utils/utils'
 
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 100%;
     max-width: 635px;
-    height: 100%;
+    height: auto;
     margin: auto;
 `
 
 const InvoiceDetails = () => {
-    const { id } = useParams()
+    // const { id } = useParams()
     const [invoice, setInvoice] = useState<Invoice>()
-    console.log(id)
+    const [windowWidth, setWindowWidth] = useState(getWindowWidth())
 
     const fetchSingleInvoice = async () => {
         try {
             const { data } = await axios.get(
-                `http://localhost:9001/api/invoice/6240970ff86c142ab8041416`
+                `http://localhost:9001/api/invoice/62460e74f852671c74005433`
             )
             return data
         } catch (e) {
@@ -41,23 +42,55 @@ const InvoiceDetails = () => {
         }
 
         fetch()
+
+        function handleResize() {
+            setWindowWidth(getWindowWidth())
+        }
+
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
     }, [])
+
+    function getButtons(type: string): ReactNode {
+        return (
+            <>
+                <Button width="74px" color="rgb(37, 41, 69)">
+                    Edit
+                </Button>
+                <Button width="91px" color="rgb(236, 87, 87)">
+                    Delete
+                </Button>
+                {type !== 'paid' && (
+                    <Button width="137px" color="rgb(124, 93, 250)">
+                        Mark As Paid
+                    </Button>
+                )}
+            </>
+        )
+    }
 
     return (
         <NavigationTemplate>
             {invoice && (
-                <StyledWrapper>
-                    <NavLink to={`/home`}>
-                        <Button variant="back">
-                            <img src={arrowLeft} alt="arrow-left"></img>
-                            <span>Go back</span>
-                        </Button>
-                    </NavLink>
+                <>
+                    <StyledWrapper>
+                        <NavLink to={`/home`}>
+                            <Button variant="back">
+                                <img src={arrowLeft} alt="arrow-left"></img>
+                                <span>Go back</span>
+                            </Button>
+                        </NavLink>
 
-                    <DetailsController type={invoice.type} />
+                        <DetailsController
+                            type={invoice.type}
+                            getButtons={() => getButtons(invoice.type)}
+                            windowWidth={windowWidth}
+                        />
 
-                    <DetailsBody content={invoice} />
-                </StyledWrapper>
+                        <DetailsBody content={invoice} />
+                    </StyledWrapper>
+                    {windowWidth < 650 && getButtons(invoice.type)}
+                </>
             )}
         </NavigationTemplate>
     )

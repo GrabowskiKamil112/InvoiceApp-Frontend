@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
 import InvoiceControllerBar from '../components/Organisms/InvoiceControllerBar'
 import { RootState } from '../store'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import { Invoice } from '../Types/Invoice'
 
-const Loading = styled.button<{ visible: boolean }>`
+const Loading = styled.button<{ visible: boolean; display: boolean }>`
     transition: all 0.6s ease-in;
     position: absolute;
     top: 0;
@@ -23,7 +23,14 @@ const Loading = styled.button<{ visible: boolean }>`
         color: #e0e0e0e2;
         transform: translateY(20px);
     }
+
+    ${({ display }) =>
+        display &&
+        css`
+            display: none;
+        `}
 `
+
 const StyledWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -37,16 +44,24 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
     const [isLoading, toggleLoading] = useState(true)
+    const [isDisplay, toggleDisplay] = useState(false)
 
     useEffect(() => {
         setTimeout(() => {
             toggleLoading(!isLoading)
         }, 500)
+        setTimeout(() => {
+            toggleDisplay(!isDisplay)
+        }, 1100)
     }, [])
 
     return (
         <>
-            <Loading visible={isLoading} className="button  is-loading  is-large" />
+            <Loading
+                display={isDisplay}
+                visible={isLoading}
+                className="button  is-loading  is-large"
+            />
             <NavigationTemplate>
                 <InvoiceControllerBar />
                 <StyledWrapper>

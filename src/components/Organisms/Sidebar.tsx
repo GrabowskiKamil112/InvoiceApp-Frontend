@@ -15,6 +15,7 @@ const StyledWrapper = styled.aside`
     width: 110px;
     height: 100%;
     display: flex;
+    z-index: 999;
 
     @media (max-width: 900px) {
         border-radius: 0;

@@ -12,11 +12,16 @@ export const generateInfo = (invoiceFilter: string, amount = 1) => {
         amount > 1 ? 'invoices' : 'invoice'
     }`
 }
-export function calculateTotalPrice(quantity?: number, price?: string): number {
+export function calculateTotal(quantity?: string, price?: string): number {
     if (quantity && price) {
-        return parseFloat(price) * quantity
+        return parseFloat(price) * parseFloat(quantity)
     }
     return 0
+}
+
+export function getWindowWidth(): number {
+    const { innerWidth } = window
+    return innerWidth
 }
 
 export const SignupSchema = Yup.object().shape({

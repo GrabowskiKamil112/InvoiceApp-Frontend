@@ -1,9 +1,8 @@
-import React, { useContext } from 'react'
+import React, { ReactNode, useContext } from 'react'
 import styled from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
 import Status from '../Atoms/Status'
-import Button from '../Atoms/Button'
 
 const StyledWrapper = styled.div<{ themeCtx: string }>`
     width: 100%;
@@ -25,14 +24,20 @@ const Container = styled.div<{ themeCtx?: string }>`
         margin-right: 8px;
         color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.btn.tertiary.text`)};
     }
+
+    @media (max-width: 650px) {
+        width: 100%;
+        justify-content: space-between;
+    }
 `
 
 interface Props {
     type?: 'draft' | 'paid' | 'pending'
+    getButtons: () => ReactNode
+    windowWidth: number
 }
-const DetailsController: React.FC<Props> = ({ type = 'draft' }) => {
+const DetailsController: React.FC<Props> = ({ type = 'draft', getButtons, windowWidth }) => {
     const { activeTheme } = useContext(PageContext)
-    console.log('type:', type)
 
     return (
         <StyledWrapper themeCtx={activeTheme}>
@@ -40,19 +45,7 @@ const DetailsController: React.FC<Props> = ({ type = 'draft' }) => {
                 <span>Status</span>
                 <Status type={type}>{type}</Status>
             </Container>
-            <Container>
-                <Button width="74px" color="rgb(37, 41, 69)">
-                    Edit
-                </Button>
-                <Button width="91px" color="rgb(236, 87, 87)">
-                    Delete
-                </Button>
-                {type !== 'paid' && (
-                    <Button width="137px" color="rgb(124, 93, 250)">
-                        Mark As Paid
-                    </Button>
-                )}
-            </Container>
+            {windowWidth > 650 && <Container>{getButtons()}</Container>}
         </StyledWrapper>
     )
 }

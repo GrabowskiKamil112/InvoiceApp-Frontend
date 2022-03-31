@@ -27,7 +27,7 @@ interface To {
 }
 export interface ItemsListEntity {
     name?: string
-    quantity?: number
+    quantity?: string
     price?: string
 }
 

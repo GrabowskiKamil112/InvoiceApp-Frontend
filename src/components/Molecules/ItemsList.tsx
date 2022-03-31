@@ -1,8 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { ItemsListEntity } from '../../Types/Invoice'
 import styled from 'styled-components'
-import { calculateTotalPrice, themeNavigator } from '../../utils/utils'
+import { calculateTotal, themeNavigator } from '../../utils/utils'
 import PageContext from '../../context/pageContext'
 import Paragraph from '../Atoms/Paragraph'
 
@@ -12,7 +12,6 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
     padding-top: 32px;
     border-radius: 8px;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceTable.bg`)};
-    margin-bottom: 50px;
     margin-top: 60px;
     grid-area: items;
 `
@@ -62,10 +61,14 @@ const P = styled(Paragraph)`
     font-weight: 500;
 `
 
-const ItemsList = ({ items }: { items: ItemsListEntity[] }) => {
-    console.log('items', items)
-    const [totalAmount, setTotalAmount] = useState<number>(0)
+const ItemsList = ({ items = [] }: { items?: ItemsListEntity[] }) => {
     const { activeTheme } = useContext(PageContext)
+
+    const totalAmount = items.reduce((acc, { price, quantity }) => {
+        return (acc += calculateTotal(quantity, price))
+    }, 0)
+
+    console.log('items', items)
     return (
         <StyledWrapper themeCtx={activeTheme}>
             <Table themeCtx={activeTheme}>
@@ -79,7 +82,7 @@ const ItemsList = ({ items }: { items: ItemsListEntity[] }) => {
                 </thead>
 
                 {items.map(({ name, quantity, price }, index) => {
-                    const itemTotal = calculateTotalPrice(quantity, price)
+                    const itemTotal = calculateTotal(quantity, price)
 
                     return (
                         <tbody key={index}>
@@ -105,7 +108,7 @@ const ItemsList = ({ items }: { items: ItemsListEntity[] }) => {
                         <td>Amount Due</td>
                         <td />
                         <td />
-                        <td>${totalAmount}</td>
+                        <td>{totalAmount ? `$${totalAmount}` : ''}</td>
                     </tr>
                 </tfoot>
             </Table>

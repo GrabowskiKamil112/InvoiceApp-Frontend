@@ -83,6 +83,9 @@ const Button = styled.button<{
             &:hover {
                 color: #545972;
             }
+            &:hover::after {
+                opacity: 0;
+            }
 
             & span {
                 display: block;

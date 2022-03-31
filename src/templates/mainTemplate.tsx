@@ -7,10 +7,12 @@ import { themeNavigator } from '../utils/utils'
 
 const StyledWrapper = styled.div<{ themeCtx: string }>`
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.body.bg`)};
     transition: background-color 0.4s ease;
-    //  overflow: hidden;
+    @media (max-width: 900px) {
+        min-height: calc(100vh - 80px);
+    }
 `
 
 const MainTemplate: React.FC = ({ children }) => {
