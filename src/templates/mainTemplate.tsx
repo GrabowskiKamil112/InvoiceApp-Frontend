@@ -16,7 +16,7 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
 `
 
 const MainTemplate: React.FC = ({ children }) => {
-    const [activeTheme, setTheme] = useState('dark')
+    const [activeTheme, setTheme] = useState<'dark' | 'light'>('dark')
 
     const toggleTheme = () => {
         setTheme((activeTheme) => (activeTheme === 'dark' ? 'light' : 'dark'))

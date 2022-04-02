@@ -48,7 +48,7 @@ const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
 `
-const InvoiceForm = () => {
+const InvoiceForm: React.FC = () => {
     const { activeTheme } = useContext(PageContext)
     return (
         <StyledWrapper>

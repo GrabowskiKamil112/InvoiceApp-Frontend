@@ -85,7 +85,7 @@ const InvoiceControllerBar = () => {
             </div>
             <StyledDiv>
                 <FilterBy handleRadioInput={handleRadioInput} />
-                <StyledButton color="hsl(251, 94%, 67%)" width="140px">
+                <StyledButton color="hsl(251, 94%, 67%)">
                     <Span>
                         <Img src={plusIcon} alt="plus" />
                     </Span>

@@ -35,10 +35,10 @@ interface Values {
     passwordConfirm: string
 }
 
-export default function LoginRegister() {
+const LoginRegister: React.FC = () => {
     const { activeTheme } = useContext(PageContext)
     const [isRegister, toggleRegister] = useState<boolean>(false)
-    const [numOfErrors, setNumOfErrors] = useState<number>(0)
+    const [numOfErrors, setNumOfErrors] = useState(0)
     const formRef = useRef<HTMLFormElement>(null)
 
     const handleNumOfErrors = () => {
@@ -118,3 +118,5 @@ export default function LoginRegister() {
         </LoginRegisterTemplate>
     )
 }
+
+export default LoginRegister

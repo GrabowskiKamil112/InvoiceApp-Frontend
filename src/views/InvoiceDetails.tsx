@@ -19,7 +19,7 @@ const StyledWrapper = styled.div`
     margin: auto;
 `
 
-const InvoiceDetails = () => {
+const InvoiceDetails: React.FC = () => {
     // const { id } = useParams()
     const [invoice, setInvoice] = useState<Invoice>()
     const [windowWidth, setWindowWidth] = useState(getWindowWidth())
@@ -56,17 +56,9 @@ const InvoiceDetails = () => {
     function getButtons(type: string): ReactNode {
         return (
             <>
-                <Button width="74px" color="rgb(37, 41, 69)">
-                    Edit
-                </Button>
-                <Button width="91px" color="rgb(236, 87, 87)">
-                    Delete
-                </Button>
-                {type !== 'paid' && (
-                    <Button width="137px" color="rgb(124, 93, 250)">
-                        Mark As Paid
-                    </Button>
-                )}
+                <Button color="rgb(37, 41, 69)">Edit</Button>
+                <Button color="rgb(236, 87, 87)">Delete</Button>
+                {type !== 'paid' && <Button color="rgb(124, 93, 250)">Mark As Paid</Button>}
             </>
         )
     }

@@ -33,7 +33,7 @@ const StyledWrapper = styled.div`
     }
 `
 
-const AsideController = () => {
+const AsideController: React.FC = () => {
     const { activeTheme, toggleTheme } = useContext(PageContext)
 
     return (

@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 import InvoiceDetails from './InvoiceDetails'
 import { useAppSelector } from '../store/hooks/hooks'
 
-const App = () => {
+const App: React.FC = () => {
     return (
         <Provider store={store}>
             <MainTemplate>
