@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
 import InvoiceControllerBar from '../components/Organisms/InvoiceControllerBar'
+import InvoiceForm from '../components/Organisms/InvoiceForm'
 import { RootState } from '../store'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import { Invoice } from '../Types/Invoice'
@@ -43,8 +44,9 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    const [isLoading, toggleLoading] = useState(true)
-    const [isDisplay, toggleDisplay] = useState(false)
+    const [isLoading, toggleLoading] = useState<boolean>(true)
+    const [isDisplay, toggleDisplay] = useState<boolean>(false)
+    const [isFormOpen] = useState<boolean>(true)
 
     useEffect(() => {
         setTimeout(() => {
@@ -53,6 +55,10 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
         setTimeout(() => {
             toggleDisplay(!isDisplay)
         }, 1100)
+
+        if (isFormOpen) {
+            console.log(document.getElementsByTagName('html')[0])
+        }
     }, [])
 
     return (
@@ -62,6 +68,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                 visible={isLoading}
                 className="button  is-loading  is-large"
             />
+            {isFormOpen && <InvoiceForm />}
             <NavigationTemplate>
                 <InvoiceControllerBar />
                 <StyledWrapper>

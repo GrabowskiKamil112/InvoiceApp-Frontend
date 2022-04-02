@@ -43,7 +43,7 @@ const Table = styled.table<{ themeCtx: string }>`
     }
     & > tfoot > tr > td {
         padding: 32px 0 32px 32px;
-        background-color: black;
+        background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceTable.footerBg`)};
     }
     & > tfoot > tr > td:nth-child(4) {
         padding: 32px 32px 32px 0;
@@ -58,7 +58,7 @@ const Table = styled.table<{ themeCtx: string }>`
 `
 
 const P = styled(Paragraph)`
-    font-weight: 500;
+    font-weight: 700;
 `
 
 const ItemsList = ({ items = [] }: { items?: ItemsListEntity[] }) => {
@@ -105,7 +105,9 @@ const ItemsList = ({ items = [] }: { items?: ItemsListEntity[] }) => {
                 })}
                 <tfoot>
                     <tr>
-                        <td>Amount Due</td>
+                        <td>
+                            <P themeCtx={activeTheme}>Amount Due</P>
+                        </td>
                         <td />
                         <td />
                         <td>{totalAmount ? `$${totalAmount}` : ''}</td>

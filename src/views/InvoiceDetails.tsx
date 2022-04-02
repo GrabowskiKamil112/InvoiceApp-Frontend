@@ -29,6 +29,8 @@ const InvoiceDetails = () => {
             const { data } = await axios.get(
                 `http://localhost:9001/api/invoice/62460e74f852671c74005433`
             )
+            console.log(data)
+
             return data
         } catch (e) {
             console.error(e)

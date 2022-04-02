@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import styled from 'styled-components'
 import Input from '../components/Atoms/Input'
 import LoginRegisterTemplate from '../templates/LoginRegisterTemplate'
@@ -6,6 +6,7 @@ import { Formik, Form } from 'formik'
 import { SignupSchema } from '../utils/utils'
 import Button from '../components/Atoms/Button'
 import Paragraph from '../components/Atoms/Paragraph'
+import PageContext from '../context/pageContext'
 
 const StyledHeader = styled.h3`
     font-family: 'Poppins', sans-serif;
@@ -35,13 +36,15 @@ interface Values {
 }
 
 export default function LoginRegister() {
+    const { activeTheme } = useContext(PageContext)
     const [isRegister, toggleRegister] = useState<boolean>(false)
     const [numOfErrors, setNumOfErrors] = useState<number>(0)
-    const formRef = useRef(null)
+    const formRef = useRef<HTMLFormElement>(null)
 
     const handleNumOfErrors = () => {
         setTimeout(() => {
-            setNumOfErrors(formRef.current?.getElementsByTagName('label').length)
+            const numOfErrors = formRef.current?.getElementsByTagName('label').length
+            setNumOfErrors(numOfErrors ? numOfErrors : 0)
         }, 1)
     }
 
@@ -104,7 +107,7 @@ export default function LoginRegister() {
                     </StyledForm>
                 )}
             </Formik>
-            <Paragraph>Don&apos;t have an account?</Paragraph>
+            <Paragraph themeCtx={activeTheme}>Don&apos;t have an account?</Paragraph>
             <Button
                 variant="loginToggle"
                 onClick={() => {

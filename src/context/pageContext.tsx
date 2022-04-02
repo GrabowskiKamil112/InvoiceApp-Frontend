@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
 interface ContextType {
-    activeTheme: string
+    activeTheme: 'dark' | 'light'
     toggleTheme: () => void
 }
 

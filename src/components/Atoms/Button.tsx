@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components'
 
 const Button = styled.button<{
-    width?: string
     color?: string
     variant?: 'loginToggle' | 'submit' | 'back'
 }>`
@@ -9,16 +8,17 @@ const Button = styled.button<{
     text-decoration: none;
     padding: 0;
     background-color: ${({ color }) => color};
-    width: ${({ width }) => width};
+    width: auto;
     height: 47px;
     border: none;
     border-radius: 50px;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 1.4rem;
     color: white;
     text-align: center;
     position: relative;
     overflow: hidden;
+    padding: 0 24px;
 
     &::after {
         transition: all 0.3s ease;
