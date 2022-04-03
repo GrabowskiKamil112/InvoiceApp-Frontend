@@ -12,6 +12,7 @@ export const generateInfo = (invoiceFilter: string, amount = 1) => {
         amount > 1 ? 'invoices' : 'invoice'
     }`
 }
+
 export function calculateTotal(quantity?: string, price?: string): number {
     if (quantity && price) {
         return parseFloat(price) * parseFloat(quantity)

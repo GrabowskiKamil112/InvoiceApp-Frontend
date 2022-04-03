@@ -18,7 +18,7 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
     gap: 10px;
     display: grid;
     align-items: center;
-    grid-template-columns: 80px 144px 35% repeat(3, auto);
+    grid-template-columns: 80px 144px minmax(auto, 35%) repeat(3, auto);
     transition: all 250ms ease-out;
     outline: 1px solid rgba(124, 93, 250, 0);
     padding: 16px 24px;

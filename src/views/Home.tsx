@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { connect } from 'react-redux'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
@@ -44,40 +44,56 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    const [isLoading, toggleLoading] = useState<boolean>(true)
+    const [isLoading, toggleLoading] = useState<boolean>(false)
     const [isDisplay, toggleDisplay] = useState<boolean>(false)
-    const [isFormOpen] = useState<boolean>(true)
+    const [isFormOpen, toggleIsFormOpen] = useState<boolean>(true)
+    const invoiceFormRef = useRef<HTMLDivElement>()
+
+    const handleClick = (event: any) => {
+        const { right } = (
+            invoiceFormRef?.current?.childNodes[0]?.childNodes[0] as HTMLFormElement
+        )?.getBoundingClientRect()
+
+        if (right) {
+            console.log(event.pageX, right)
+
+            if (right !== undefined && event.pageX > right) {
+                toggleIsFormOpen(false)
+            }
+        }
+    }
 
     useEffect(() => {
-        console.log('render')
+        if (isFormOpen) {
+            window.addEventListener('click', handleClick)
+        }
 
-        setTimeout(() => {
-            toggleLoading(!isLoading)
-        }, 500)
-        setTimeout(() => {
-            toggleDisplay(!isDisplay)
-        }, 1100)
-    }, [])
+        return () => {
+            window.removeEventListener('click', handleClick)
+        }
+    }, [isFormOpen])
 
     useLayoutEffect(() => {
         const rootHTML = document.getElementsByTagName('html')[0]
         if (isFormOpen) {
-            rootHTML.style.overflow = 'hidden'
+            rootHTML.style.overflowY = 'hidden'
         } else {
-            rootHTML.style.overflow = 'auto'
+            rootHTML.style.overflowY = 'auto'
         }
     }, [isFormOpen])
 
     return (
         <>
-            <Loading
-                display={isDisplay}
-                visible={isLoading}
-                className="button  is-loading  is-large"
-            />
-            {isFormOpen && <InvoiceForm />}
+            {isFormOpen && (
+                <div ref={invoiceFormRef}>
+                    <InvoiceForm />
+                </div>
+            )}
             <NavigationTemplate>
-                <InvoiceControllerBar />
+                <InvoiceControllerBar
+                    openFormFn={() => toggleIsFormOpen(true)}
+                    isFormOpen={isFormOpen}
+                />
                 <StyledWrapper>
                     {invoices
                         ?.filter(({ type }: { type: string }) =>

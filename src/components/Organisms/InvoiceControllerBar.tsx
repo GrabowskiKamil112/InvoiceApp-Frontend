@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Button from '../Atoms/Button'
 import Paragraph from '../Atoms/Paragraph'
 import Header from '../Atoms/Header'
@@ -29,11 +29,19 @@ const StyledButton = styled(Button)`
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-right: 2px;
+    padding: 0 18px 0 8px;
     transition: background-color 0.3s ease;
-    &:hover {
-        background-color: rgb(146, 119, 255);
-    }
+    ${({ disabled }) =>
+        disabled &&
+        css`
+            cursor: default;
+            &:hover {
+                background-color: rgb(146, 119, 255);
+                &::after {
+                    display: none;
+                }
+            }
+        `};
 `
 const Img = styled.img`
     background-color: white;
@@ -48,7 +56,13 @@ const StyledDiv = styled.div`
     display: flex;
 `
 
-const InvoiceControllerBar = () => {
+const InvoiceControllerBar = ({
+    openFormFn,
+    isFormOpen,
+}: {
+    openFormFn: () => void
+    isFormOpen: boolean
+}) => {
     const [invoiceFilter, setInvoiceFilter] = useState<string>('total')
     const [numOfInvoices, setNumOfInvoices] = useState<number>()
     const { activeTheme } = useContext(PageContext)
@@ -85,7 +99,10 @@ const InvoiceControllerBar = () => {
             </div>
             <StyledDiv>
                 <FilterBy handleRadioInput={handleRadioInput} />
-                <StyledButton color="hsl(251, 94%, 67%)">
+                <StyledButton
+                    color="hsl(251, 94%, 67%)"
+                    onClick={() => openFormFn()}
+                    disabled={isFormOpen}>
                     <Span>
                         <Img src={plusIcon} alt="plus" />
                     </Span>
