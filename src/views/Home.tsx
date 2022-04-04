@@ -7,6 +7,7 @@ import InvoiceForm from '../components/Organisms/InvoiceForm'
 import { RootState } from '../store'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import { Invoice } from '../Types/Invoice'
+import { useOnClickOutsideForm } from '../utils/hooks'
 
 const Loading = styled.button<{ visible: boolean; display: boolean }>`
     transition: all 0.6s ease-in;
@@ -44,34 +45,10 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    const [isLoading, toggleLoading] = useState<boolean>(false)
-    const [isDisplay, toggleDisplay] = useState<boolean>(false)
-    const [isFormOpen, toggleIsFormOpen] = useState<boolean>(true)
-    const invoiceFormRef = useRef<HTMLDivElement>()
+    const [isFormOpen, setIsFormOpen] = useState<boolean>(true)
+    const invoiceFormRef = React.createRef<HTMLDivElement>()
 
-    const handleClick = (event: any) => {
-        const { right } = (
-            invoiceFormRef?.current?.childNodes[0]?.childNodes[0] as HTMLFormElement
-        )?.getBoundingClientRect()
-
-        if (right) {
-            console.log(event.pageX, right)
-
-            if (right !== undefined && event.pageX > right) {
-                toggleIsFormOpen(false)
-            }
-        }
-    }
-
-    useEffect(() => {
-        if (isFormOpen) {
-            window.addEventListener('click', handleClick)
-        }
-
-        return () => {
-            window.removeEventListener('click', handleClick)
-        }
-    }, [isFormOpen])
+    useOnClickOutsideForm(invoiceFormRef, () => setIsFormOpen(false))
 
     useLayoutEffect(() => {
         const rootHTML = document.getElementsByTagName('html')[0]
@@ -84,14 +61,10 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
 
     return (
         <>
-            {isFormOpen && (
-                <div ref={invoiceFormRef}>
-                    <InvoiceForm />
-                </div>
-            )}
+            {isFormOpen && <InvoiceForm ref={invoiceFormRef} />}
             <NavigationTemplate>
                 <InvoiceControllerBar
-                    openFormFn={() => toggleIsFormOpen(true)}
+                    openFormFn={() => setIsFormOpen(true)}
                     isFormOpen={isFormOpen}
                 />
                 <StyledWrapper>

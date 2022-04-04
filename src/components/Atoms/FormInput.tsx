@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
+import DropdownSelect from './DropdownSelect'
 
 interface inputProps {
     themeCtx: string
@@ -60,6 +61,8 @@ interface InputProps {
     label: string
     name: string
     wideSpan?: boolean
+    placeholder?: string
+    isSelect?: boolean
 }
 const FormInput: React.FC<InputProps> = ({
     type,
@@ -68,6 +71,8 @@ const FormInput: React.FC<InputProps> = ({
     validationError,
     value,
     wideSpan = false,
+    placeholder,
+    isSelect = false,
 }) => {
     const { activeTheme } = useContext(PageContext)
     return (
@@ -78,14 +83,19 @@ const FormInput: React.FC<InputProps> = ({
                 validationError={validationError}
                 htmlFor={name}>
                 {label}
-                <StyledInput
-                    validationError={validationError}
-                    themeCtx={activeTheme}
-                    type={type}
-                    name={name}
-                    value={value}
-                    autocomplete="off"
-                />
+                {isSelect ? (
+                    <DropdownSelect items={['1', '7', '14', '30']} />
+                ) : (
+                    <StyledInput
+                        placeholder={placeholder}
+                        validationError={validationError}
+                        themeCtx={activeTheme}
+                        type={type}
+                        name={name}
+                        value={value}
+                        autocomplete="off"
+                    />
+                )}
             </StyledLabel>
         </>
     )

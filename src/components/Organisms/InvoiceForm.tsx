@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik'
 import React, { useContext } from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import Button from '../Atoms/Button'
 import FormInput from '../Atoms/FormInput'
@@ -21,11 +21,17 @@ const StyledForm = styled(Form)`
     background-color: rgb(20, 22, 37);
     border-radius: 0 20px 20px 0;
 `
-const StyledFormSection = styled.div`
+const StyledFormSection = styled.div<{ dates?: boolean }>`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto;
     gap: 24px;
+
+    ${({ dates }) =>
+        dates &&
+        css`
+            grid-template-columns: repeat(2, 1fr);
+        `};
 `
 const Div = styled.div`
     margin-top: 48px;
@@ -48,10 +54,11 @@ const ButtonsContainer = styled.div`
     display: flex;
     flex-direction: row;
 `
-const InvoiceForm: React.FC = () => {
+const InvoiceForm = React.forwardRef<HTMLDivElement>((_props, ref) => {
     const { activeTheme } = useContext(PageContext)
+
     return (
-        <StyledWrapper>
+        <StyledWrapper ref={ref}>
             <Formik
                 validateOnChange={false}
                 validateOnBlur={false}
@@ -65,6 +72,9 @@ const InvoiceForm: React.FC = () => {
                     clients_country: '',
                     clients_street_address: '',
                     clients_city: '',
+                    description: '',
+                    invoice_date: '',
+                    payment_terms: '',
                 }}
                 // validationSchema={undefined}
                 onSubmit={(values: any) => {
@@ -122,6 +132,7 @@ const InvoiceForm: React.FC = () => {
                                         type="email"
                                         label="Client's Email"
                                         name="clients_email"
+                                        placeholder="e.g email@example.com"
                                         value={values.clients_email}
                                     />
                                     <FormInput
@@ -151,7 +162,32 @@ const InvoiceForm: React.FC = () => {
                                     />
                                 </StyledFormSection>
                             </fieldset>
-                            <fieldset></fieldset>
+                            <fieldset>
+                                <legend>Dates</legend>
+                                <StyledFormSection dates>
+                                    <FormInput
+                                        type="date"
+                                        label="Invoice Date"
+                                        name="invoice_date"
+                                        value={values.invoice_date}
+                                    />
+                                    <FormInput
+                                        isSelect
+                                        type="text"
+                                        label="Payment Terms"
+                                        name="payment_terms"
+                                        value={values.payment_terms}
+                                    />
+                                    <FormInput
+                                        wideSpan
+                                        type="text"
+                                        label="Description"
+                                        name="description"
+                                        placeholder="e.g Graphic Design Service"
+                                        value={values.description}
+                                    />
+                                </StyledFormSection>
+                            </fieldset>
                             <fieldset>
                                 <legend>ItemList</legend>
                             </fieldset>
@@ -170,6 +206,6 @@ const InvoiceForm: React.FC = () => {
             </Formik>
         </StyledWrapper>
     )
-}
+})
 
 export default InvoiceForm
