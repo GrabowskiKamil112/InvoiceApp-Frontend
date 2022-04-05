@@ -25,7 +25,7 @@ type To = {
     post_code?: string
     country?: string
 }
-type ItemsListEntity = {
+export type ItemsListEntity = {
     name?: string
     quantity?: string
     price?: string

@@ -29,7 +29,7 @@ const StyledInput = styled(Field)<inputProps>`
             border-color: #ec5757;
         `};
 `
-const StyledLabel = styled.label<labelProps>`
+export const StyledLabel = styled.label<labelProps>`
     height: auto;
     font-size: 1.2rem;
     font-weight: 400;
@@ -72,7 +72,6 @@ const FormInput: React.FC<InputProps> = ({
     value,
     wideSpan = false,
     placeholder,
-    isSelect = false,
 }) => {
     const { activeTheme } = useContext(PageContext)
     return (
@@ -83,19 +82,16 @@ const FormInput: React.FC<InputProps> = ({
                 validationError={validationError}
                 htmlFor={name}>
                 {label}
-                {isSelect ? (
-                    <DropdownSelect items={['1', '7', '14', '30']} />
-                ) : (
-                    <StyledInput
-                        placeholder={placeholder}
-                        validationError={validationError}
-                        themeCtx={activeTheme}
-                        type={type}
-                        name={name}
-                        value={value}
-                        autocomplete="off"
-                    />
-                )}
+
+                <StyledInput
+                    placeholder={placeholder}
+                    validationError={validationError}
+                    themeCtx={activeTheme}
+                    type={type}
+                    name={name}
+                    value={value}
+                    autocomplete="off"
+                />
             </StyledLabel>
         </>
     )

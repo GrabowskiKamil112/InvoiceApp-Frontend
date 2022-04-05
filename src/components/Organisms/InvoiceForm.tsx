@@ -3,6 +3,7 @@ import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import Button from '../Atoms/Button'
+import DropdownSelect from '../Atoms/DropdownSelect'
 import FormInput from '../Atoms/FormInput'
 import Header from '../Atoms/Header'
 
@@ -80,7 +81,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement>((_props, ref) => {
                 onSubmit={(values: any) => {
                     alert(JSON.stringify(values, null, 2))
                 }}>
-                {({ values }) => (
+                {({ values, setFieldValue }) => (
                     <StyledForm>
                         <Header fontSize="2.4" size={'big'}>
                             Create Invoice
@@ -171,12 +172,19 @@ const InvoiceForm = React.forwardRef<HTMLDivElement>((_props, ref) => {
                                         name="invoice_date"
                                         value={values.invoice_date}
                                     />
-                                    <FormInput
-                                        isSelect
-                                        type="text"
+                                    <DropdownSelect
+                                        onChange={(value: string) =>
+                                            setFieldValue('payment_terms', value)
+                                        }
                                         label="Payment Terms"
                                         name="payment_terms"
                                         value={values.payment_terms}
+                                        options={[
+                                            { value: 'developer', label: 'Software Developer' },
+                                            { value: 'chef', label: 'Chef' },
+                                            { value: 'enginner', label: 'Enginner' },
+                                            { value: 'painter', label: 'Painter' },
+                                        ]}
                                     />
                                     <FormInput
                                         wideSpan
@@ -209,3 +217,6 @@ const InvoiceForm = React.forwardRef<HTMLDivElement>((_props, ref) => {
 })
 
 export default InvoiceForm
+function setFieldValue(arg0: string, value: any) {
+    throw new Error('Function not implemented.')
+}
