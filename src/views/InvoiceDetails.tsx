@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import React, { ReactNode, useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import NavigationTemplate from '../templates/NavigationTemplate'
@@ -27,7 +27,7 @@ const InvoiceDetails: React.FC = () => {
     const fetchSingleInvoice = async () => {
         try {
             const { data } = await axios.get(
-                `http://localhost:9001/api/invoice/62460e74f852671c74005433`
+                `http://localhost:9001/api/invoice/624c7b0076aa981474d44bf0`
             )
             console.log(data)
 

@@ -11,13 +11,13 @@
     payment_due?: string
 }
 
-interface From {
+type From = {
     street_address?: string
     city?: string
     post_code?: string
     country?: string
 }
-interface To {
+type To = {
     name?: string
     email?: string
     city?: string
@@ -25,12 +25,18 @@ interface To {
     post_code?: string
     country?: string
 }
-export interface ItemsListEntity {
+type ItemsListEntity = {
     name?: string
     quantity?: string
     price?: string
 }
 
-export interface newInvoice extends Invoice {
+export type newInvoice = Omit<Required<Invoice>, 'from' | 'to' | ' items_list'> & {
+    userID: string
+    from: Required<From>
+    to: Required<To>
+    items_list: Required<ItemsListEntity>[]
+}
+export interface newDraftInvoice extends Invoice {
     userID: string
 }
