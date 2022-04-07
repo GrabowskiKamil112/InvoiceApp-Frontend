@@ -19,6 +19,7 @@ const StyledInput = styled(Field)<inputProps>`
     border-radius: 4px;
     font-size: 12px;
     outline: none;
+    color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.bodyB`)};
     font-weight: 700;
     height: 47px;
     width: 100%;

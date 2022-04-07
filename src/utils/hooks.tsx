@@ -1,6 +1,10 @@
-import { useEffect, RefObject } from 'react'
+import { useEffect, RefObject, useLayoutEffect } from 'react'
 
-export function useOnClickOutsideForm(ref: RefObject<HTMLDivElement>, handler: () => void) {
+export function useOnClickOutsideForm(
+    ref: RefObject<HTMLDivElement>,
+    isFormOpen: boolean,
+    handler: () => void
+) {
     useEffect(() => {
         const listener = (event: MouseEvent | TouchEvent): void => {
             const form = ref?.current?.childNodes[0]
@@ -17,4 +21,13 @@ export function useOnClickOutsideForm(ref: RefObject<HTMLDivElement>, handler: (
             document.removeEventListener('touchstart', listener)
         }
     }, [ref, handler])
+
+    useLayoutEffect(() => {
+        const rootHTML = document.getElementsByTagName('html')[0]
+        if (isFormOpen) {
+            rootHTML.style.overflowY = 'hidden'
+        } else {
+            rootHTML.style.overflowY = 'auto'
+        }
+    }, [isFormOpen])
 }

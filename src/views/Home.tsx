@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
@@ -45,23 +45,16 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    const [isFormOpen, setIsFormOpen] = useState<boolean>(true)
+    const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
     const invoiceFormRef = React.createRef<HTMLDivElement>()
 
-    useOnClickOutsideForm(invoiceFormRef, () => setIsFormOpen(false))
-
-    useLayoutEffect(() => {
-        const rootHTML = document.getElementsByTagName('html')[0]
-        if (isFormOpen) {
-            rootHTML.style.overflowY = 'hidden'
-        } else {
-            rootHTML.style.overflowY = 'auto'
-        }
-    }, [isFormOpen])
+    useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
 
     return (
         <>
-            {isFormOpen && <InvoiceForm ref={invoiceFormRef} />}
+            {isFormOpen && (
+                <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
+            )}
             <NavigationTemplate>
                 <InvoiceControllerBar
                     openFormFn={() => setIsFormOpen(true)}

@@ -1,11 +1,11 @@
-import React, { memo, useContext } from 'react'
+import { memo, useContext } from 'react'
 import { Invoice } from '../../Types/Invoice'
 import styled from 'styled-components'
 import { themeNavigator } from '../../utils/utils'
 import PageContext from '../../context/pageContext'
 import Header from '../Atoms/Header'
-import Paragraph from '../Atoms/Paragraph'
 import ItemsList from './ItemsList'
+import Paragraph from '../Atoms/Paragraph'
 
 const StyledWrapper = styled.section<{ themeCtx: string }>`
     width: 100%;
@@ -75,55 +75,57 @@ const Email = styled.div`
     }
 `
 
-const DetailsBody = ({ content }: { content: Invoice }) => {
-    console.log(content)
+const DetailsBody = ({ invoice }: { invoice: Invoice }) => {
+    console.log(invoice)
+    const { from = {}, to = {}, items_list, created, payment_due, description, _id: id } = invoice
     const { activeTheme } = useContext(PageContext)
-    const { from = {}, to = {}, items_list, created, payment_due, description, _id: id } = content
 
-    const P = (text?: string, small?: boolean, key?: string) => (
-        <Paragraph small={small} themeCtx={activeTheme} key={key}>
+    const P = (text?: string, small = false, key?: string) => (
+        <Paragraph smal={small} themeCtx={activeTheme} key={key}>
             {text}
         </Paragraph>
     )
 
     return (
-        <StyledWrapper themeCtx={activeTheme}>
-            <Title>
-                <Header size="medium">
-                    <span>#</span>
-                    {id.substring(0, 6)}
-                </Header>
-                {P(description)}
-            </Title>
-            <Address1>
-                {(Object.keys(from) as Array<keyof typeof from>).map((keyName) => {
-                    return P(from[keyName], true, keyName)
-                })}
-            </Address1>
-            <Dates>
-                <div>
-                    {P('Invoice Date')}
-                    <Header size="medium">{created}</Header>
-                </div>
-                <div>
-                    {P('Payment Due')}
-                    <Header size="medium">{payment_due}</Header>
-                </div>
-            </Dates>
-            <Address2>
-                {P('Bill to', true)}
-                <Header size="medium">{to?.name}</Header>
+        <>
+            <StyledWrapper themeCtx={activeTheme}>
+                <Title>
+                    <Header size="medium">
+                        <span>#</span>
+                        {id.substring(0, 6)}
+                    </Header>
+                    {P(description)}
+                </Title>
+                <Address1>
+                    {(Object.keys(from) as Array<keyof typeof from>).map((keyName) => {
+                        return P(from[keyName], true, keyName)
+                    })}
+                </Address1>
+                <Dates>
+                    <div>
+                        {P('Invoice Date')}
+                        <Header size="medium">{created}</Header>
+                    </div>
+                    <div>
+                        {P('Payment Due')}
+                        <Header size="medium">{payment_due}</Header>
+                    </div>
+                </Dates>
+                <Address2>
+                    {P('Bill to', true)}
+                    <Header size="medium">{to?.name}</Header>
 
-                {(Object.keys(to) as Array<keyof typeof to>).map((keyName) => {
-                    return P(to[keyName], true, keyName)
-                })}
-            </Address2>
-            <Email>
-                <Paragraph themeCtx={activeTheme}>Sent to</Paragraph>
-                <Header size="medium">{to?.email}</Header>
-            </Email>
-            {ItemsList && <ItemsList items={items_list} />}
-        </StyledWrapper>
+                    {(Object.keys(to) as Array<keyof typeof to>).map((keyName) => {
+                        return P(to[keyName], true, keyName)
+                    })}
+                </Address2>
+                <Email>
+                    {P('Sent to')}
+                    <Header size="medium">{to?.email}</Header>
+                </Email>
+                {ItemsList && <ItemsList items={items_list} />}
+            </StyledWrapper>
+        </>
     )
 }
 // DetailsBody.propTypes = {

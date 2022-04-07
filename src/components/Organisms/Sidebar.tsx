@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import styled from 'styled-components'
 import Logo from '../Atoms/Logo'
 import AsideController from '../Molecules/AsideController'
@@ -33,4 +34,4 @@ const Sidebar = () => {
     )
 }
 
-export default Sidebar
+export default memo(Sidebar)

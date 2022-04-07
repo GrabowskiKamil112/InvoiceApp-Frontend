@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components'
 const Button = styled.button<{
     color?: string
     variant?: 'loginToggle' | 'submit' | 'back'
+    disabled: boolean
 }>`
     cursor: pointer;
     text-decoration: none;
@@ -19,6 +20,16 @@ const Button = styled.button<{
     position: relative;
     overflow: hidden;
     padding: 0 24px;
+
+    ${({ disabled }) =>
+        disabled &&
+        css`
+            cursor: default;
+            &:hover::after {
+                    display: none;
+                }
+            }
+        `};
 
     &::after {
         transition: all 0.3s ease;

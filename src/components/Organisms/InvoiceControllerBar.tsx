@@ -35,9 +35,7 @@ const StyledButton = styled(Button)`
         disabled &&
         css`
             cursor: default;
-            &:hover {
-                background-color: rgb(146, 119, 255);
-                &::after {
+            &:hover::after {
                     display: none;
                 }
             }
