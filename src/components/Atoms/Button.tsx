@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components'
 const Button = styled.button<{
     color?: string
     variant?: 'loginToggle' | 'submit' | 'back'
-    disabled: boolean
+    disabled?: boolean
 }>`
     cursor: pointer;
     text-decoration: none;

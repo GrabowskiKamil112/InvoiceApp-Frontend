@@ -55,6 +55,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
             {isFormOpen && (
                 <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
             )}
+            {invoices && <Loading visible display={false} />}
             <NavigationTemplate>
                 <InvoiceControllerBar
                     openFormFn={() => setIsFormOpen(true)}

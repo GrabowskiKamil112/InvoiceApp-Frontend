@@ -3,7 +3,6 @@ import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
-import DropdownSelect from './DropdownSelect'
 
 interface inputProps {
     themeCtx: string

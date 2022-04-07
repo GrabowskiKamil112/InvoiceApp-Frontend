@@ -81,7 +81,6 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
             type,
             from = {},
             to = {},
-            items_list,
             created,
             payment_due,
             description,
