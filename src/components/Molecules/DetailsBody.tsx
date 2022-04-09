@@ -75,7 +75,7 @@ const Email = styled.div`
     }
 `
 
-const DetailsBody = ({ invoice }: { invoice: Invoice }) => {
+const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
     console.log(invoice)
     const { from = {}, to = {}, items_list, created, payment_due, description, _id: id } = invoice
     const { activeTheme } = useContext(PageContext)

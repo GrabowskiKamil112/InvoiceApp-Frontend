@@ -10,16 +10,16 @@ import { Invoice } from '../Types/Invoice'
 import { useOnClickOutsideForm } from '../utils/hooks'
 
 const Loading = styled.button<{ visible: boolean; display: boolean }>`
+    background-color: ${({ theme }) => theme.dark.body.bg};
+    opacity: ${({ visible }) => (visible ? '1' : '0')};
     transition: all 0.6s ease-in;
+    transform: scale(2.5);
     position: absolute;
+    height: 100vh;
+    z-index: 999;
+    width: 100%;
     top: 0;
     left: 0;
-    z-index: 999;
-    height: 100vh;
-    width: 100%;
-    opacity: ${({ visible }) => (visible ? '1' : '0')};
-    transform: scale(2.5);
-    background-color: ${({ theme }) => theme.dark.body.bg};
     &::before {
         content: 'NOW LOADING';
         color: #e0e0e0e2;
@@ -55,7 +55,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
             {isFormOpen && (
                 <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
             )}
-            {invoices && <Loading visible display={false} />}
+            {!invoices && <Loading visible display={false} />}
             <NavigationTemplate>
                 <InvoiceControllerBar
                     openFormFn={() => setIsFormOpen(true)}

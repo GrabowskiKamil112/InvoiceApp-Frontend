@@ -1,6 +1,8 @@
-﻿export interface Invoice {
+﻿type types = 'draft' | 'pending' | 'paid'
+
+export interface Invoice {
     _id: string
-    type: 'draft' | 'pending' | 'paid'
+    type: types
     from?: From
     to?: To
     invoice_date?: string
@@ -17,6 +19,7 @@ type From = {
     post_code?: string
     country?: string
 }
+
 type To = {
     name?: string
     email?: string
@@ -25,6 +28,7 @@ type To = {
     post_code?: string
     country?: string
 }
+
 export type ItemsListEntity = {
     name?: string
     quantity?: string
@@ -37,6 +41,7 @@ export type newInvoice = Omit<Required<Invoice>, 'from' | 'to' | ' items_list'> 
     to: Required<To>
     items_list: Required<ItemsListEntity>[]
 }
+
 export interface newDraftInvoice extends Invoice {
     userID: string
 }

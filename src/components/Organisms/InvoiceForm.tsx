@@ -3,10 +3,12 @@ import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { Invoice } from '../../Types/Invoice'
+import { validateForm } from '../../utils/utils'
 import Button from '../Atoms/Button'
 import DropdownSelect from '../Atoms/DropdownSelect'
 import FormInput from '../Atoms/FormInput'
 import Header from '../Atoms/Header'
+import moment from 'moment'
 
 const StyledWrapper = styled.div`
     position: fixed;
@@ -68,6 +70,7 @@ const ButtonsContainer = styled.div<{ isEdit: boolean }>`
             }
         `};
 `
+
 type props = {
     isEdit?: boolean
     invoice?: Invoice
@@ -93,6 +96,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                     validateOnChange={false}
                     validateOnBlur={false}
                     initialValues={{
+                        _id: '',
                         type: type || '',
                         street_address: from.street_address || '',
                         city: from.city || '',
@@ -101,18 +105,19 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         clients_name: to.name || '',
                         clients_email: to.email || '',
                         clients_country: to.country || '',
+                        clients_post_code: to.post_code || '',
                         clients_city: to.city || '',
                         clients_street_address: to.street_address || '',
                         description: description || '',
-                        invoice_date: created || '',
+                        created: created || '',
                         payment_terms: payment_due || '',
                     }}
-                    // validationSchema={undefined}
+                    validate={(values) => validateForm(values as Invoice)}
                     onSubmit={(values: any) => {
                         if (isEdit) {
                             console.log('EDITED')
                         }
-                        alert(JSON.stringify(values, null, 2))
+                        console.log('gotowy:', JSON.stringify(values, null, 2))
                     }}>
                     {({ values, setFieldValue }) => (
                         <StyledForm>
@@ -193,13 +198,13 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                         <FormInput
                                             type="text"
                                             label="Post Code"
-                                            name="Post Code"
-                                            value={values.street_address}
+                                            name="clients_post_code"
+                                            value={values.clients_post_code}
                                         />
                                         <FormInput
                                             type="text"
                                             label="Country"
-                                            name="country"
+                                            name="clients_country"
                                             value={values.clients_country}
                                         />
                                     </StyledFormSection>
@@ -210,8 +215,8 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                         <FormInput
                                             type="date"
                                             label="Invoice Date"
-                                            name="invoice_date"
-                                            value={values.invoice_date}
+                                            name="created"
+                                            value={values.created}
                                         />
                                         <DropdownSelect
                                             onChange={(value: string) =>
@@ -265,11 +270,23 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                         <Button
                                             color="#363B53"
                                             type="submit"
-                                            onClick={() => setFieldValue('type', 'draft')}>
+                                            onClick={() => {
+                                                setFieldValue('type', 'draft'),
+                                                    setFieldValue(
+                                                        'created',
+                                                        moment().format('DD MMM YYYY')
+                                                    )
+                                            }}>
                                             Save as Draft
                                         </Button>
                                         <Button
-                                            onClick={() => setFieldValue('type', 'pending')}
+                                            onClick={() => {
+                                                setFieldValue('type', 'pending'),
+                                                    setFieldValue(
+                                                        'created',
+                                                        moment().format('DD MMM YYYY')
+                                                    )
+                                            }}
                                             color="#7c5dfa"
                                             type="submit">
                                             Save & Send
