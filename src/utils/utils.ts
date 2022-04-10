@@ -64,8 +64,8 @@ export const SignupSchema = Yup.object().shape({
 //     "payment_terms": "enginner"
 //   }
 
-const draftInvoice = Yup.object().shape({
-    type: Yup.string().oneOf(['pending', 'paid', 'draft']).required('type is required'),
+export const draftInvoice = Yup.object().shape({
+    type: Yup.string().oneOf(['draft']).required('type is required'),
     street_address: Yup.string(),
     city: Yup.string(),
     post_code: Yup.string(),
@@ -83,12 +83,13 @@ const draftInvoice = Yup.object().shape({
     created: Yup.string().required('invoice date is required'),
 })
 
-const normalInvoice = Yup.object().shape({
-    type: Yup.string().oneOf(['pending', 'paid', 'draft']).required('type is required'),
+export const normalInvoice = Yup.object().shape({
+    type: Yup.string().oneOf(['pending', 'paid']).required('type is required'),
     street_address: Yup.string().required('street_address is required'),
     city: Yup.string().required(' city is required'),
     post_code: Yup.string().required(' post_code is required'),
     country: Yup.string().required('country is required'),
+    clients_name: Yup.string().required('clients name is required'),
     clients_email: Yup.string()
         .matches(
             /^()(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
@@ -105,7 +106,7 @@ const normalInvoice = Yup.object().shape({
 })
 
 export const validateForm = async (values: Invoice) => {
-    const errors: any = {}
+    const errorsList: any = {}
     console.log(values)
 
     const { type } = values
@@ -115,25 +116,23 @@ export const validateForm = async (values: Invoice) => {
             const validation = await draftInvoice.validate(values, { abortEarly: false })
         } catch (error) {
             console.log('error:', error.message)
-            errors.push(error.message)
+            errorsList.push(error.message)
         }
     } else {
-        const validation = normalInvoice
+        await normalInvoice
             .validate(values, { abortEarly: false })
-            .then(function () {
+            .then(() => {
                 // Success
             })
-            .catch(function (err) {
-                err.inner.forEach((e: any) => {
+            .catch((errors) => {
+                errors.inner.forEach((e: Yup.ValidationError) => {
                     if (e.path) {
-                        errors[e.path] = e.message
+                        errorsList[e.path] = e.message
                     }
                 })
             })
-        console.log(validation.errors)
     }
 
-    console.log(errors)
-
-    return errors
+    console.log('list of errors', errorsList)
+    return errorsList
 }

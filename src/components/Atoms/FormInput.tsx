@@ -1,4 +1,4 @@
-import { Field } from 'formik'
+import { Field, getIn, useFormikContext } from 'formik'
 import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
@@ -12,6 +12,7 @@ interface labelProps extends inputProps {
     wideSpan: boolean
 }
 const StyledInput = styled(Field)<inputProps>`
+    transition: border-color 0.3s ease;
     margin-top: 10px;
     padding: 16px 20px;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.form.fieldBg`)};
@@ -23,6 +24,7 @@ const StyledInput = styled(Field)<inputProps>`
     height: 47px;
     width: 100%;
     border: 1px solid rgb(37, 41, 69);
+
     ${({ validationError }) =>
         validationError &&
         css`
@@ -30,10 +32,11 @@ const StyledInput = styled(Field)<inputProps>`
         `};
 `
 export const StyledLabel = styled.label<labelProps>`
-    height: auto;
+    color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.formLabel`)};
+    transition: color 0.3s ease;
     font-size: 1.2rem;
     font-weight: 400;
-    color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.formLabel`)};
+    height: auto;
 
     ${({ validationError }) =>
         validationError &&
@@ -68,24 +71,26 @@ const FormInput: React.FC<InputProps> = ({
     type,
     label,
     name,
-    validationError,
     value,
     wideSpan = false,
     placeholder,
 }) => {
     const { activeTheme } = useContext(PageContext)
+    const { errors } = useFormikContext()
+    const thisInputError = getIn(errors, name)
+
     return (
         <>
             <StyledLabel
                 wideSpan={wideSpan}
                 themeCtx={activeTheme}
-                validationError={validationError}
+                validationError={thisInputError}
                 htmlFor={name}>
                 {label}
 
                 <StyledInput
-                    placeholder={placeholder}
-                    validationError={validationError}
+                    placeholder={placeholder || ' '}
+                    validationError={thisInputError}
                     themeCtx={activeTheme}
                     type={type}
                     name={name}

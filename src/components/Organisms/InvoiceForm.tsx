@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { Invoice } from '../../Types/Invoice'
@@ -9,6 +9,7 @@ import DropdownSelect from '../Atoms/DropdownSelect'
 import FormInput from '../Atoms/FormInput'
 import Header from '../Atoms/Header'
 import moment from 'moment'
+import Errors from '../Atoms/Errors'
 
 const StyledWrapper = styled.div`
     position: fixed;
@@ -45,6 +46,7 @@ const Div = styled.div`
     display: flex;
     flex-direction: column;
     gap: 36px;
+    scroll-behavior: smooth;
     overflow-y: scroll;
     padding: 0 32px 16px 0;
     & > fieldset > legend {
@@ -79,6 +81,7 @@ type props = {
 const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
     ({ isEdit = false, invoice, closeFn }, ref) => {
         const { activeTheme } = useContext(PageContext)
+        const formToScrollRef = useRef<HTMLDivElement>(null)
 
         const {
             type,
@@ -112,7 +115,14 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         created: created || '',
                         payment_terms: payment_due || '',
                     }}
-                    validate={(values) => validateForm(values as Invoice)}
+                    validate={async (values) => {
+                        const errors = await validateForm(values as Invoice)
+                        if (Object.keys(errors).length !== 0) {
+                            const form = formToScrollRef.current
+                            form!.scrollTop = form!.scrollHeight
+                        }
+                        return errors
+                    }}
                     onSubmit={(values: any) => {
                         if (isEdit) {
                             console.log('EDITED')
@@ -132,13 +142,12 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                     'Create Invoice'
                                 )}
                             </Header>
-                            <Div>
+                            <Div ref={formToScrollRef}>
                                 <fieldset>
                                     <legend>Bill From</legend>
                                     <StyledFormSection>
                                         <FormInput
                                             wideSpan
-                                            validationError="dfgh"
                                             type="text"
                                             label="Street Address"
                                             name="street_address"
@@ -176,7 +185,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                         />
                                         <FormInput
                                             wideSpan
-                                            type="email"
+                                            type="text"
                                             label="Client's Email"
                                             name="clients_email"
                                             placeholder="e.g email@example.com"
@@ -245,6 +254,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                 <fieldset>
                                     <legend>ItemList</legend>
                                 </fieldset>
+                                <Errors />
                             </Div>
                             <ButtonsContainer isEdit={isEdit}>
                                 {isEdit ? (
