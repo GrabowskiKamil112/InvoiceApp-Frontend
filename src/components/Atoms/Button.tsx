@@ -19,6 +19,7 @@ const Button = styled.button<{
     font-size: 1.4rem;
     color: white;
     text-align: center;
+    transition: background-color 0.2s ease;
     position: relative;
     overflow: hidden;
     padding: 0 24px;
@@ -71,6 +72,12 @@ const Button = styled.button<{
             color: ${themeNavigator(`${themeCtx}.btn.secondary.text`)};
             background-color: ${themeNavigator(`${themeCtx}.btn.secondary.bg`)};
             width: 100%;
+            &:hover {
+                background-color: ${themeNavigator(`${themeCtx}.btn.secondary.hover`)};
+                &:after {
+                    opacity: 0;
+                }
+            }
         `};
 
     ${({ variant }) =>

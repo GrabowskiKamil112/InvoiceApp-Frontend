@@ -85,7 +85,7 @@ const theme = {
         btn: {
             secondary: {
                 bg: '#252945',
-                hover: '#ffffff',
+                hover: 'rgb(32, 34, 59)',
                 text: '#dfe3fa',
             },
             tertiary: {

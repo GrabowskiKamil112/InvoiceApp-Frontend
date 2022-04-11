@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { Invoice } from '../../Types/Invoice'
@@ -10,6 +10,7 @@ import FormInput from '../Atoms/FormInput'
 import Header from '../Atoms/Header'
 import moment from 'moment'
 import Errors from '../Atoms/Errors'
+import FormItem from '../Molecules/FormItem'
 
 const StyledWrapper = styled.div`
     position: fixed;
@@ -26,6 +27,10 @@ const StyledForm = styled(Form)<{ themeCtx: string }>`
     padding: 56px 32px 0 166px;
     max-width: 750px;
     height: 100%;
+
+    @media (max-width: 900px) {
+        padding-left: 60px;
+    }
 `
 const StyledFormSection = styled.div<{ dates?: boolean }>`
     display: grid;
@@ -80,7 +85,15 @@ type props = {
 const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
     ({ isEdit = false, invoice, closeFn }, ref) => {
         const { activeTheme } = useContext(PageContext)
+        const [numOfitems, setNumOfItems] = useState<number>(0)
         const formToScrollRef = useRef<HTMLDivElement>(null)
+        let items = []
+
+        useEffect(() => {
+            for (let i = 0; i < numOfitems; i++) {
+                items.push(<FormItem />)
+            }
+        }, [numOfitems])
 
         const {
             type,
@@ -90,7 +103,9 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
             payment_due,
             description,
             _id: id,
+            items_list,
         } = invoice || {}
+        console.log(items_list)
 
         return (
             <StyledWrapper ref={ref}>
@@ -113,6 +128,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         description: description || '',
                         created: created || '',
                         payment_terms: payment_due || '',
+                        items_list: [],
                     }}
                     validate={async (values) => {
                         const errors = await validateForm(values as Invoice)
@@ -252,10 +268,14 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                 </fieldset>
                                 <fieldset>
                                     <legend>ItemList</legend>
+                                    {Array.from({ length: numOfitems }, (_, i) => (
+                                        <FormItem key={i}></FormItem>
+                                    ))}
                                     <Button
                                         themeCtx={activeTheme}
                                         variant="addNewItem"
                                         type="button"
+                                        onClick={() => setNumOfItems(numOfitems + 1)}
                                         color={activeTheme == 'dark' ? '#252945' : '#f9fafe'}>
                                         + Add New Item
                                     </Button>

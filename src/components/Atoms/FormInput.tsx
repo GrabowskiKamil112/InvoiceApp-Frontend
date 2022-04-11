@@ -61,7 +61,7 @@ interface InputProps {
     validationError?: string
     value?: string
     type: string
-    label: string
+    label?: string
     name: string
     wideSpan?: boolean
     placeholder?: string
