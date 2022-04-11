@@ -3,7 +3,7 @@ import React, { useContext, useRef } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { Invoice } from '../../Types/Invoice'
-import { validateForm } from '../../utils/utils'
+import { themeNavigator, validateForm } from '../../utils/utils'
 import Button from '../Atoms/Button'
 import DropdownSelect from '../Atoms/DropdownSelect'
 import FormInput from '../Atoms/FormInput'
@@ -20,12 +20,11 @@ const StyledWrapper = styled.div`
     top: 0;
     left: 0;
 `
-const StyledForm = styled(Form)`
-    background-color: rgb(20, 22, 37);
+const StyledForm = styled(Form)<{ themeCtx: string }>`
+    background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.form.bg`)};
     border-radius: 0 20px 20px 0;
-    padding: 56px 32px 0 72px;
-    margin-left: 94px;
-    max-width: 656px;
+    padding: 56px 32px 0 166px;
+    max-width: 750px;
     height: 100%;
 `
 const StyledFormSection = styled.div<{ dates?: boolean }>`
@@ -130,7 +129,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         console.log('gotowy:', JSON.stringify(values, null, 2))
                     }}>
                     {({ values, setFieldValue }) => (
-                        <StyledForm>
+                        <StyledForm themeCtx={activeTheme}>
                             <Header fontSize="2.4" size={'big'}>
                                 {isEdit ? (
                                     <span>
@@ -253,6 +252,13 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                 </fieldset>
                                 <fieldset>
                                     <legend>ItemList</legend>
+                                    <Button
+                                        themeCtx={activeTheme}
+                                        variant="addNewItem"
+                                        type="button"
+                                        color={activeTheme == 'dark' ? '#252945' : '#f9fafe'}>
+                                        + Add New Item
+                                    </Button>
                                 </fieldset>
                                 <Errors />
                             </Div>

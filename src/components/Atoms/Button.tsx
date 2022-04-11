@@ -1,9 +1,11 @@
 import styled, { css } from 'styled-components'
+import { themeNavigator } from '../../utils/utils'
 
 const Button = styled.button<{
     color?: string
-    variant?: 'loginToggle' | 'submit' | 'back'
+    variant?: 'loginToggle' | 'submit' | 'back' | 'addNewItem'
     disabled?: boolean
+    themeCtx?: string
 }>`
     cursor: pointer;
     text-decoration: none;
@@ -61,6 +63,14 @@ const Button = styled.button<{
             &:hover::after {
                 opacity: 0;
             }
+        `};
+
+    ${({ variant, themeCtx }) =>
+        variant == 'addNewItem' &&
+        css`
+            color: ${themeNavigator(`${themeCtx}.btn.secondary.text`)};
+            background-color: ${themeNavigator(`${themeCtx}.btn.secondary.bg`)};
+            width: 100%;
         `};
 
     ${({ variant }) =>

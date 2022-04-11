@@ -7,9 +7,11 @@ export function useOnClickOutsideForm(
 ) {
     useEffect(() => {
         const listener = (event: MouseEvent | TouchEvent): void => {
+            const sidebar = document.getElementById('sidebar')
             const form = ref?.current?.childNodes[0]
+            const { target } = event
 
-            if (!form || form.contains(event.target as Node)) {
+            if (!form || form.contains(target as Node) || sidebar?.contains(target as Node)) {
                 return
             }
             handler()

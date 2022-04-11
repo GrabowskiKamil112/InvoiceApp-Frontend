@@ -27,7 +27,7 @@ const StyledWrapper = styled.aside`
 
 const Sidebar = () => {
     return (
-        <StyledWrapper>
+        <StyledWrapper id="sidebar">
             <Logo />
             <AsideController />
         </StyledWrapper>
