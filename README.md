@@ -1,5 +1,3 @@
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=GrabowskiKamil112&hide=prs,issues,contribs,stars)](https://github.com/anuraghazra/github-readme-stats)
-
 
 # Another Invoice App
 >  Invoicing software that is a tool for storing billings with settlement dates. This tool allows storing drafts or normal invoices with date countdown, reminding you about upcoming payments.
@@ -44,3 +42,5 @@ Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
 <!-- This project is open source and available under the [... License](). -->
 
 <!-- You don't have to include all sections - just the one's relevant to your project -->
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=GrabowskiKamil112&hide=prs,issues,contribs,stars)](https://github.com/anuraghazra/github-readme-stats)
+
