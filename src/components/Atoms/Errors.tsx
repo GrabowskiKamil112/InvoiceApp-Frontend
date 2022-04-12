@@ -1,12 +1,22 @@
 import { getIn, useFormikContext } from 'formik'
 import React from 'react'
+import styled from 'styled-components'
+
+const StyledWrapper = styled.div`
+    & > div {
+        font-size: 1.1rem;
+        color: #ec5757;
+        margin-bottom: 4px;
+        font-weight: 700;
+    }
+`
 
 const Errors: React.FC = () => {
     const { errors } = useFormikContext()
     console.log('errors:', errors)
 
     return (
-        <div>
+        <StyledWrapper>
             {Object.values(errors).some((val) => (val as string).endsWith('required')) && (
                 <div> - All fields must be filled.</div>
             )}
@@ -16,7 +26,7 @@ const Errors: React.FC = () => {
             {
                 // itemlist errors
             }
-        </div>
+        </StyledWrapper>
     )
 }
 

@@ -87,13 +87,6 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
         const { activeTheme } = useContext(PageContext)
         const [numOfitems, setNumOfItems] = useState<number>(0)
         const formToScrollRef = useRef<HTMLDivElement>(null)
-        let items = []
-
-        useEffect(() => {
-            for (let i = 0; i < numOfitems; i++) {
-                items.push(<FormItem />)
-            }
-        }, [numOfitems])
 
         const {
             type,
@@ -269,7 +262,12 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                 <fieldset>
                                     <legend>ItemList</legend>
                                     {Array.from({ length: numOfitems }, (_, i) => (
-                                        <FormItem key={i}></FormItem>
+                                        <FormItem
+                                            key={i}
+                                            index={i}
+                                            removeItemFn={() =>
+                                                setNumOfItems(numOfitems - 1)
+                                            }></FormItem>
                                     ))}
                                     <Button
                                         themeCtx={activeTheme}
@@ -307,21 +305,13 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             color="#363B53"
                                             type="submit"
                                             onClick={() => {
-                                                setFieldValue('type', 'draft'),
-                                                    setFieldValue(
-                                                        'created',
-                                                        moment().format('DD MMM YYYY')
-                                                    )
+                                                setFieldValue('type', 'draft')
                                             }}>
                                             Save as Draft
                                         </Button>
                                         <Button
                                             onClick={() => {
-                                                setFieldValue('type', 'pending'),
-                                                    setFieldValue(
-                                                        'created',
-                                                        moment().format('DD MMM YYYY')
-                                                    )
+                                                setFieldValue('type', 'pending')
                                             }}
                                             color="#7c5dfa"
                                             type="submit">

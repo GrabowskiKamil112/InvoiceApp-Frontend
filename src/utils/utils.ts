@@ -81,6 +81,7 @@ export const draftInvoice = Yup.object().shape({
     payment_terms: Yup.string(),
     description: Yup.string(),
     created: Yup.string().required('invoice date is required'),
+    items_list: Yup.array(),
 })
 
 export const normalInvoice = Yup.object().shape({
@@ -103,6 +104,7 @@ export const normalInvoice = Yup.object().shape({
     payment_terms: Yup.string().required(' payment_terms is required'),
     description: Yup.string().required('description is required'),
     created: Yup.string().required(' invoice date is required'),
+    items_list: Yup.array(),
 })
 
 export const validateForm = async (values: Invoice) => {

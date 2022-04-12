@@ -29,7 +29,7 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
         }
     }
 
-    & > button {
+    & > span {
         background: none;
         border: none;
         position: relative;
@@ -46,20 +46,23 @@ const DeleteIcon = styled(SVG)`
         fill: #cc5353;
     }
 `
-const FormItem: React.FC = () => {
+
+type props = { index: number; removeItemFn: () => void }
+
+const FormItem: React.FC<props> = ({ index, removeItemFn }) => {
     const { activeTheme } = useContext(PageContext)
 
     return (
         <StyledWrapper themeCtx={activeTheme}>
-            <FormInput type="text" name="name" />
-            <FormInput type="text" name="quantity" />
-            <FormInput type="text" name="price" />
+            <FormInput type="text" name={`items_list[${index}].name`} />
+            <FormInput type="text" name={`items_list[${index}].quantity`} />
+            <FormInput type="text" name={`items_list[${index}].price`} />
 
             <div>0</div>
 
-            <button type="button">
-                <DeleteIcon src={binIcon}></DeleteIcon>
-            </button>
+            <span>
+                <DeleteIcon src={binIcon} onClick={() => removeItemFn()}></DeleteIcon>
+            </span>
         </StyledWrapper>
     )
 }
