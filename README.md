@@ -2,7 +2,7 @@
 
 
 # Another Invoice App
->  Invoicing software is a tool for storing billings with settlement dates. This tool allows storing drafts or normal invoices with date countdown, reminding you about upcoming payments.
+>  Invoicing software that is a tool for storing billings with settlement dates. This tool allows storing drafts or normal invoices with date countdown, reminding you about upcoming payments.
 
 
 ## Demo
