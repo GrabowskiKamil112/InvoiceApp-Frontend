@@ -5,8 +5,8 @@ import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
 
 interface inputProps {
-    themeCtx: string
-    validationError?: string
+    themectx: string
+    validationerror?: string
 }
 interface labelProps extends inputProps {
     wideSpan: boolean
@@ -15,11 +15,11 @@ const StyledInput = styled(Field)<inputProps>`
     transition: border-color 0.3s ease;
     margin-top: 10px;
     padding: 16px 20px;
-    background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.form.fieldBg`)};
+    background-color: ${({ themectx }) => themeNavigator(`${themectx}.form.fieldBg`)};
     border-radius: 4px;
     font-size: 12px;
     outline: none;
-    color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.bodyB`)};
+    color: ${({ themectx }) => themeNavigator(`${themectx}.text.bodyB`)};
     font-weight: 700;
     height: 47px;
     width: 100%;
@@ -32,14 +32,14 @@ const StyledInput = styled(Field)<inputProps>`
         `};
 `
 export const StyledLabel = styled.label<labelProps>`
-    color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.formLabel`)};
+    color: ${({ themectx }) => themeNavigator(`${themectx}.text.formLabel`)};
     transition: color 0.3s ease;
     font-size: 1.2rem;
     font-weight: 400;
     height: auto;
 
-    ${({ validationError }) =>
-        validationError &&
+    ${({ validationerror }) =>
+        validationerror &&
         css`
             color: #ec5757;
         `};
@@ -50,7 +50,7 @@ export const StyledLabel = styled.label<labelProps>`
         `};
 
     &:focus-within {
-        color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.formLabel`)};
+        color: ${({ themectx }) => themeNavigator(`${themectx}.text.formLabel`)};
         & input {
             border-color: #9277ff;
         }
@@ -58,7 +58,7 @@ export const StyledLabel = styled.label<labelProps>`
 `
 
 interface InputProps {
-    validationError?: string
+    validationerror?: string
     value?: string
     type: string
     label?: string
@@ -83,19 +83,19 @@ const FormInput: React.FC<InputProps> = ({
         <>
             <StyledLabel
                 wideSpan={wideSpan}
-                themeCtx={activeTheme}
-                validationError={thisInputError}
+                themectx={activeTheme}
+                validationerror={thisInputError}
                 htmlFor={name}>
                 {label}
 
                 <StyledInput
                     placeholder={placeholder || ' '}
-                    validationError={thisInputError}
-                    themeCtx={activeTheme}
+                    validationerror={thisInputError}
+                    themectx={activeTheme}
                     type={type}
                     name={name}
                     value={value}
-                    autocomplete="off"
+                    autoComplete="off"
                 />
             </StyledLabel>
         </>

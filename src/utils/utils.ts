@@ -72,7 +72,7 @@ export const draftInvoice = Yup.object().shape({
     country: Yup.string(),
     clients_email: Yup.string().matches(
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        'email is incorrect'
+        { message: 'email is incorrect', excludeEmptyString: true }
     ),
     clients_country: Yup.string(),
     clients_post_code: Yup.string(),
@@ -80,8 +80,14 @@ export const draftInvoice = Yup.object().shape({
     clients_street_address: Yup.string(),
     payment_terms: Yup.string(),
     description: Yup.string(),
-    created: Yup.string().required('invoice date is required'),
-    items_list: Yup.array(),
+    created: Yup.string(),
+    items_list: Yup.array().of(
+        Yup.object().shape({
+            name: Yup.string(),
+            quantity: Yup.number(),
+            price: Yup.number(),
+        })
+    ),
 })
 
 export const normalInvoice = Yup.object().shape({
@@ -94,7 +100,7 @@ export const normalInvoice = Yup.object().shape({
     clients_email: Yup.string()
         .matches(
             /^()(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            'email is incorrect'
+            { message: 'email is incorrect', excludeEmptyString: true }
         )
         .required(' clients_email is required'),
     clients_country: Yup.string().required('clients_country is required'),
@@ -104,7 +110,15 @@ export const normalInvoice = Yup.object().shape({
     payment_terms: Yup.string().required(' payment_terms is required'),
     description: Yup.string().required('description is required'),
     created: Yup.string().required(' invoice date is required'),
-    items_list: Yup.array(),
+    items_list: Yup.array()
+        .min(1)
+        .of(
+            Yup.object().shape({
+                name: Yup.string().required('required'),
+                quantity: Yup.number().required('required'),
+                price: Yup.number().required('required'),
+            })
+        ),
 })
 
 export const validateForm = async (values: Invoice) => {
@@ -114,12 +128,16 @@ export const validateForm = async (values: Invoice) => {
     const { type } = values
 
     if (type === 'draft') {
-        try {
-            const validation = await draftInvoice.validate(values, { abortEarly: false })
-        } catch (error) {
-            console.log('error:', error.message)
-            errorsList.push(error.message)
-        }
+        await draftInvoice
+            .validate(values, { abortEarly: false })
+            .then(() => {})
+            .catch((errors) => {
+                errors.inner.forEach((e: Yup.ValidationError) => {
+                    if (e.path) {
+                        errorsList[e.path] = e.message
+                    }
+                })
+            })
     } else {
         await normalInvoice
             .validate(values, { abortEarly: false })

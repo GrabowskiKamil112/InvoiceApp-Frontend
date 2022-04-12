@@ -11,21 +11,25 @@ const StyledWrapper = styled.div`
     }
 `
 
+type Errors = {
+    [key: string]: string
+}
+
 const Errors: React.FC = () => {
-    const { errors } = useFormikContext()
-    console.log('errors:', errors)
+    const { errors } = useFormikContext<Errors>()
 
     return (
         <StyledWrapper>
             {Object.values(errors).some((val) => (val as string).endsWith('required')) && (
                 <div> - All fields must be filled.</div>
             )}
-            {getIn(errors, 'clients_email') === 'email is incorrect' && (
-                <div> - invalid email.</div>
+            {getIn(errors, 'clients_email')?.endsWith('incorrect') && <div> - invalid email.</div>}
+            {getIn(errors, 'items_list')?.endsWith('at least 1 items') && (
+                <div> - An item must be added.</div>
             )}
-            {
-                // itemlist errors
-            }
+            {Object.values(errors).some((val) => (val as string).includes('must be a')) && (
+                <div> - invalid input.</div>
+            )}
         </StyledWrapper>
     )
 }

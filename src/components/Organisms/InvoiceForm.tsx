@@ -1,5 +1,5 @@
 import { Form, Formik } from 'formik'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { Invoice } from '../../Types/Invoice'
@@ -8,7 +8,6 @@ import Button from '../Atoms/Button'
 import DropdownSelect from '../Atoms/DropdownSelect'
 import FormInput from '../Atoms/FormInput'
 import Header from '../Atoms/Header'
-import moment from 'moment'
 import Errors from '../Atoms/Errors'
 import FormItem from '../Molecules/FormItem'
 
@@ -21,8 +20,8 @@ const StyledWrapper = styled.div`
     top: 0;
     left: 0;
 `
-const StyledForm = styled(Form)<{ themeCtx: string }>`
-    background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.form.bg`)};
+const StyledForm = styled(Form)<{ themectx: string }>`
+    background-color: ${({ themectx }) => themeNavigator(`${themectx}.form.bg`)};
     border-radius: 0 20px 20px 0;
     padding: 56px 32px 0 166px;
     max-width: 750px;
@@ -98,7 +97,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
             _id: id,
             items_list,
         } = invoice || {}
-        console.log(items_list)
+        console.log('itemslist in form', items_list)
 
         return (
             <StyledWrapper ref={ref}>
@@ -138,7 +137,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         console.log('gotowy:', JSON.stringify(values, null, 2))
                     }}>
                     {({ values, setFieldValue }) => (
-                        <StyledForm themeCtx={activeTheme}>
+                        <StyledForm themectx={activeTheme}>
                             <Header fontSize="2.4" size={'big'}>
                                 {isEdit ? (
                                     <span>
@@ -289,7 +288,12 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             onClick={() => closeFn()}>
                                             Cancel
                                         </Button>
-                                        <Button color="#7c5dfa" type="submit">
+                                        <Button
+                                            color="#7c5dfa"
+                                            type="submit"
+                                            onClick={() => {
+                                                setFieldValue('type', 'pending')
+                                            }}>
                                             Save Changes
                                         </Button>
                                     </>
