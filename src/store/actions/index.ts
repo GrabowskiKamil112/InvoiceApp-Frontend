@@ -27,10 +27,58 @@ export enum ActionType {
     ADD_INVOICE_FAILURE = 'ADD_INVOICE_FAILURE',
     ADD_INVOICE_REQUEST = 'ADD_INVOICE_REQUEST',
     FETCH_REQUEST = 'FETCH_REQUEST',
-    FETCH_SUCCES = 'FETCH_SUCCES',
+    FETCH_SUCCESS = 'FETCH_SUCCESS',
     FETCH_FAILURE = 'FETCH_FAILURE',
+    AUTH_REQUEST = 'AUTH_REQUEST',
+    AUTH_SUCCESS = 'AUTH_SUCCESS',
+    AUTH_FAILURE = 'AUTH_FAILURE',
+    REGISTER_REQUEST = 'REGISTER_REQUEST',
+    REGISTER_SUCCESS = 'REGISTER_SUCCESS',
+    REGISTER_FAILURE = 'REGISTER_FAILURE',
 }
 export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveCompleted
+
+export const authenticate =
+    (username: string, password: string): AppThunk =>
+    (dispatch) => {
+        dispatch({ type: ActionType.AUTH_REQUEST })
+
+        return axios
+            .post('http://localhost:9001/api/user/login', {
+                username,
+                password,
+            })
+            .then((payload) => {
+                console.log(payload)
+                dispatch({ type: ActionType.AUTH_SUCCESS, payload })
+            })
+            .catch((err) => {
+                console.log(err)
+                dispatch({ type: ActionType.AUTH_FAILURE })
+            })
+    }
+
+export const registration =
+    (username: string, email: string, password: string): AppThunk =>
+    (dispatch) => {
+        dispatch({ type: ActionType.REGISTER_REQUEST })
+
+        return axios
+            .post('http://localhost:9001/api/user/register', {
+                username,
+                password,
+            })
+            .then((payload) => {
+                const { data: userID } = payload
+                console.log('succes', userID)
+
+                dispatch({ type: ActionType.REGISTER_SUCCESS, payload: { userID } })
+            })
+            .catch((err) => {
+                console.log(err)
+                dispatch({ type: ActionType.REGISTER_FAILURE })
+            })
+    }
 
 export const changeFilter =
     (filter: string): AppThunk =>

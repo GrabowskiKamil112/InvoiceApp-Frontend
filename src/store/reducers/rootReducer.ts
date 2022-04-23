@@ -8,7 +8,7 @@ const testItems = [
 
 const initialState = {
     filterBy: 'total',
-    userID: '1234',
+    userID: null,
     invoices: [
         {
             _id: '2zf8dj90dp',
@@ -127,8 +127,16 @@ const rootReducer = (state = initialState, action: any) => {
                 ...state,
             }
 
-        default:
+        case ActionType.REGISTER_SUCCESS:
             console.log(type)
+
+            return {
+                ...state,
+                userID: payload.userID,
+            }
+
+        default:
+            console.log('cached in default:', type)
 
             return { ...state }
     }

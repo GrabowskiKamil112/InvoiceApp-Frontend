@@ -7,6 +7,10 @@ import { SignupSchema } from '../utils/utils'
 import Button from '../components/Atoms/Button'
 import Paragraph from '../components/Atoms/Paragraph'
 import PageContext from '../context/pageContext'
+import { authenticate, registration } from '../store/actions'
+import { useDispatch } from 'react-redux'
+import { useAppSelector } from '../store/hooks/hooks'
+import { Navigate } from 'react-router-dom'
 
 const StyledHeader = styled.h3`
     font-family: 'Poppins', sans-serif;
@@ -41,11 +45,18 @@ const LoginRegister: React.FC = () => {
     const [numOfErrors, setNumOfErrors] = useState(0)
     const formRef = useRef<HTMLFormElement>(null)
 
+    const dispatch = useDispatch()
+    const userID = useAppSelector((state) => state.userID)
+
     const handleNumOfErrors = () => {
         setTimeout(() => {
             const numOfErrors = formRef.current?.getElementsByTagName('label').length
             setNumOfErrors(numOfErrors ? numOfErrors : 0)
         }, 1)
+    }
+
+    if (userID) {
+        return <Navigate to="/home" />
     }
 
     return (
@@ -63,6 +74,11 @@ const LoginRegister: React.FC = () => {
                 validationSchema={isRegister ? SignupSchema : undefined}
                 onSubmit={(values: Values) => {
                     console.log(isRegister, values)
+                    const { username, email, password } = values
+
+                    !isRegister
+                        ? dispatch(authenticate(username, password))
+                        : dispatch(registration(username, email, password))
 
                     alert(JSON.stringify(values, null, 2))
                 }}>
