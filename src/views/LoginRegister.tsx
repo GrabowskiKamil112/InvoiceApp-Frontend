@@ -40,13 +40,14 @@ interface Values {
 }
 
 const LoginRegister: React.FC = () => {
+    const [state, setState] = useState({ isRegister: false, redirect: false })
+    const [numOfErrors, setNumOfErrors] = useState<number>(0)
     const { activeTheme } = useContext(PageContext)
-    const [isRegister, toggleRegister] = useState<boolean>(false)
-    const [numOfErrors, setNumOfErrors] = useState(0)
     const formRef = useRef<HTMLFormElement>(null)
 
-    const dispatch = useDispatch()
     const userID = useAppSelector((state) => state.userID)
+
+    const dispatch = useDispatch()
 
     const handleNumOfErrors = () => {
         setTimeout(() => {
@@ -55,13 +56,19 @@ const LoginRegister: React.FC = () => {
         }, 1)
     }
 
-    if (userID) {
+    const handleModalAfterRegistration = (username: string) => {
+        console.log('userrrrr', username)
+
+        setState({ ...state, ['redirect']: true })
+    }
+
+    if ((userID && !state.isRegister) || state.redirect) {
         return <Navigate to="/home" />
     }
 
     return (
-        <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={isRegister}>
-            <StyledHeader>{isRegister ? 'Create your account' : 'welcome'}</StyledHeader>
+        <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={state.isRegister}>
+            <StyledHeader>{state.isRegister ? 'Create your account' : 'welcome'}</StyledHeader>
             <Formik
                 validateOnChange={false}
                 validateOnBlur={false}
@@ -71,17 +78,19 @@ const LoginRegister: React.FC = () => {
                     password: '',
                     passwordConfirm: '',
                 }}
-                validationSchema={isRegister ? SignupSchema : undefined}
+                validationSchema={state.isRegister ? SignupSchema : undefined}
                 onSubmit={async (values: Values) => {
-                    console.log(isRegister, values)
                     const { username, email, password } = values
-                    let result = (await !isRegister)
+
+                    !state.isRegister
                         ? dispatch(authenticate(username, password))
-                        : dispatch(registration(username, email, password))
-
-                    result.then((data: string) => console.log('result:', data))
-
-                    alert(JSON.stringify(values, null, 2))
+                        : await dispatch(registration(username, email, password)).then(
+                              (username: string) => {
+                                  if (username) {
+                                      handleModalAfterRegistration(username)
+                                  }
+                              }
+                          )
                 }}>
                 {({ errors, values }) => (
                     <StyledForm ref={formRef}>
@@ -92,7 +101,7 @@ const LoginRegister: React.FC = () => {
                             placeholder="Username"
                             value={values.username}
                         />
-                        {isRegister && (
+                        {state.isRegister && (
                             <Input
                                 validationError={errors.email}
                                 type="email"
@@ -108,7 +117,7 @@ const LoginRegister: React.FC = () => {
                             placeholder="Password"
                             value={values.password}
                         />
-                        {isRegister && (
+                        {state.isRegister && (
                             <Input
                                 validationError={errors.passwordConfirm}
                                 type="password"
@@ -128,7 +137,7 @@ const LoginRegister: React.FC = () => {
             <Button
                 variant="loginToggle"
                 onClick={() => {
-                    return toggleRegister(!isRegister)
+                    return setState({ ...state, ['isRegister']: !state.isRegister })
                 }}>
                 Sign up
             </Button>

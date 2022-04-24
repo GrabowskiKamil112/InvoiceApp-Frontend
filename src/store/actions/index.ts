@@ -49,7 +49,7 @@ export const authenticate =
                 password,
             })
             .then((payload) => {
-                console.log(payload)
+                console.log('payload', payload)
                 dispatch({ type: ActionType.AUTH_SUCCESS, payload })
             })
             .catch((err) => {
@@ -68,11 +68,11 @@ export const registration = (username: string, email: string, password: string):
                 password,
             })
             .then((payload) => {
-                const { data: userID } = payload
-                console.log('succes', userID)
+                console.log(payload)
 
-                dispatch({ type: ActionType.REGISTER_SUCCESS, payload: { userID } })
-                return userID
+                dispatch({ type: ActionType.REGISTER_SUCCESS, payload })
+
+                return payload.data.username
             })
             .catch((err) => {
                 console.log(err)

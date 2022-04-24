@@ -132,7 +132,16 @@ const rootReducer = (state = initialState, action: any) => {
 
             return {
                 ...state,
-                userID: payload.userID,
+                userID: payload.data._id,
+                username: payload.data.username,
+            }
+
+        case ActionType.AUTH_SUCCESS:
+            console.log(type)
+            return {
+                ...state,
+                userID: payload.data._id,
+                username: payload.data.username,
             }
 
         default:
