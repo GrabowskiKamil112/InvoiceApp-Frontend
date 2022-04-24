@@ -8,8 +8,7 @@ import Button from '../components/Atoms/Button'
 import Paragraph from '../components/Atoms/Paragraph'
 import PageContext from '../context/pageContext'
 import { authenticate, registration } from '../store/actions'
-import { useDispatch } from 'react-redux'
-import { useAppSelector } from '../store/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
 import { Navigate } from 'react-router-dom'
 
 const StyledHeader = styled.h3`
@@ -47,7 +46,7 @@ const LoginRegister: React.FC = () => {
 
     const userID = useAppSelector((state) => state.userID)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const handleNumOfErrors = () => {
         setTimeout(() => {

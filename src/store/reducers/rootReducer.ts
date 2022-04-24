@@ -103,6 +103,8 @@ const initialState = {
 
 const rootReducer = (state = initialState, action: any) => {
     const { type, payload } = action
+    console.log(type)
+
     switch (type) {
         case ActionType.CHANGE_FILTER:
             return {
@@ -135,6 +137,15 @@ const rootReducer = (state = initialState, action: any) => {
                 userID: payload.data._id,
                 username: payload.data.username,
             }
+
+        case ActionType.LOGOUT:
+            console.log(type)
+
+        // return {
+        //     ...state,
+        //     userID: null,
+        //     username: null,
+        // }
 
         case ActionType.AUTH_SUCCESS:
             console.log(type)

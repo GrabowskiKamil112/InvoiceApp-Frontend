@@ -7,6 +7,8 @@ import moonIcon from '../../../public/assets/icon-moon.svg'
 import sunIcon from '../../../public/assets/icon-sun.svg'
 import PageContext from '../../context/pageContext'
 import { Link } from 'react-router-dom'
+import { useAppDispatch } from '../../store/hooks/hooks'
+import { logout } from '../../store/actions'
 
 const Divider = styled.div`
     height: 1px;
@@ -35,10 +37,11 @@ const StyledWrapper = styled.div`
 
 const AsideController: React.FC = () => {
     const { activeTheme, toggleTheme } = useContext(PageContext)
+    const dispatch = useAppDispatch()
 
     return (
         <StyledWrapper>
-            <Link to="/login">
+            <Link to="/login" onClick={() => dispatch(logout())}>
                 <Icon src={logoutIcon} />
             </Link>
             <Icon src={activeTheme === 'light' ? moonIcon : sunIcon} onClick={toggleTheme} />

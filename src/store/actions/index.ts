@@ -19,6 +19,7 @@ export interface IChangeCompletion {
 }
 
 export enum ActionType {
+    LOGOUT = 'LOGOUT',
     CHANGE_FILTER = 'CHANGE_FILTER',
     REMOVE_INVOICE_SUCCESS = 'REMOVE_INVOICE_SUCCESS',
     REMOVE_INVOICE_FAILURE = 'REMOVE_INVOICE_FAILURE',
@@ -36,6 +37,7 @@ export enum ActionType {
     REGISTER_SUCCESS = 'REGISTER_SUCCESS',
     REGISTER_FAILURE = 'REGISTER_FAILURE',
 }
+
 export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveCompleted
 
 export const authenticate =
@@ -50,6 +52,9 @@ export const authenticate =
             })
             .then((payload) => {
                 console.log('payload', payload)
+
+                sessionStorage.setItem('userID', payload.data._id)
+
                 dispatch({ type: ActionType.AUTH_SUCCESS, payload })
             })
             .catch((err) => {
@@ -81,10 +86,15 @@ export const registration = (username: string, email: string, password: string):
     }
 }
 
+export const logout = (): AppThunk => (dispatch, getState) => {
+    console.log(getState)
+    sessionStorage.removeItem('userID')
+    dispatch({ type: ActionType.LOGOUT })
+}
+
 export const changeFilter =
     (filter: string): AppThunk =>
-    (dispatch, getState) => {
-        console.log(getState())
+    (dispatch) => {
         dispatch({ type: ActionType.CHANGE_FILTER, payload: { filter } })
     }
 
