@@ -72,13 +72,14 @@ const LoginRegister: React.FC = () => {
                     passwordConfirm: '',
                 }}
                 validationSchema={isRegister ? SignupSchema : undefined}
-                onSubmit={(values: Values) => {
+                onSubmit={async (values: Values) => {
                     console.log(isRegister, values)
                     const { username, email, password } = values
-
-                    !isRegister
+                    let result = (await !isRegister)
                         ? dispatch(authenticate(username, password))
                         : dispatch(registration(username, email, password))
+
+                    result.then((data: string) => console.log('result:', data))
 
                     alert(JSON.stringify(values, null, 2))
                 }}>

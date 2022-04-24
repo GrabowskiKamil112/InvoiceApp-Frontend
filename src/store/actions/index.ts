@@ -58,9 +58,8 @@ export const authenticate =
             })
     }
 
-export const registration =
-    (username: string, email: string, password: string): AppThunk =>
-    (dispatch) => {
+export const registration = (username: string, email: string, password: string): AppThunk => {
+    return async (dispatch) => {
         dispatch({ type: ActionType.REGISTER_REQUEST })
 
         return axios
@@ -73,12 +72,14 @@ export const registration =
                 console.log('succes', userID)
 
                 dispatch({ type: ActionType.REGISTER_SUCCESS, payload: { userID } })
+                return userID
             })
             .catch((err) => {
                 console.log(err)
                 dispatch({ type: ActionType.REGISTER_FAILURE })
             })
     }
+}
 
 export const changeFilter =
     (filter: string): AppThunk =>
