@@ -9,7 +9,6 @@ export interface Invoice {
     payment_term?: string
     description?: string
     items_list?: ItemsListEntity[]
-    created: string
     payment_due?: string
 }
 

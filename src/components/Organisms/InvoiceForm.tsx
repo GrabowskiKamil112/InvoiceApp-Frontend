@@ -1,4 +1,4 @@
-import { Form, Formik } from 'formik'
+import { Form, Formik, useFormikContext } from 'formik'
 import React, { useContext, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
@@ -10,6 +10,9 @@ import FormInput from '../Atoms/FormInput'
 import Header from '../Atoms/Header'
 import Errors from '../Atoms/Errors'
 import FormItem from '../Molecules/FormItem'
+import moment from 'moment'
+import { useAppDispatch } from '../../store/hooks/hooks'
+import { addItem } from '../../store/actions'
 
 const StyledWrapper = styled.div`
     position: fixed;
@@ -87,17 +90,18 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
         const [numOfitems, setNumOfItems] = useState<number>(0)
         const formToScrollRef = useRef<HTMLDivElement>(null)
 
+        const dispatch = useAppDispatch()
+
         const {
             type,
             from = {},
             to = {},
-            created,
+            invoice_date,
             payment_due,
             description,
             _id: id,
             items_list,
         } = invoice || {}
-        console.log('itemslist in form', items_list)
 
         return (
             <StyledWrapper ref={ref}>
@@ -107,19 +111,23 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                     initialValues={{
                         _id: '',
                         type: type || '',
-                        street_address: from.street_address || '',
-                        city: from.city || '',
-                        post_code: from.post_code || '',
-                        country: from.country || '',
-                        clients_name: to.name || '',
-                        clients_email: to.email || '',
-                        clients_country: to.country || '',
-                        clients_post_code: to.post_code || '',
-                        clients_city: to.city || '',
-                        clients_street_address: to.street_address || '',
+                        from: {
+                            street_address: from.street_address || '',
+                            city: from.city || '',
+                            post_code: from.post_code || '',
+                            country: from.country || '',
+                        },
+                        to: {
+                            name: to.name || '',
+                            email: to.email || '',
+                            country: to.country || '',
+                            post_code: to.post_code || '',
+                            city: to.city || '',
+                            street_address: to.street_address || '',
+                        },
                         description: description || '',
-                        created: created || '',
-                        payment_terms: payment_due || '',
+                        invoice_date: invoice_date || '',
+                        payment_term: payment_due || '',
                         items_list: [],
                     }}
                     validate={async (values) => {
@@ -135,6 +143,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                             console.log('EDITED')
                         }
                         console.log('gotowy:', JSON.stringify(values, null, 2))
+                        dispatch(addItem(values))
                     }}>
                     {({ values, setFieldValue }) => (
                         <StyledForm themectx={activeTheme}>
@@ -157,26 +166,26 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             wideSpan
                                             type="text"
                                             label="Street Address"
-                                            name="street_address"
-                                            value={values.street_address}
+                                            name="from.street_address"
+                                            value={values.from.street_address}
                                         />
                                         <FormInput
                                             type="text"
                                             label="City"
-                                            name="city"
-                                            value={values.city}
+                                            name="from.city"
+                                            value={values.from.city}
                                         />
                                         <FormInput
                                             type="text"
                                             label="Post Code"
-                                            name="post_code"
-                                            value={values.post_code}
+                                            name="from.post_code"
+                                            value={values.from.post_code}
                                         />
                                         <FormInput
                                             type="text"
                                             label="Country"
-                                            name="country"
-                                            value={values.country}
+                                            name="from.country"
+                                            value={values.from.country}
                                         />
                                     </StyledFormSection>
                                 </fieldset>
@@ -187,41 +196,41 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             wideSpan
                                             type="text"
                                             label="Client's Name"
-                                            name="clients_name"
-                                            value={values.clients_name}
+                                            name="to.name"
+                                            value={values.to.name}
                                         />
                                         <FormInput
                                             wideSpan
                                             type="text"
                                             label="Client's Email"
-                                            name="clients_email"
+                                            name="to.email"
                                             placeholder="e.g email@example.com"
-                                            value={values.clients_email}
+                                            value={values.to.email}
                                         />
                                         <FormInput
                                             wideSpan
                                             type="text"
                                             label="Street Address"
-                                            name="clients_street_address"
-                                            value={values.clients_street_address}
+                                            name="to.street_address"
+                                            value={values.to.street_address}
                                         />
                                         <FormInput
                                             type="text"
                                             label="City"
-                                            name="clients_city"
-                                            value={values.clients_city}
+                                            name="to.city"
+                                            value={values.to.city}
                                         />
                                         <FormInput
                                             type="text"
                                             label="Post Code"
-                                            name="clients_post_code"
-                                            value={values.clients_post_code}
+                                            name="to.post_code"
+                                            value={values.to.post_code}
                                         />
                                         <FormInput
                                             type="text"
                                             label="Country"
-                                            name="clients_country"
-                                            value={values.clients_country}
+                                            name="to.country"
+                                            value={values.to.country}
                                         />
                                     </StyledFormSection>
                                 </fieldset>
@@ -231,16 +240,16 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                         <FormInput
                                             type="date"
                                             label="Invoice Date"
-                                            name="created"
-                                            value={values.created}
+                                            name="invoice_date"
+                                            value={values.invoice_date}
                                         />
                                         <DropdownSelect
                                             onChange={(value: string) =>
                                                 setFieldValue('payment_terms', value)
                                             }
                                             label="Payment Terms"
-                                            name="payment_terms"
-                                            value={values.payment_terms}
+                                            name="payment_term"
+                                            value={values.payment_term}
                                             options={[
                                                 { value: 'developer', label: 'Software Developer' },
                                                 { value: 'chef', label: 'Chef' },
@@ -309,12 +318,20 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             color="#363B53"
                                             type="submit"
                                             onClick={() => {
+                                                setFieldValue(
+                                                    'created',
+                                                    moment(values.invoice_date).format('D MMM YYYY')
+                                                )
                                                 setFieldValue('type', 'draft')
                                             }}>
                                             Save as Draft
                                         </Button>
                                         <Button
                                             onClick={() => {
+                                                setFieldValue(
+                                                    'created',
+                                                    moment(values.invoice_date).format('D MMM YYYY')
+                                                )
                                                 setFieldValue('type', 'pending')
                                             }}
                                             color="#7c5dfa"

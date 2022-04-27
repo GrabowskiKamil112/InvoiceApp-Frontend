@@ -1,6 +1,6 @@
 import theme from '../theme/theme'
 import * as Yup from 'yup'
-import { Invoice } from '../Types/Invoice'
+import { Invoice, newInvoice } from '../Types/Invoice'
 
 export const themeNavigator = (path: string): string => {
     return path.split('.').reduce<any>((a, b) => {
@@ -122,7 +122,7 @@ export const normalInvoice = Yup.object().shape({
 })
 
 export const validateForm = async (values: Invoice) => {
-    const errorsList: any = {}
+    const errorsList: Record<string, string> = {}
     console.log(values)
 
     const { type } = values
