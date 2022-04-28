@@ -27,9 +27,9 @@ export enum ActionType {
     ADD_INVOICE_SUCCESS = 'ADD_INVOICE_SUCCESS',
     ADD_INVOICE_FAILURE = 'ADD_INVOICE_FAILURE',
     ADD_INVOICE_REQUEST = 'ADD_INVOICE_REQUEST',
-    FETCH_REQUEST = 'FETCH_REQUEST',
-    FETCH_SUCCESS = 'FETCH_SUCCESS',
-    FETCH_FAILURE = 'FETCH_FAILURE',
+    FETCH_INVOICES_REQUEST = 'FETCH_REQUEST',
+    FETCH_INVOICES_SUCCESS = 'FETCH_SUCCESS',
+    FETCH_INVOICES_FAILURE = 'FETCH_FAILURE',
     AUTH_REQUEST = 'AUTH_REQUEST',
     AUTH_SUCCESS = 'AUTH_SUCCESS',
     AUTH_FAILURE = 'AUTH_FAILURE',
@@ -73,7 +73,7 @@ export const registration = (username: string, email: string, password: string):
                 password,
             })
             .then((payload) => {
-                console.log(payload)
+                console.log(payload, 'email:', email)
 
                 dispatch({ type: ActionType.REGISTER_SUCCESS, payload })
 
@@ -119,3 +119,31 @@ export const addItem =
             dispatch({ type: ActionType.ADD_INVOICE_FAILURE })
         }
     }
+export const deleteItem =
+    (invoiceId: string): AppThunk =>
+    async (dispatch) => {
+        dispatch({ type: ActionType.REMOVE_INVOICE_REQUEST })
+        try {
+            await axios.delete(`http://localhost:9001/api/invoice/${invoiceId}`)
+
+            dispatch({ type: ActionType.REMOVE_INVOICE_SUCCESS, payload: { id: invoiceId } })
+        } catch (err) {
+            console.log('error:' + err)
+            dispatch({ type: ActionType.REMOVE_INVOICE_FAILURE })
+        }
+    }
+
+export const fetchInvoices = (): AppThunk => async (dispatch, getState) => {
+    dispatch({ type: ActionType.FETCH_INVOICES_REQUEST })
+
+    try {
+        const { data } = await axios.get(`http://localhost:9001/api/invoices`, {
+            params: { userID: getState().userID || sessionStorage.getItem('userID') },
+        })
+        console.log('fetched invpoices:', data)
+        dispatch({ type: ActionType.FETCH_INVOICES_SUCCESS, payload: { data } })
+    } catch (err) {
+        console.log('error:' + err)
+        dispatch({ type: ActionType.FETCH_INVOICES_FAILURE })
+    }
+}

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
 import InvoiceControllerBar from '../components/Organisms/InvoiceControllerBar'
 import InvoiceForm from '../components/Organisms/InvoiceForm'
 import { RootState } from '../store'
+import { fetchInvoices } from '../store/actions'
+import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import { Invoice } from '../Types/Invoice'
 import { useOnClickOutsideForm } from '../utils/hooks'
@@ -46,9 +48,17 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
     const invoiceFormRef = React.createRef<HTMLDivElement>()
 
+    const numOfInvoicesInStore = useAppSelector((state) => state.invoices).length
+    const dispatch = useAppDispatch()
+
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
+
+    useEffect(() => {
+        numOfInvoicesInStore === 0 && dispatch(fetchInvoices())
+    }, [])
 
     return (
         <>

@@ -1,6 +1,6 @@
 import theme from '../theme/theme'
 import * as Yup from 'yup'
-import { Invoice, newInvoice } from '../Types/Invoice'
+import { Invoice } from '../Types/Invoice'
 
 export const themeNavigator = (path: string): string => {
     return path.split('.').reduce<any>((a, b) => {

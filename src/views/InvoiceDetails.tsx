@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { createRef, ReactNode, useEffect, useState } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useParams } from 'react-router-dom'
 import NavigationTemplate from '../templates/NavigationTemplate'
 import styled from 'styled-components'
 import Button from '../components/Atoms/Button'
@@ -11,6 +11,8 @@ import DetailsBody from '../components/Molecules/DetailsBody'
 import { getWindowWidth } from '../utils/utils'
 import { useOnClickOutsideForm } from '../utils/hooks'
 import InvoiceForm from '../components/Organisms/InvoiceForm'
+import { useAppDispatch } from '../store/hooks/hooks'
+import { deleteItem } from '../store/actions'
 
 const StyledWrapper = styled.div`
     display: flex;
@@ -22,19 +24,18 @@ const StyledWrapper = styled.div`
 `
 
 const InvoiceDetails: React.FC = () => {
-    // const { id } = useParams()
+    const { id } = useParams()
     const [invoice, setInvoice] = useState<Invoice>()
     const [windowWidth, setWindowWidth] = useState(getWindowWidth())
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
     const invoiceFormRef = createRef<HTMLDivElement>()
+    const dispatch = useAppDispatch()
 
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
 
     const fetchSingleInvoice = async () => {
         try {
-            const { data } = await axios.get(
-                `http://localhost:9001/api/invoice/624c7b0076aa981474d44bf0`
-            )
+            const { data } = await axios.get(`http://localhost:9001/api/invoice/${id}`)
             console.log(data)
 
             return data as Invoice
@@ -59,6 +60,10 @@ const InvoiceDetails: React.FC = () => {
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
+    const handleDelete = () => {
+        id && dispatch(deleteItem(id))
+    }
+
     function getButtons(type: string): ReactNode {
         return (
             <>
@@ -68,7 +73,10 @@ const InvoiceDetails: React.FC = () => {
                     onClick={() => setIsFormOpen(true)}>
                     Edit
                 </Button>
-                <Button disabled={isFormOpen} color="rgb(236, 87, 87)">
+                <Button
+                    disabled={isFormOpen}
+                    color="rgb(236, 87, 87)"
+                    onClick={() => handleDelete()}>
                     Delete
                 </Button>
                 {type !== 'paid' && (
