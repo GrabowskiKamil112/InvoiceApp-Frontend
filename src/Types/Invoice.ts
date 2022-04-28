@@ -1,11 +1,11 @@
-﻿type types = 'draft' | 'pending' | 'paid'
+﻿type invoiceTypes = 'draft' | 'pending' | 'paid'
 
 export interface Invoice {
     _id: string
-    type: types
+    type: invoiceTypes
+    invoice_date: string
     from?: From
     to?: To
-    invoice_date?: string
     payment_term?: string
     description?: string
     items_list?: ItemsListEntity[]
