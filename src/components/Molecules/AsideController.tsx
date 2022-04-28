@@ -6,7 +6,6 @@ import Icon from '../Atoms/Icon'
 import moonIcon from '../../../public/assets/icon-moon.svg'
 import sunIcon from '../../../public/assets/icon-sun.svg'
 import PageContext from '../../context/pageContext'
-import { Link } from 'react-router-dom'
 import { useAppDispatch } from '../../store/hooks/hooks'
 import { logout } from '../../store/actions'
 
@@ -41,9 +40,9 @@ const AsideController: React.FC = () => {
 
     return (
         <StyledWrapper>
-            <Link to="/login" onClick={() => dispatch(logout())}>
+            <div onClick={() => dispatch(logout())}>
                 <Icon src={logoutIcon} />
-            </Link>
+            </div>
             <Icon src={activeTheme === 'light' ? moonIcon : sunIcon} onClick={toggleTheme} />
             <Divider />
             <a href="https://github.com/GrabowskiKamil112" target="_blank" rel="noreferrer">
