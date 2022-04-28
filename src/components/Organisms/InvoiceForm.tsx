@@ -1,4 +1,4 @@
-import { Form, Formik, useFormikContext } from 'formik'
+import { Form, Formik } from 'formik'
 import React, { useContext, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
@@ -97,7 +97,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
             from = {},
             to = {},
             invoice_date,
-            payment_due,
+            payment_term,
             description,
             _id: id,
             items_list,
@@ -126,9 +126,9 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                             street_address: to.street_address || '',
                         },
                         description: description || '',
-                        invoice_date: invoice_date || '',
-                        payment_term: payment_due || '',
-                        items_list: [],
+                        invoice_date: invoice_date || moment(new Date()).format('YYYY-MM-DD'),
+                        payment_term: payment_term || '',
+                        items_list: [] || items_list,
                     }}
                     validate={async (values) => {
                         const errors = await validateForm(values as Invoice)
@@ -138,12 +138,16 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         }
                         return errors
                     }}
-                    onSubmit={(values: any) => {
+                    onSubmit={(values) => {
+                        values.payment_term = moment(
+                            moment(values.invoice_date).add(values.payment_term, 'days')
+                        ).format('YYYY-MM-DD')
+
                         if (isEdit) {
                             console.log('EDITED')
                         }
                         console.log('gotowy:', JSON.stringify(values, null, 2))
-                        dispatch(addItem(values))
+                        dispatch(addItem(values as Invoice))
                     }}>
                     {({ values, setFieldValue }) => (
                         <StyledForm themectx={activeTheme}>
@@ -244,17 +248,17 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             value={values.invoice_date}
                                         />
                                         <DropdownSelect
-                                            onChange={(value: string) =>
-                                                setFieldValue('payment_terms', value)
-                                            }
+                                            onChange={(value: string) => {
+                                                setFieldValue('payment_term', value)
+                                            }}
                                             label="Payment Terms"
                                             name="payment_term"
                                             value={values.payment_term}
                                             options={[
-                                                { value: 'developer', label: 'Software Developer' },
-                                                { value: 'chef', label: 'Chef' },
-                                                { value: 'enginner', label: 'Enginner' },
-                                                { value: 'painter', label: 'Painter' },
+                                                { value: '1', label: 'Net 1 days' },
+                                                { value: '7', label: 'Net 7 days' },
+                                                { value: '14', label: 'Net 14 days' },
+                                                { value: '30', label: 'Net 30 days' },
                                             ]}
                                         />
                                         <FormInput
@@ -318,20 +322,12 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             color="#363B53"
                                             type="submit"
                                             onClick={() => {
-                                                setFieldValue(
-                                                    'created',
-                                                    moment(values.invoice_date).format('D MMM YYYY')
-                                                )
                                                 setFieldValue('type', 'draft')
                                             }}>
                                             Save as Draft
                                         </Button>
                                         <Button
                                             onClick={() => {
-                                                setFieldValue(
-                                                    'created',
-                                                    moment(values.invoice_date).format('D MMM YYYY')
-                                                )
                                                 setFieldValue('type', 'pending')
                                             }}
                                             color="#7c5dfa"
