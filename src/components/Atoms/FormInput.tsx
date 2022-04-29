@@ -77,7 +77,10 @@ const FormInput: React.FC<InputProps> = ({
 }) => {
     const { activeTheme } = useContext(PageContext)
     const { errors } = useFormikContext()
-    const thisInputError = getIn(errors, name)
+    const thisInputError = errors[name]
+
+    console.log('thisinputeerrror',thisInputError,name);
+    
 
     return (
         <>

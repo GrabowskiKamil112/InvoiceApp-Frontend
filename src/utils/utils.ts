@@ -66,18 +66,23 @@ export const SignupSchema = Yup.object().shape({
 
 export const draftInvoice = Yup.object().shape({
     type: Yup.string().oneOf(['draft']).required('type is required'),
-    street_address: Yup.string(),
-    city: Yup.string(),
-    post_code: Yup.string(),
-    country: Yup.string(),
-    clients_email: Yup.string().matches(
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        { message: 'email is incorrect', excludeEmptyString: true }
-    ),
-    clients_country: Yup.string(),
-    clients_post_code: Yup.string(),
-    clients_city: Yup.string(),
-    clients_street_address: Yup.string(),
+    from: Yup.object().shape({
+        street_address: Yup.string(),
+        city: Yup.string(),
+        post_code: Yup.string(),
+        country: Yup.string(),
+    }),
+    to: Yup.object().shape({
+        name: Yup.string(),
+        email: Yup.string().matches(
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+            { message: 'email is incorrect', excludeEmptyString: true }
+        ),
+        country: Yup.string(),
+        post_code: Yup.string(),
+        city: Yup.string(),
+        street_address: Yup.string(),
+    }),
     payment_terms: Yup.string(),
     description: Yup.string(),
     created: Yup.string(),
@@ -92,21 +97,23 @@ export const draftInvoice = Yup.object().shape({
 
 export const normalInvoice = Yup.object().shape({
     type: Yup.string().oneOf(['pending', 'paid']).required('type is required'),
-    street_address: Yup.string().required('street_address is required'),
-    city: Yup.string().required(' city is required'),
-    post_code: Yup.string().required(' post_code is required'),
-    country: Yup.string().required('country is required'),
-    clients_name: Yup.string().required('clients name is required'),
-    clients_email: Yup.string()
-        .matches(
-            /^()(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    from: Yup.object().shape({
+        street_address: Yup.string().required(),
+        city: Yup.string().required(),
+        post_code: Yup.string().required(),
+        country: Yup.string().required(),
+    }),
+    to: Yup.object().shape({
+        name: Yup.string().required(),
+        email: Yup.string().matches(
+            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             { message: 'email is incorrect', excludeEmptyString: true }
-        )
-        .required(' clients_email is required'),
-    clients_country: Yup.string().required('clients_country is required'),
-    clients_post_code: Yup.string().required('clients_post_code is required'),
-    clients_city: Yup.string().required('clients_city is required'),
-    clients_street_address: Yup.string().required('clients_street_address is required'),
+        ).required(),
+        country: Yup.string().required(),
+        post_code: Yup.string().required(),
+        city: Yup.string().required(),
+        street_address: Yup.string().required(),
+    }),
     payment_terms: Yup.string().required(' payment_terms is required'),
     description: Yup.string().required('description is required'),
     created: Yup.string().required(' invoice date is required'),
@@ -123,7 +130,7 @@ export const normalInvoice = Yup.object().shape({
 
 export const validateForm = async (values: Invoice) => {
     const errorsList: Record<string, string> = {}
-    console.log(values)
+    console.log('values',values)
 
     const { type } = values
 
