@@ -46,6 +46,8 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.REGISTER_SUCCESS:
+            
+            
             return {
                 ...state,
                 userID: payload.data._id,
@@ -60,6 +62,7 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.AUTH_SUCCESS:
+            console.log('payload in reducer',payload.data);
             return {
                 ...state,
                 userID: payload.data._id,

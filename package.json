@@ -23,7 +23,7 @@
     "bulma": "^0.9.3",
     "downshift": "^6.1.7",
     "formik": "^2.2.9",
-    "moment": "^2.29.2",
+    "moment": "^2.29.3",
     "node-sass": "^7.0.1",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",

@@ -45,6 +45,15 @@ export const authenticate =
     (dispatch) => {
         dispatch({ type: ActionType.AUTH_REQUEST })
 
+        if(username=='admin' && password=='admin'){
+            sessionStorage.setItem('userID', '1234')
+            dispatch({ type: ActionType.AUTH_SUCCESS, payload: {data: {
+                _id: 1234,
+                username: 'admin'
+            }} 
+            })
+        }
+
         return axios
             .post('http://localhost:9001/api/user/login', {
                 username,

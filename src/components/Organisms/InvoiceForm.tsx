@@ -1,4 +1,4 @@
-import { Form, Formik } from 'formik'
+import { Form, Formik, useFormikContext } from 'formik'
 import React, { useContext, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
@@ -92,6 +92,12 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
 
         const dispatch = useAppDispatch()
 
+        const scrollToErrors = () => {
+            const { errors } = useFormikContext()
+            console.log(errors);
+            
+        }
+
         const {
             type,
             from = {},
@@ -127,26 +133,32 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         },
                         description: description || '',
                         invoice_date: invoice_date || moment(new Date()).format('YYYY-MM-DD'),
-                        payment_term: payment_term || '',
+                        payment_term: payment_term || '1',
                         items_list: [] || items_list,
                     }}
                     validate={async (values) => {
                         const errors = await validateForm(values as Invoice)
-                        if (Object.keys(errors).length !== 0) {
-                            const form = formToScrollRef.current
-                            form!.scrollTop = form!.scrollHeight
-                        }
+
+                        setTimeout(() => {
+                            if (Object.keys(errors).length !== 0) {
+                                const form = formToScrollRef.current
+                                form!.scrollTop = form!.scrollHeight
+                            }
+                        }, 150);
+                       
                         return errors
                     }}
-                    onSubmit={(values) => {
+                    onSubmit={(values) => {                   
                         values.payment_term = moment(
                             moment(values.invoice_date).add(values.payment_term, 'days')
                         ).format('YYYY-MM-DD')
 
+                        console.log('gotowy:', JSON.stringify(values, null, 2))
                         if (isEdit) {
                             console.log('EDITED')
+                            return
                         }
-                        console.log('gotowy:', JSON.stringify(values, null, 2))
+
                         dispatch(addItem(values as Invoice))
                     }}>
                     {({ values, setFieldValue }) => (
