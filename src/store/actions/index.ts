@@ -27,9 +27,12 @@ export enum ActionType {
     ADD_INVOICE_SUCCESS = 'ADD_INVOICE_SUCCESS',
     ADD_INVOICE_FAILURE = 'ADD_INVOICE_FAILURE',
     ADD_INVOICE_REQUEST = 'ADD_INVOICE_REQUEST',
-    FETCH_INVOICES_REQUEST = 'FETCH_REQUEST',
-    FETCH_INVOICES_SUCCESS = 'FETCH_SUCCESS',
-    FETCH_INVOICES_FAILURE = 'FETCH_FAILURE',
+    FETCH_INVOICES_REQUEST = 'FETCH_INVOICES_REQUEST',
+    FETCH_INVOICES_SUCCESS = 'FETCH_INVOICES_SUCCESS',
+    FETCH_INVOICES_FAILURE = 'FETCH_INVOICES_FAILURE',
+    UPDATE_INVOICE_REQUEST = 'UPDATE_INVOICE_REQUEST',
+    UPDATE_INVOICE_SUCCESS = 'UPDATE_INVOICE_SUCCESS',
+    UPDATE_INVOICE_FAILURE = 'UPDATE_INVOICE_FAILURE',
     AUTH_REQUEST = 'AUTH_REQUEST',
     AUTH_SUCCESS = 'AUTH_SUCCESS',
     AUTH_FAILURE = 'AUTH_FAILURE',
@@ -45,12 +48,16 @@ export const authenticate =
     (dispatch) => {
         dispatch({ type: ActionType.AUTH_REQUEST })
 
-        if(username=='admin' && password=='admin'){
+        if (username == 'admin' && password == 'admin') {
             sessionStorage.setItem('userID', '1234')
-            dispatch({ type: ActionType.AUTH_SUCCESS, payload: {data: {
-                _id: 1234,
-                username: 'admin'
-            }} 
+            dispatch({
+                type: ActionType.AUTH_SUCCESS,
+                payload: {
+                    data: {
+                        _id: 1234,
+                        username: 'admin',
+                    },
+                },
             })
         }
 
@@ -128,6 +135,23 @@ export const addItem =
             dispatch({ type: ActionType.ADD_INVOICE_FAILURE })
         }
     }
+export const updateItem =
+    (invoiceContent: Invoice, invoiceId: string): AppThunk =>
+    async (dispatch, getState) => {
+        dispatch({ type: ActionType.UPDATE_INVOICE_REQUEST })
+        try {
+            const { data } = await axios.put(`http://localhost:9001/api/invoice/${invoiceId}`, {
+                userID: getState().userID,
+                ...invoiceContent,
+            })
+
+            dispatch({ type: ActionType.UPDATE_INVOICE_SUCCESS, payload: { data } })
+        } catch (err) {
+            console.log('error:' + err)
+            dispatch({ type: ActionType.UPDATE_INVOICE_FAILURE })
+        }
+    }
+
 export const deleteItem =
     (invoiceId: string): AppThunk =>
     async (dispatch) => {

@@ -27,6 +27,7 @@ const rootReducer = (state: State = initialState, action: any) => {
 
         case ActionType.ADD_INVOICE_SUCCESS:
             const newInvoice = payload.data
+            console.log('newinvoice in reducer', payload)
 
             return {
                 ...state,
@@ -38,6 +39,13 @@ const rootReducer = (state: State = initialState, action: any) => {
                 ...state,
                 invoices: [...state.invoices, ...payload.data],
             }
+        case ActionType.UPDATE_INVOICE_SUCCESS:
+            console.log(payload)
+
+            return {
+                ...state,
+                invoices: [...state.invoices],
+            }
 
         case ActionType.REMOVE_INVOICE_SUCCESS:
             return {
@@ -46,8 +54,6 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.REGISTER_SUCCESS:
-            
-            
             return {
                 ...state,
                 userID: payload.data._id,
@@ -62,7 +68,7 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.AUTH_SUCCESS:
-            console.log('payload in reducer',payload.data);
+            console.log('payload in reducer', payload.data)
             return {
                 ...state,
                 userID: payload.data._id,
