@@ -8,6 +8,7 @@ const Button = styled.button<{
     themeCtx?: string
 }>`
     cursor: pointer;
+    white-space: nowrap;
     text-decoration: none;
     padding: 0;
     background-color: ${({ color }) => color};
@@ -23,6 +24,11 @@ const Button = styled.button<{
     position: relative;
     overflow: hidden;
     padding: 0 24px;
+
+    & > img {
+        margin-right: 4px;
+        transform: translateY(+10%);
+    }
 
     ${({ disabled }) =>
         disabled &&
