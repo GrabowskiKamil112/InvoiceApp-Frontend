@@ -1,6 +1,6 @@
 import theme from '../theme/theme'
 import * as Yup from 'yup'
-import { Invoice } from '../Types/Invoice'
+import { Invoice, ItemsListEntity } from '../Types/Invoice'
 
 export const themeNavigator = (path: string): string => {
     return path.split('.').reduce<any>((a, b) => {
@@ -24,6 +24,15 @@ export function calculateTotal(quantity?: string, price?: string): number {
 export function getWindowWidth(): number {
     const { innerWidth } = window
     return innerWidth
+}
+
+export const getTotalPriceOfItem = (item: ItemsListEntity): string => {
+    const { price, quantity } = item || {}
+
+    if (price && quantity && [price, quantity].every((s) => s.match(/^\d+$/))) {
+        return (parseInt(quantity) * parseInt(price)).toString() + '$'
+    }
+    return '0'
 }
 
 export const SignupSchema = Yup.object().shape({
@@ -65,9 +74,9 @@ export const SignupSchema = Yup.object().shape({
 //   }
 
 export const draftInvoice = Yup.object().shape({
-    type: Yup.string().oneOf(['draft']).required('type is required'),
+    type: Yup.string().oneOf(['draft']).required(),
     from: Yup.object().shape({
-        street_address: Yup.string(),
+        street: Yup.string(),
         city: Yup.string(),
         post_code: Yup.string(),
         country: Yup.string(),
@@ -81,11 +90,11 @@ export const draftInvoice = Yup.object().shape({
         country: Yup.string(),
         post_code: Yup.string(),
         city: Yup.string(),
-        street_address: Yup.string(),
+        street: Yup.string(),
     }),
-    payment_terms: Yup.string(),
+    payment_term: Yup.string(),
     description: Yup.string(),
-    created: Yup.string(),
+    invoice_date: Yup.string(),
     items_list: Yup.array().of(
         Yup.object().shape({
             name: Yup.string(),
@@ -96,41 +105,43 @@ export const draftInvoice = Yup.object().shape({
 })
 
 export const normalInvoice = Yup.object().shape({
-    type: Yup.string().oneOf(['pending', 'paid']).required('type is required'),
+    type: Yup.string().oneOf(['pending', 'paid']).required(),
     from: Yup.object().shape({
-        street_address: Yup.string().required(),
+        street: Yup.string().required(),
         city: Yup.string().required(),
         post_code: Yup.string().required(),
         country: Yup.string().required(),
     }),
     to: Yup.object().shape({
         name: Yup.string().required(),
-        email: Yup.string().matches(
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            { message: 'email is incorrect', excludeEmptyString: true }
-        ).required(),
+        email: Yup.string()
+            .matches(
+                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                { message: 'email is incorrect', excludeEmptyString: true }
+            )
+            .required(),
         country: Yup.string().required(),
         post_code: Yup.string().required(),
         city: Yup.string().required(),
-        street_address: Yup.string().required(),
+        street: Yup.string().required(),
     }),
-    payment_terms: Yup.string().required(' payment_terms is required'),
-    description: Yup.string().required('description is required'),
-    created: Yup.string().required(' invoice date is required'),
+    payment_term: Yup.string().required(),
+    description: Yup.string().required(),
+    invoice_date: Yup.string().required(),
     items_list: Yup.array()
         .min(1)
         .of(
             Yup.object().shape({
-                name: Yup.string().required('required'),
-                quantity: Yup.number().required('required'),
-                price: Yup.number().required('required'),
+                name: Yup.string().required(),
+                quantity: Yup.number().required(),
+                price: Yup.number().required(),
             })
         ),
 })
 
 export const validateForm = async (values: Invoice) => {
     const errorsList: Record<string, string> = {}
-    console.log('values',values)
+    console.log('values', values)
 
     const { type } = values
 
