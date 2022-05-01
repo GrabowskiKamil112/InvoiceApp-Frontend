@@ -44,7 +44,8 @@ type RequireAuthProps = {
     children: JSX.Element
 }
 const RequireAuth = ({ children, redirectTo }: RequireAuthProps) => {
-    const isAuthenticated = useAppSelector((state) => state.userID)
+    const isAuthenticated =
+        useAppSelector((state) => state.userID) || sessionStorage.getItem('userID')
     return isAuthenticated ? children : <Navigate to={redirectTo} />
 }
 
