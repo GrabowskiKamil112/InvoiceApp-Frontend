@@ -1,14 +1,15 @@
 import styled from 'styled-components'
 import SVG from 'react-inlinesvg'
+import { themeNavigator } from '../../utils/utils'
 
-const Icon = styled(SVG)`
-    width: 30px;
-    height: 30px;
+const Icon = styled(SVG)<{ themectx: string }>`
+    width: 282px;
+    height: 28px;
     margin-bottom: 40px;
     cursor: pointer;
 
     transition: all 0.25s ease-in-out;
-    fill: rgb(73, 78, 110);
+    fill: ${({ themectx }) => themeNavigator(`${themectx}.icon`)};
 
     &:hover {
         fill: rgb(136, 143, 185);

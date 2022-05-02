@@ -1,4 +1,4 @@
-import { Field, getIn, useFormikContext } from 'formik'
+import { Field, useFormikContext } from 'formik'
 import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
@@ -6,7 +6,7 @@ import { themeNavigator } from '../../utils/utils'
 
 interface inputProps {
     themectx: string
-    validationerror?: string
+    validationError?: string
 }
 interface labelProps extends inputProps {
     wideSpan: boolean
@@ -19,11 +19,11 @@ const StyledInput = styled(Field)<inputProps>`
     border-radius: 4px;
     font-size: 12px;
     outline: none;
-    color: ${({ themectx }) => themeNavigator(`${themectx}.text.bodyB`)};
+    color: ${({ themectx }) => themeNavigator(`${themectx}.text.link`)};
     font-weight: 700;
     height: 47px;
     width: 100%;
-    border: 1px solid rgb(37, 41, 69);
+    border: 1px solid ${({ themectx }) => themeNavigator(`${themectx}.form.fieldBorder`)};
 
     ${({ validationError }) =>
         validationError &&
@@ -38,8 +38,8 @@ export const StyledLabel = styled.label<labelProps>`
     font-weight: 400;
     height: auto;
 
-    ${({ validationerror }) =>
-        validationerror &&
+    ${({ validationError }) =>
+        validationError &&
         css`
             color: #ec5757;
         `};
@@ -77,23 +77,20 @@ const FormInput: React.FC<InputProps> = ({
 }) => {
     const { activeTheme } = useContext(PageContext)
     const { errors } = useFormikContext()
-    const thisInputError = errors[name]
-
-    console.log('thisinputeerrror',thisInputError,name);
-    
+    const thisInputError = errors[name as keyof typeof errors]
 
     return (
         <>
             <StyledLabel
                 wideSpan={wideSpan}
                 themectx={activeTheme}
-                validationerror={thisInputError}
+                validationError={thisInputError}
                 htmlFor={name}>
                 {label}
 
                 <StyledInput
                     placeholder={placeholder || ' '}
-                    validationerror={thisInputError}
+                    validationError={thisInputError}
                     themectx={activeTheme}
                     type={type}
                     name={name}

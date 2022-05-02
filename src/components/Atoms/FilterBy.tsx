@@ -4,6 +4,7 @@ import arrowDown from '../../../public/assets/icon-arrow-down.svg'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
 import iconCheck from '../../../public/assets/icon-check.svg'
+import { useAppSelector } from '../../store/hooks/hooks'
 
 const StyledWrapper = styled.div`
     height: 47px;
@@ -108,6 +109,7 @@ type FilterByProps = { handleRadioInput: (e: React.MouseEvent<HTMLInputElement>)
 
 const FilterBy = ({ handleRadioInput }: FilterByProps) => {
     const [isFilterOpen, toggleFilterOpen] = useState<boolean>(false)
+    const activeFilter = useAppSelector((state) => state.filterBy)
     const { activeTheme } = useContext(PageContext)
 
     return (
@@ -125,6 +127,7 @@ const FilterBy = ({ handleRadioInput }: FilterByProps) => {
                             id="paid"
                             name="invoiceFilter"
                             onClick={(e) => handleRadioInput(e)}
+                            checked={activeFilter === 'paid'}
                         />
                         Paid
                     </label>
@@ -135,6 +138,7 @@ const FilterBy = ({ handleRadioInput }: FilterByProps) => {
                             id="pending"
                             name="invoiceFilter"
                             onClick={(e) => handleRadioInput(e)}
+                            checked={activeFilter === 'pending'}
                         />
                         Pending
                     </label>
@@ -145,6 +149,7 @@ const FilterBy = ({ handleRadioInput }: FilterByProps) => {
                             id="draft"
                             name="invoiceFilter"
                             onClick={(e) => handleRadioInput(e)}
+                            checked={activeFilter === 'draft'}
                         />
                         Draft
                     </label>
