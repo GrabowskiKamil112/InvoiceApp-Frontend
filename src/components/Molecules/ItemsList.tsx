@@ -2,7 +2,7 @@ import { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { ItemsListEntity } from '../../Types/Invoice'
 import styled from 'styled-components'
-import { calculateTotal, themeNavigator } from '../../utils/utils'
+import { calculateTotalOfInvoice, calculateTotalOfItem, themeNavigator } from '../../utils/utils'
 import PageContext from '../../context/pageContext'
 import Paragraph from '../Atoms/Paragraph'
 
@@ -19,6 +19,12 @@ const Table = styled.table<{ themeCtx: string }>`
     border-collapse: separate !important;
     width: 100%;
     height: auto;
+
+    & > thead > tr > th {
+        font-size: 1.2rem;
+        font-weight: 300;
+        color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.bodyA`)};
+    }
 
     & > * > tr > *:nth-child(1) {
         text-align: start;
@@ -42,6 +48,7 @@ const Table = styled.table<{ themeCtx: string }>`
         border-radius: 0 0 0 8px;
     }
     & > tfoot > tr > td {
+        color: white;
         padding: 32px 0 32px 32px;
         background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceTable.footerBg`)};
     }
@@ -64,11 +71,8 @@ const P = styled(Paragraph)`
 const ItemsList = ({ items = [] }: { items?: ItemsListEntity[] }) => {
     const { activeTheme } = useContext(PageContext)
 
-    const totalAmount = items.reduce((acc, { price, quantity }) => {
-        return (acc += calculateTotal(quantity, price))
-    }, 0)
+    const totalAmount = calculateTotalOfInvoice(items)
 
-    console.log('items', items)
     return (
         <StyledWrapper themeCtx={activeTheme}>
             <Table themeCtx={activeTheme}>
@@ -82,7 +86,7 @@ const ItemsList = ({ items = [] }: { items?: ItemsListEntity[] }) => {
                 </thead>
 
                 {items.map(({ name, quantity, price }, index) => {
-                    const itemTotal = calculateTotal(quantity, price)
+                    const itemTotal = calculateTotalOfItem(quantity, price)
 
                     return (
                         <tbody key={index}>

@@ -14,11 +14,19 @@ export const generateInfo = (invoiceFilter: string, amount = 1): string => {
     }`
 }
 
-export function calculateTotal(quantity?: string, price?: string): number {
+export function calculateTotalOfItem(quantity?: string, price?: string): number {
     if (quantity && price) {
         return parseFloat(price) * parseFloat(quantity)
     }
     return 0
+}
+
+export function calculateTotalOfInvoice(items: ItemsListEntity[]): number {
+    const totalAmount = items.reduce((acc, { price, quantity }) => {
+        return (acc += calculateTotalOfItem(quantity, price))
+    }, 0)
+
+    return totalAmount
 }
 
 export function getWindowWidth(): number {
@@ -26,7 +34,7 @@ export function getWindowWidth(): number {
     return innerWidth
 }
 
-export const getTotalPriceOfItem = (item: ItemsListEntity): string => {
+export const getTotalPriceOfItemInForm = (item: ItemsListEntity): string => {
     const { price, quantity } = item || {}
 
     if (price && quantity && [price, quantity].every((s) => s.match(/^\d+$/))) {
