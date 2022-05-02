@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
 import InvoiceControllerBar from '../components/Organisms/InvoiceControllerBar'
@@ -35,7 +36,7 @@ const Loading = styled.button<{ visible: boolean; display: boolean }>`
         `}
 `
 
-const StyledWrapper = styled.div`
+const StyledTransitionGroup = styled(TransitionGroup)`
     display: flex;
     flex-direction: column;
     gap: 1.6rem;
@@ -60,6 +61,8 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
         numOfInvoicesInStore === 0 && dispatch(fetchInvoices())
     }, [])
 
+    let transitionDelay = 0
+
     return (
         <>
             {isFormOpen && (
@@ -71,15 +74,27 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                     openFormFn={() => setIsFormOpen(true)}
                     isFormOpen={isFormOpen}
                 />
-                <StyledWrapper>
+                <StyledTransitionGroup>
                     {invoices
                         ?.filter(({ type }: { type: string }) =>
                             filterBy !== 'total' ? type === filterBy : true
                         )
-                        .map((invoice: Invoice) => (
-                            <InvoiceShort key={invoices.indexOf(invoice)} content={invoice} />
-                        ))}
-                </StyledWrapper>
+                        .map((invoice: Invoice) => {
+                            transitionDelay += 120
+                            return (
+                                <CSSTransition
+                                    key={invoices.indexOf(invoice)}
+                                    timeout={400 + transitionDelay}
+                                    classNames="item">
+                                    <InvoiceShort
+                                        key={invoices.indexOf(invoice)}
+                                        content={invoice}
+                                        transitionDelay={transitionDelay}
+                                    />
+                                </CSSTransition>
+                            )
+                        })}
+                </StyledTransitionGroup>
             </NavigationTemplate>
         </>
     )
