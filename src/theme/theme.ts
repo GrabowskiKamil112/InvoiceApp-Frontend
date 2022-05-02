@@ -64,11 +64,7 @@ const theme = {
             linkHover: '#7e88c3',
             placeholder: 'rgba(12, 14, 22, .4)',
         },
-
-        icon: {
-            path: '/images/icon-moon.svg',
-            alt: 'moon icon',
-        },
+        icon: '#7e88c3',
     },
     dark: {
         body: {
@@ -129,11 +125,7 @@ const theme = {
             linkHover: '#888eb0',
             placeholder: '#fff',
         },
-
-        icon: {
-            path: '/images/icon-sun.svg',
-            alt: 'sun icon',
-        },
+        icon: 'rgb(73, 78, 110)',
     },
 }
 
