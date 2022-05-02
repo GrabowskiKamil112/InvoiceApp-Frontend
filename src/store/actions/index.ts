@@ -1,6 +1,6 @@
 import { AppThunk } from './../index'
 import axios from 'axios'
-import { Invoice } from '../../Types/Invoice'
+import { Invoice, invoiceTypes } from '../../Types/Invoice'
 
 export interface IAddItem {
     type: 'ADD_ITEM'
@@ -43,6 +43,64 @@ export enum ActionType {
 
 export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveCompleted
 
+const API_URL = 'http://localhost:9001/api'
+const testInvoices = [
+    {
+        type: 'pending' as invoiceTypes,
+        from: {
+            street: 'Piotrowska 7A',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'USA',
+        },
+        to: {
+            name: 'John Marston',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Jawiszowice',
+            street: 'Wyszyńskiego 44F',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-04-19',
+        items_list: [
+            {
+                name: 'milk',
+                quantity: '4',
+                price: '5',
+            },
+        ],
+    },
+    {
+        type: 'paid' as invoiceTypes,
+        from: {
+            street: 'Borelowskiego 6B',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'Polska',
+        },
+        to: {
+            name: 'Arthur Morgan',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Oświęcim',
+            street: 'Wyszyńskiego',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-05-15',
+        items_list: [
+            {
+                name: 'bread',
+                quantity: '2',
+                price: '6',
+            },
+        ],
+    },
+]
+
 export const authenticate =
     (username: string, password: string): AppThunk =>
     (dispatch) => {
@@ -62,7 +120,7 @@ export const authenticate =
         }
 
         return axios
-            .post('http://localhost:9001/api/user/login', {
+            .post(`${API_URL}/user/login`, {
                 username,
                 password,
             })
@@ -80,18 +138,23 @@ export const authenticate =
     }
 
 export const registration = (username: string, email: string, password: string): AppThunk => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         dispatch({ type: ActionType.REGISTER_REQUEST })
 
         return axios
-            .post('http://localhost:9001/api/user/register', {
+            .post(`${API_URL}/user/register`, {
                 username,
                 password,
             })
             .then((payload) => {
-                console.log(payload, 'email:', email)
-
                 dispatch({ type: ActionType.REGISTER_SUCCESS, payload })
+
+                testInvoices.forEach((invoice) => {
+                    axios.post(`${API_URL}/invoice`, {
+                        userID: getState().userID,
+                        ...invoice,
+                    })
+                })
 
                 return payload.data.username
             })
@@ -120,7 +183,7 @@ export const addItem =
         dispatch({ type: ActionType.ADD_INVOICE_REQUEST })
 
         try {
-            const { data } = await axios.post(`http://localhost:9001/api/invoice`, {
+            const { data } = await axios.post(`${API_URL}/invoice`, {
                 userID: getState().userID,
                 ...invoiceContent,
             })
@@ -140,7 +203,7 @@ export const updateItem =
     async (dispatch, getState) => {
         dispatch({ type: ActionType.UPDATE_INVOICE_REQUEST })
         try {
-            const { data } = await axios.put(`http://localhost:9001/api/invoice/${invoiceId}`, {
+            const { data } = await axios.put(`${API_URL}/invoice/${invoiceId}`, {
                 userID: getState().userID,
                 ...invoiceContent,
             })
@@ -157,7 +220,7 @@ export const deleteItem =
     async (dispatch) => {
         dispatch({ type: ActionType.REMOVE_INVOICE_REQUEST })
         try {
-            await axios.delete(`http://localhost:9001/api/invoice/${invoiceId}`)
+            await axios.delete(`${API_URL}/invoice/${invoiceId}`)
 
             dispatch({ type: ActionType.REMOVE_INVOICE_SUCCESS, payload: { id: invoiceId } })
         } catch (err) {
@@ -170,7 +233,7 @@ export const fetchInvoices = (): AppThunk => async (dispatch, getState) => {
     dispatch({ type: ActionType.FETCH_INVOICES_REQUEST })
 
     try {
-        const { data } = await axios.get(`http://localhost:9001/api/invoices`, {
+        const { data } = await axios.get(`${API_URL}/invoices`, {
             params: { userID: getState().userID || sessionStorage.getItem('userID') },
         })
         console.log('fetched invpoices:', data)

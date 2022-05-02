@@ -1,10 +1,10 @@
-import { Invoice } from '../../Types/Invoice'
+import { Invoice, invoiceTypes } from '../../Types/Invoice'
 import { ActionType } from '../actions'
 
 const initialState = {
-    filterBy: 'draft',
+    filterBy: 'total',
     username: null,
-    userID: null,
+    userID: sessionStorage.getItem('userID') || null,
     invoices: [],
 }
 interface State {
@@ -40,11 +40,14 @@ const rootReducer = (state: State = initialState, action: any) => {
                 invoices: [...state.invoices, ...payload.data],
             }
         case ActionType.UPDATE_INVOICE_SUCCESS:
-            console.log(payload)
+            console.log('update p', payload)
 
             return {
                 ...state,
-                invoices: [...state.invoices],
+                invoices: [
+                    ...state.invoices.filter((invoice) => invoice._id !== payload.data._id),
+                    payload.data,
+                ],
             }
 
         case ActionType.REMOVE_INVOICE_SUCCESS:
@@ -65,6 +68,7 @@ const rootReducer = (state: State = initialState, action: any) => {
                 ...state,
                 userID: null,
                 username: null,
+                invoices: [],
             }
 
         case ActionType.AUTH_SUCCESS:
