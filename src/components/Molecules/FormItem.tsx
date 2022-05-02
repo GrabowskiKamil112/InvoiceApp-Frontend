@@ -3,8 +3,9 @@ import styled from 'styled-components'
 import FormInput from '../Atoms/FormInput'
 import binIcon from '../../../public/assets/icon-delete.svg'
 import SVG from 'react-inlinesvg'
-import { themeNavigator } from '../../utils/utils'
+import { getTotalPriceOfItemInForm, themeNavigator } from '../../utils/utils'
 import PageContext from '../../context/pageContext'
+import { useFormikContext } from 'formik'
 
 const StyledWrapper = styled.div<{ themeCtx: string }>`
     width: 100%;
@@ -16,7 +17,7 @@ const StyledWrapper = styled.div<{ themeCtx: string }>`
     & > div {
         display: flex;
         align-items: center;
-        color: rgb(136, 142, 176);
+        color: #888eb0;
         font-weight: 700;
         font-size: 1.3rem;
     }
@@ -51,14 +52,29 @@ type props = { index: number; removeItemFn: () => void }
 
 const FormItem: React.FC<props> = ({ index, removeItemFn }) => {
     const { activeTheme } = useContext(PageContext)
+    const {
+        values: { items_list },
+    } = useFormikContext()
 
     return (
         <StyledWrapper themeCtx={activeTheme}>
-            <FormInput type="text" name={`items_list[${index}].name`} />
-            <FormInput type="text" name={`items_list[${index}].quantity`} />
-            <FormInput type="text" name={`items_list[${index}].price`} />
+            <FormInput
+                type="text"
+                name={`items_list[${index}].name`}
+                value={items_list[index]?.name}
+            />
+            <FormInput
+                type="text"
+                name={`items_list[${index}].price`}
+                value={items_list[index]?.price}
+            />
+            <FormInput
+                type="text"
+                name={`items_list[${index}].quantity`}
+                value={items_list[index]?.quantity}
+            />
 
-            <div>0</div>
+            <div>{getTotalPriceOfItemInForm(items_list[index])}</div>
 
             <span>
                 <DeleteIcon src={binIcon} onClick={() => removeItemFn()}></DeleteIcon>

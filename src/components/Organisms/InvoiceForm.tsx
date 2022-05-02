@@ -1,4 +1,4 @@
-import { Form, Formik, useFormikContext } from 'formik'
+import { Form, Formik } from 'formik'
 import React, { useContext, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
@@ -12,7 +12,7 @@ import Errors from '../Atoms/Errors'
 import FormItem from '../Molecules/FormItem'
 import moment from 'moment'
 import { useAppDispatch } from '../../store/hooks/hooks'
-import { addItem } from '../../store/actions'
+import { addItem, updateItem } from '../../store/actions'
 
 const StyledWrapper = styled.div`
     position: fixed;
@@ -87,18 +87,11 @@ type props = {
 const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
     ({ isEdit = false, invoice, closeFn }, ref) => {
         const { activeTheme } = useContext(PageContext)
-        const [numOfitems, setNumOfItems] = useState<number>(0)
         const formToScrollRef = useRef<HTMLDivElement>(null)
-
         const dispatch = useAppDispatch()
 
-        const scrollToErrors = () => {
-            const { errors } = useFormikContext()
-            console.log(errors);
-            
-        }
-
         const {
+            _id,
             type,
             from = {},
             to = {},
@@ -108,6 +101,9 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
             _id: id,
             items_list,
         } = invoice || {}
+        const [numOfitems, setNumOfItems] = useState<number>(items_list?.length || 0)
+
+        console.log('items in edit', items_list)
 
         return (
             <StyledWrapper ref={ref}>
@@ -115,10 +111,10 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                     validateOnChange={false}
                     validateOnBlur={false}
                     initialValues={{
-                        _id: '',
+                        _id: _id || '',
                         type: type || '',
                         from: {
-                            street_address: from.street_address || '',
+                            street: from.street || '',
                             city: from.city || '',
                             post_code: from.post_code || '',
                             country: from.country || '',
@@ -129,12 +125,12 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                             country: to.country || '',
                             post_code: to.post_code || '',
                             city: to.city || '',
-                            street_address: to.street_address || '',
+                            street: to.street || '',
                         },
                         description: description || '',
                         invoice_date: invoice_date || moment(new Date()).format('YYYY-MM-DD'),
                         payment_term: payment_term || '1',
-                        items_list: [] || items_list,
+                        items_list: items_list || [],
                     }}
                     validate={async (values) => {
                         const errors = await validateForm(values as Invoice)
@@ -144,18 +140,19 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                 const form = formToScrollRef.current
                                 form!.scrollTop = form!.scrollHeight
                             }
-                        }, 150);
-                       
+                        }, 150)
+
                         return errors
                     }}
-                    onSubmit={(values) => {                   
+                    onSubmit={(values) => {
                         values.payment_term = moment(
                             moment(values.invoice_date).add(values.payment_term, 'days')
                         ).format('YYYY-MM-DD')
 
-                        console.log('gotowy:', JSON.stringify(values, null, 2))
+                        closeFn()
+
                         if (isEdit) {
-                            console.log('EDITED')
+                            dispatch(updateItem(values as Invoice, values._id))
                             return
                         }
 
@@ -167,7 +164,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                 {isEdit ? (
                                     <span>
                                         Edit
-                                        <span style={{ color: '#88EB0' }}>#</span>
+                                        <span style={{ color: '#88EB0 !important' }}>#</span>
                                         {id?.substring(0, 6).toUpperCase()}
                                     </span>
                                 ) : (
@@ -182,8 +179,8 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             wideSpan
                                             type="text"
                                             label="Street Address"
-                                            name="from.street_address"
-                                            value={values.from.street_address}
+                                            name="from.street"
+                                            value={values.from.street}
                                         />
                                         <FormInput
                                             type="text"
@@ -227,8 +224,8 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             wideSpan
                                             type="text"
                                             label="Street Address"
-                                            name="to.street_address"
-                                            value={values.to.street_address}
+                                            name="to.street"
+                                            value={values.to.street}
                                         />
                                         <FormInput
                                             type="text"
@@ -260,7 +257,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             value={values.invoice_date}
                                         />
                                         <DropdownSelect
-                                            onChange={(value: string) => {
+                                            onChangeFn={(value: string) => {
                                                 setFieldValue('payment_term', value)
                                             }}
                                             label="Payment Terms"
