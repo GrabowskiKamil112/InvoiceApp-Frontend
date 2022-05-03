@@ -3,7 +3,7 @@ import SVG from 'react-inlinesvg'
 import { themeNavigator } from '../../utils/utils'
 
 const Icon = styled(SVG)<{ themectx: string }>`
-    width: 282px;
+    width: auto;
     height: 28px;
     margin-bottom: 40px;
     cursor: pointer;

@@ -1,9 +1,9 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import React, { ReactNode, useContext } from 'react'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
 
-const StyledHeader = styled.header<{ themeCtx: string; fontSize?: string }>`
+const StyledHeader = styled.header<{ themeCtx: string; fontSize?: string; windowWidth?: number }>`
     font-weight: 700;
     margin: 0;
     color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.heading`)};
@@ -12,6 +12,12 @@ const StyledHeader = styled.header<{ themeCtx: string; fontSize?: string }>`
         font-size: ${({ fontSize }) => (fontSize ? `${fontSize}rem` : '3.2rem')};
         height: 32px;
         font-weight: inherit;
+        ${({ windowWidth }) =>
+            windowWidth &&
+            windowWidth < 550 &&
+            css`
+                font-size: 20px;
+            `};
     }
     h2 {
         font-size: ${({ fontSize }) => (fontSize ? `${fontSize}rem` : '1.6rem')};
@@ -28,8 +34,9 @@ const StyledHeader = styled.header<{ themeCtx: string; fontSize?: string }>`
 interface Props {
     size: string
     fontSize?: string
+    windowWidth?: number
 }
-const Header: React.FC<Props> = ({ size, children, fontSize }) => {
+const Header: React.FC<Props> = ({ size, children, fontSize, windowWidth }) => {
     const { activeTheme } = useContext(PageContext)
     const renderSwitch = (param: string, child: ReactNode) => {
         switch (param) {
@@ -43,7 +50,7 @@ const Header: React.FC<Props> = ({ size, children, fontSize }) => {
     }
 
     return (
-        <StyledHeader fontSize={fontSize} themeCtx={activeTheme}>
+        <StyledHeader windowWidth={windowWidth} fontSize={fontSize} themeCtx={activeTheme}>
             {renderSwitch(size, children)}
         </StyledHeader>
     )

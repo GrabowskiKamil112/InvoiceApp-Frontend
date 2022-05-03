@@ -1,10 +1,12 @@
-import { memo } from 'react'
+import { memo, useContext } from 'react'
 import styled from 'styled-components'
+import PageContext from '../../context/pageContext'
+import { themeNavigator } from '../../utils/utils'
 import Logo from '../Atoms/Logo'
 import AsideController from '../Molecules/AsideController'
 
-const StyledWrapper = styled.aside`
-    background-color: ${({ theme }) => theme.dark.sidebar.bg};
+const StyledWrapper = styled.aside<{ themectx: string }>`
+    background-color: ${({ themectx }) => themeNavigator(`${themectx}.sidebar.bg`)};
     justify-content: space-between;
     border-radius: 0 20px 20px 0;
     flex-direction: column;
@@ -26,8 +28,9 @@ const StyledWrapper = styled.aside`
 `
 
 const Sidebar = () => {
+    const { activeTheme } = useContext(PageContext)
     return (
-        <StyledWrapper id="sidebar">
+        <StyledWrapper id="sidebar" themectx={activeTheme}>
             <Logo />
             <AsideController />
         </StyledWrapper>

@@ -5,7 +5,6 @@ import logo from '../../../public/assets/logo.svg'
 const StyledWrapper = styled.div`
     background-color: rgb(124, 93, 250);
     height: 110px;
-    width: 100%;
     border-radius: 0 0 20px 0;
     position: relative;
     ::before {
@@ -19,7 +18,7 @@ const StyledWrapper = styled.div`
     }
 
     @media (max-width: 900px) {
-        height: 100%;
+        height: 80px;
         width: 80px;
         border-radius: 0 20px 20px 0;
         ::before {

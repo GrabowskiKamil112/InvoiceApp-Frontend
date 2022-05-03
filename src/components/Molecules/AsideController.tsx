@@ -26,11 +26,16 @@ const GithubLogo = styled.img`
     }
 `
 const StyledWrapper = styled.div`
+    width: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
+
     @media (max-width: 900px) {
         flex-direction: row;
+        & > div {
+            display: flex;
+        }
     }
 `
 
@@ -40,13 +45,20 @@ const AsideController: React.FC = () => {
 
     return (
         <StyledWrapper>
-            <div onClick={() => dispatch(logout())}>
-                <Icon src={logoutIcon} />
+            <div>
+                <div onClick={() => dispatch(logout())}>
+                    <Icon themectx={activeTheme} src={logoutIcon} />
+                </div>
+                <Icon
+                    themectx={activeTheme}
+                    src={activeTheme === 'light' ? moonIcon : sunIcon}
+                    onClick={toggleTheme}
+                />
             </div>
-            <Icon src={activeTheme === 'light' ? moonIcon : sunIcon} onClick={toggleTheme} />
+
             <Divider />
             <a href="https://github.com/GrabowskiKamil112" target="_blank" rel="noreferrer">
-                <GithubLogo src={githubLogo} />
+                <GithubLogo src={githubLogo} alt="githubLogo" />
             </a>
         </StyledWrapper>
     )

@@ -24,6 +24,10 @@ const Button = styled.button<{
     position: relative;
     overflow: hidden;
     padding: 0 24px;
+    white-space: normal;
+    @media (max-width: 390px) {
+        height: 67px;
+    }
 
     & > img {
         margin-right: 4px;

@@ -10,8 +10,13 @@ const StyledWrapper = styled.div`
     height: 47px;
     margin-right: 40px;
     width: 130px;
+    z-index: 9;
     cursor: pointer;
     position: relative;
+    @media (max-width: 550px) {
+        margin-right: 15px;
+        width: 60px;
+    }
 `
 const StyledButton = styled.button`
     cursor: pointer;
@@ -105,9 +110,12 @@ const StyledInput = styled.input`
         width: 15px;
     }
 `
-type FilterByProps = { handleRadioInput: (e: React.MouseEvent<HTMLInputElement>) => void }
+type FilterByProps = {
+    handleRadioInput: (e: React.MouseEvent<HTMLInputElement>) => void
+    shorter: boolean
+}
 
-const FilterBy = ({ handleRadioInput }: FilterByProps) => {
+const FilterBy = ({ handleRadioInput, shorter }: FilterByProps) => {
     const [isFilterOpen, toggleFilterOpen] = useState<boolean>(false)
     const activeFilter = useAppSelector((state) => state.filterBy)
     const { activeTheme } = useContext(PageContext)
@@ -115,7 +123,7 @@ const FilterBy = ({ handleRadioInput }: FilterByProps) => {
     return (
         <StyledWrapper onClick={() => toggleFilterOpen(!isFilterOpen)}>
             <StyledButton>
-                Filter by status
+                Filter {shorter && 'by status'}
                 <StyledImg src={arrowDown} alt="arrowdown" isFilterOpen={isFilterOpen}></StyledImg>
             </StyledButton>
             {isFilterOpen && (
