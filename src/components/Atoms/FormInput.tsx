@@ -1,8 +1,8 @@
 import { Field, useFormikContext } from 'formik'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
-import { themeNavigator } from '../../utils/utils'
+import { getWindowWidth, themeNavigator } from '../../utils/utils'
 
 interface inputProps {
     themectx: string
@@ -12,18 +12,18 @@ interface labelProps extends inputProps {
     wideSpan: boolean
 }
 const StyledInput = styled(Field)<inputProps>`
-    transition: border-color 0.3s ease;
-    margin-top: 10px;
-    padding: 16px 20px;
+    border: 1px solid ${({ themectx }) => themeNavigator(`${themectx}.form.fieldBorder`)};
     background-color: ${({ themectx }) => themeNavigator(`${themectx}.form.fieldBg`)};
+    color: ${({ themectx }) => themeNavigator(`${themectx}.text.link`)};
+    transition: border-color 0.3s ease;
+    padding: 16px 20px;
     border-radius: 4px;
+    font-weight: 700;
+    margin-top: 10px;
     font-size: 12px;
     outline: none;
-    color: ${({ themectx }) => themeNavigator(`${themectx}.text.link`)};
-    font-weight: 700;
     height: 47px;
     width: 100%;
-    border: 1px solid ${({ themectx }) => themeNavigator(`${themectx}.form.fieldBorder`)};
 
     ${({ validationError }) =>
         validationError &&
