@@ -1,4 +1,4 @@
-import { Invoice, invoiceTypes } from '../../Types/Invoice'
+import { Invoice } from '../../Types/Invoice'
 import { ActionType } from '../actions'
 
 const initialState = {

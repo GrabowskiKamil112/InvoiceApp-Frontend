@@ -4,9 +4,9 @@ import Button from '../Atoms/Button'
 import Paragraph from '../Atoms/Paragraph'
 import Header from '../Atoms/Header'
 import FilterBy from '../Atoms/FilterBy'
-import { useAppDispatch } from '../../store/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks'
 import { changeFilter } from '../../store/actions'
-import { generateInfo } from '../../utils/utils'
+import { generateInfo, getWindowWidth } from '../../utils/utils'
 import plusIcon from '../../../public/assets/icon-plus.svg'
 import PageContext from '../../context/pageContext'
 
@@ -20,8 +20,12 @@ const StyledWrapper = styled.div`
     position: relative;
     & > div > header {
         margin-bottom: 8px;
+        @media (max-width: 550px) {
+            margin-bottom: -2px;
+        }
     }
 `
+
 const StyledButton = styled(Button)`
     text-shadow: 0px 0px 1px #ffffff;
     text-transform: none;
@@ -31,6 +35,18 @@ const StyledButton = styled(Button)`
     align-items: center;
     padding: 0 18px 0 8px;
     transition: background-color 0.3s ease;
+
+    & img {
+        background-color: white;
+        padding: 10px;
+        border-radius: 50%;
+    }
+
+    & span {
+        height: 31px;
+        margin-right: 10px;
+    }
+
     ${({ disabled }) =>
         disabled &&
         css`
@@ -41,15 +57,7 @@ const StyledButton = styled(Button)`
             }
         `};
 `
-const Img = styled.img`
-    background-color: white;
-    padding: 10px;
-    border-radius: 50%;
-`
-const Span = styled.span`
-    height: 31px;
-    margin-right: 10px;
-`
+
 const StyledDiv = styled.div`
     display: flex;
 `
@@ -61,7 +69,10 @@ const InvoiceControllerBar = ({
     openFormFn: () => void
     isFormOpen: boolean
 }) => {
-    const [invoiceFilter, setInvoiceFilter] = useState<string>('total')
+    const [invoiceFilter, setInvoiceFilter] = useState<string>(
+        useAppSelector((state) => state.filterBy) || 'total'
+    )
+    const [windowWidth, setWindowWidth] = useState(getWindowWidth())
     const [numOfInvoices, setNumOfInvoices] = useState<number>()
     const { activeTheme } = useContext(PageContext)
     const ref1 = useRef<HTMLDivElement>(null)
@@ -81,6 +92,13 @@ const InvoiceControllerBar = ({
 
     useEffect(() => {
         dispatch(changeFilter(invoiceFilter))
+
+        const handleResize = () => {
+            setWindowWidth(getWindowWidth())
+        }
+
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
     }, [dispatch, invoiceFilter])
 
     useLayoutEffect(() => {
@@ -90,21 +108,23 @@ const InvoiceControllerBar = ({
     return (
         <StyledWrapper ref={ref1}>
             <div>
-                <Header size="big">Invoices</Header>
+                <Header windowWidth={windowWidth} size="big">
+                    Invoices
+                </Header>
                 <Paragraph themeCtx={activeTheme}>
                     {generateInfo(invoiceFilter, numOfInvoices)}
                 </Paragraph>
             </div>
             <StyledDiv>
-                <FilterBy handleRadioInput={handleRadioInput} />
+                <FilterBy shorter={windowWidth > 550} handleRadioInput={handleRadioInput} />
                 <StyledButton
                     color="hsl(251, 94%, 67%)"
                     onClick={() => openFormFn()}
                     disabled={isFormOpen}>
-                    <Span>
-                        <Img src={plusIcon} alt="plus" />
-                    </Span>
-                    <Header size="small">New Invoice</Header>
+                    <span>
+                        <img src={plusIcon} alt="plus" />
+                    </span>
+                    <Header size="small">New {windowWidth > 550 && 'Invoice'}</Header>
                 </StyledButton>
             </StyledDiv>
         </StyledWrapper>
