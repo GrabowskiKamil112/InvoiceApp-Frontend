@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
 import InvoiceControllerBar from '../components/Organisms/InvoiceControllerBar'
-import InvoiceForm from '../components/Organisms/InvoiceForm'
+import InvoiceForm from '../components/Organisms/InvoiceForm/InvoiceForm'
 import { RootState } from '../store'
 import { fetchInvoices } from '../store/actions'
 import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
@@ -21,8 +22,8 @@ const Loading = styled.button<{ visible: boolean; display: boolean }>`
     height: 100vh;
     z-index: 999;
     width: 100%;
-    top: 0;
     left: 0;
+    top: 0;
     &::before {
         content: 'NOW LOADING';
         color: #e0e0e0e2;
@@ -48,11 +49,11 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
+    const { pathname } = useLocation()
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState<boolean>(true)
     const invoiceFormRef = React.createRef<HTMLDivElement>()
-
     const numOfInvoicesInStore = useAppSelector((state) => state.invoices).length
+
     const dispatch = useAppDispatch()
 
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
@@ -64,39 +65,42 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
     let transitionDelay = 0
 
     return (
-        <>
-            {isFormOpen && (
-                <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
-            )}
-            {!invoices && <Loading visible display={false} />}
-            <NavigationTemplate>
-                <InvoiceControllerBar
-                    openFormFn={() => setIsFormOpen(true)}
-                    isFormOpen={isFormOpen}
-                />
-                <StyledTransitionGroup>
-                    {invoices
-                        ?.filter(({ type }: { type: string }) =>
-                            filterBy !== 'total' ? type === filterBy : true
-                        )
-                        .map((invoice: Invoice) => {
-                            transitionDelay += 120
-                            return (
-                                <CSSTransition
-                                    key={invoices.indexOf(invoice)}
-                                    timeout={400 + transitionDelay}
-                                    classNames="item">
-                                    <InvoiceShort
-                                        key={invoices.indexOf(invoice)}
-                                        content={invoice}
-                                        transitionDelay={transitionDelay}
-                                    />
-                                </CSSTransition>
+        <CSSTransition in={pathname == '/home'} timeout={600} classNames="homeFade" unmountOnExit>
+            <>
+                <CSSTransition in={isFormOpen} timeout={600} classNames="form" unmountOnExit>
+                    <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
+                </CSSTransition>
+
+                {!invoices && <Loading visible display={false} />}
+                <NavigationTemplate>
+                    <InvoiceControllerBar
+                        openFormFn={() => setIsFormOpen(true)}
+                        isFormOpen={isFormOpen}
+                    />
+                    <StyledTransitionGroup>
+                        {invoices
+                            ?.filter(({ type }: { type: string }) =>
+                                filterBy !== 'total' ? type === filterBy : true
                             )
-                        })}
-                </StyledTransitionGroup>
-            </NavigationTemplate>
-        </>
+                            .map((invoice: Invoice) => {
+                                transitionDelay += 120
+                                return (
+                                    <CSSTransition
+                                        key={invoices.indexOf(invoice)}
+                                        timeout={400 + transitionDelay}
+                                        classNames="item">
+                                        <InvoiceShort
+                                            key={invoices.indexOf(invoice)}
+                                            content={invoice}
+                                            transitionDelay={transitionDelay}
+                                        />
+                                    </CSSTransition>
+                                )
+                            })}
+                    </StyledTransitionGroup>
+                </NavigationTemplate>
+            </>
+        </CSSTransition>
     )
 }
 
