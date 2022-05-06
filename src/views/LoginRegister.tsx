@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Input from '../components/Atoms/Input'
 import LoginRegisterTemplate from '../templates/LoginRegisterTemplate'
 import { Formik, Form } from 'formik'
-import { SignupSchema } from '../utils/utils'
+import { SignupSchema } from '../utils/validation'
 import Button from '../components/Atoms/Button'
 import Paragraph from '../components/Atoms/Paragraph'
 import PageContext from '../context/pageContext'
@@ -86,7 +86,7 @@ const LoginRegister: React.FC = () => {
                         : await dispatch(registration(username, email, password)).then(
                               (username: string) => {
                                   if (username) {
-                                      handleModalAfterRegistration(username)
+                                      handleModalAfterRegistration(username) // WIP
                                   }
                               }
                           )

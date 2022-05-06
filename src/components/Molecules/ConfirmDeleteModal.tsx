@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import PageContext from '../../context/pageContext'
 import { themeNavigator } from '../../utils/utils'
@@ -29,7 +29,7 @@ const StyledModal = styled.div<{ themeCtx: string }>`
     top: 50vh;
     margin-top: -126px; /* Negative half of height. */
     margin-left: -220px; /* Negative half of width. */
-    //transform-origin: center;
+
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -40,7 +40,7 @@ const StyledModal = styled.div<{ themeCtx: string }>`
     transition: all 0.2s;
 
     &.fade-enter {
-        transform: scale(0.4) translate(-50%, -50%);
+        transform: scale(0.4);
     }
 
     // enter to

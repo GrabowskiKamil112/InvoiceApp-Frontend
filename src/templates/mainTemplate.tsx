@@ -6,7 +6,7 @@ import PageContext from '../context/pageContext'
 import { themeNavigator } from '../utils/utils'
 
 const StyledWrapper = styled.div<{ themeCtx: string }>`
-    width: 100vw;
+    width: 100%;
     min-height: 100vh;
     background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.body.bg`)};
     transition: background-color 0.4s ease;
