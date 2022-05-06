@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { calculateTotalOfInvoice, getWindowWidth } from '../../utils/utils'
+import { addCommas, calculateTotalOfInvoice, getWindowWidth } from '../../utils/utils'
 import Header from '../Atoms/Header'
 import Status from '../Atoms/Status'
 import arrowRight from '../../../public/assets/icon-arrow-right.svg'
@@ -34,7 +34,7 @@ const InvoiceShort: React.FC<Props> = ({ content, transitionDelay }) => {
             <div>{to?.name}</div>
             <Header size="medium">
                 &#163;
-                {items_list ? `${calculateTotalOfInvoice(items_list)}` : ''}
+                {items_list ? `${addCommas(calculateTotalOfInvoice(items_list))}` : ''}
             </Header>
             <Status type={type}>{type}</Status>
             {windowWidth > 750 && <img src={arrowRight} alt="arrowRight" />}

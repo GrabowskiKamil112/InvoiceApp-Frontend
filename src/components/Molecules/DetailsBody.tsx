@@ -20,6 +20,18 @@ const StyledWrapper = styled.section<{ themeCtx: string }>`
         'title title from'
         'dates to email'
         'items items items';
+
+    @media (max-width: 750px) {
+        row-gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: repeat(1fr, 4) auto;
+        grid-template-areas:
+            'title .'
+            'from .'
+            'dates to'
+            'email email'
+            'items items';
+    }
 `
 const Title = styled.div`
     grid-area: title;
@@ -27,6 +39,12 @@ const Title = styled.div`
     & p {
         margin-top: 6px;
     }
+    @media (max-width: 750px) {
+        & h2 {
+            font-size: 14px;
+        }
+    }
+
     & h2 span {
         color: rgb(126, 136, 195);
     }
@@ -41,6 +59,12 @@ const Address1 = styled.address`
         display: block;
         margin-bottom: 4px;
         float: right;
+    }
+    @media (max-width: 750px) {
+        justify-self: start;
+        & p {
+            text-align: left;
+        }
     }
 `
 const Address2 = styled.address`
@@ -76,8 +100,15 @@ const Email = styled.div`
 `
 
 const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
-    console.log(invoice)
-    const { from = {}, to = {}, items_list, created, payment_due, description, _id: id } = invoice
+    const {
+        from = {},
+        to = {},
+        items_list,
+        payment_term,
+        invoice_date,
+        description,
+        _id: id,
+    } = invoice
     const { activeTheme } = useContext(PageContext)
 
     const P = (text?: string, small = false, key?: string) => (
@@ -92,7 +123,7 @@ const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
                 <Title>
                     <Header size="medium">
                         <span>#</span>
-                        {id.substring(0, 6)}
+                        {id.substring(id.length - 6).toUpperCase()}
                     </Header>
                     {P(description)}
                 </Title>
@@ -104,11 +135,11 @@ const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
                 <Dates>
                     <div>
                         {P('Invoice Date')}
-                        <Header size="medium">{created}</Header>
+                        <Header size="medium">{invoice_date}</Header>
                     </div>
                     <div>
                         {P('Payment Due')}
-                        <Header size="medium">{payment_due}</Header>
+                        <Header size="medium">{payment_term}</Header>
                     </div>
                 </Dates>
                 <Address2>
@@ -116,7 +147,7 @@ const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
                     <Header size="medium">{to?.name}</Header>
 
                     {(Object.keys(to) as Array<keyof typeof to>).map((keyName) => {
-                        return P(to[keyName], true, keyName)
+                        return keyName == 'name' ? '' : P(to[keyName], true, keyName)
                     })}
                 </Address2>
                 <Email>
@@ -128,6 +159,7 @@ const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
         </>
     )
 }
+
 // DetailsBody.propTypes = {
 //     content: PropTypes.shape({
 //         _id: PropTypes.number,
