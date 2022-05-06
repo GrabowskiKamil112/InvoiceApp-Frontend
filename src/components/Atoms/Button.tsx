@@ -26,7 +26,7 @@ const Button = styled.button<{
     padding: 0 24px;
     white-space: normal;
     @media (max-width: 390px) {
-        height: 67px;
+        height: 52px;
     }
 
     & > img {

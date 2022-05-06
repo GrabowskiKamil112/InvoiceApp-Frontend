@@ -38,7 +38,7 @@ const Img = styled.img`
     }
 `
 
-const Logo = () => {
+const Logo: React.FC = () => {
     return (
         <StyledWrapper>
             <Img src={logo} />

@@ -20,10 +20,10 @@ const Errors: React.FC = () => {
 
     return (
         <StyledWrapper>
-            {Object.values(errors).some((val) => (val as string).endsWith('required')) && (
+            {Object.values(errors).some((val) => (val as string).endsWith('required field')) && (
                 <div> - All fields must be filled.</div>
             )}
-            {getIn(errors, 'clients_email')?.endsWith('incorrect') && <div> - invalid email.</div>}
+            {errors['to.email']?.endsWith('incorrect') && <div> - invalid email.</div>}
             {getIn(errors, 'items_list')?.endsWith('at least 1 items') && (
                 <div> - An item must be added.</div>
             )}

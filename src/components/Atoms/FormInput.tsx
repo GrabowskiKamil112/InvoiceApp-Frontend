@@ -1,8 +1,8 @@
 import { Field, useFormikContext } from 'formik'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import styled, { css } from 'styled-components'
 import PageContext from '../../context/pageContext'
-import { getWindowWidth, themeNavigator } from '../../utils/utils'
+import { themeNavigator } from '../../utils/utils'
 
 interface inputProps {
     themectx: string

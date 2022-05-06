@@ -14,6 +14,9 @@ const StyledSelect = styled(Select)<{ themeCtx: string }>`
         border: none;
         outline: none;
     }
+    & > option {
+        background-color: red;
+    }
     & > div {
         background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.form.fieldBg`)};
         border: none;
@@ -28,20 +31,23 @@ const StyledSelect = styled(Select)<{ themeCtx: string }>`
         background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.form.fieldBg`)};
         height: auto;
         & > div > div:hover {
-            background-color: #1c2f9b;
+            //  background-color: #0044ff;
+            &::selection {
+                background-color: red;
+            }
         }
     }
 `
 type Option = Record<'value' | 'label', string>
 
 const DropdownSelect = ({
-    onChange,
+    onChangeFn,
     options,
     value,
     label,
     name,
 }: {
-    onChange: (arg: string) => any
+    onChangeFn: (arg: string) => any
     options: Option[]
     value: string
     label: string
@@ -51,14 +57,24 @@ const DropdownSelect = ({
     const defaultValue = (options: Option[], value: String) => {
         return options ? options.find((option: Option) => option.value === value) : ''
     }
+    const customTheme = (theme: { colors: any }) => {
+        return {
+            ...theme,
+            ...theme.colors,
+            primary25: 'orange',
+            primary: 'green',
+            neutral90: 'pink',
+        }
+    }
 
     return (
-        <StyledLabel wideSpan={false} themeCtx={activeTheme} htmlFor={name}>
+        <StyledLabel wideSpan={false} themectx={activeTheme} htmlFor={name}>
             {label}
             <StyledSelect
+                theme={customTheme}
                 themeCtx={activeTheme}
                 value={defaultValue(options, value)}
-                onChange={(option: Option) => onChange(option.value)}
+                onChange={(option: Option) => onChangeFn(option.value)}
                 options={options}
             />
         </StyledLabel>
