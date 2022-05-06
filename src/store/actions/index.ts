@@ -114,9 +114,12 @@ export const authenticate =
                     data: {
                         _id: 1234,
                         username: 'admin',
+                        invoices: [...testInvoices],
                     },
                 },
             })
+
+            return
         }
 
         return axios

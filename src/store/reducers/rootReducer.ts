@@ -27,7 +27,6 @@ const rootReducer = (state: State = initialState, action: any) => {
 
         case ActionType.ADD_INVOICE_SUCCESS:
             const newInvoice = payload.data
-            console.log('newinvoice in reducer', payload)
 
             return {
                 ...state,
@@ -40,8 +39,6 @@ const rootReducer = (state: State = initialState, action: any) => {
                 invoices: [...state.invoices, ...payload.data],
             }
         case ActionType.UPDATE_INVOICE_SUCCESS:
-            console.log('update p', payload)
-
             return {
                 ...state,
                 invoices: [
