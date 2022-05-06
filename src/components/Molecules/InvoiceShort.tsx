@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { addCommas, calculateTotalOfInvoice, getWindowWidth } from '../../utils/utils'
 import Header from '../Atoms/Header'
 import Status from '../Atoms/Status'
@@ -42,4 +42,4 @@ const InvoiceShort: React.FC<Props> = ({ content, transitionDelay }) => {
     )
 }
 
-export default InvoiceShort
+export default useMemo(InvoiceShort)
