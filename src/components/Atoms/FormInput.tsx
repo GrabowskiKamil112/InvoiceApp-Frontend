@@ -34,6 +34,7 @@ const StyledInput = styled(Field)<inputProps>`
 export const StyledLabel = styled.label<labelProps>`
     color: ${({ themectx }) => themeNavigator(`${themectx}.text.formLabel`)};
     transition: color 0.3s ease;
+    //white-space: nowrap;
     font-size: 1.2rem;
     font-weight: 400;
     height: auto;

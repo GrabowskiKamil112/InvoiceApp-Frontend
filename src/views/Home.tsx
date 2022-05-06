@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
@@ -49,7 +48,6 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    const { pathname } = useLocation()
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
     const invoiceFormRef = React.createRef<HTMLDivElement>()
     const numOfInvoicesInStore = useAppSelector((state) => state.invoices).length
@@ -65,7 +63,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
     let transitionDelay = 0
 
     return (
-        <CSSTransition in={pathname == '/home'} timeout={600} classNames="homeFade" unmountOnExit>
+       
             <>
                 <CSSTransition in={isFormOpen} timeout={600} classNames="form" unmountOnExit>
                     <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
@@ -100,7 +98,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                     </StyledTransitionGroup>
                 </NavigationTemplate>
             </>
-        </CSSTransition>
+       
     )
 }
 

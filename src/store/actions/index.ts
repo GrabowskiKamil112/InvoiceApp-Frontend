@@ -46,6 +46,7 @@ export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveComplet
 const API_URL = 'http://localhost:9001/api'
 const testInvoices = [
     {
+        _id:'1234',
         type: 'pending' as invoiceTypes,
         from: {
             street: 'Piotrowska 7A',
@@ -67,12 +68,13 @@ const testInvoices = [
         items_list: [
             {
                 name: 'milk',
-                quantity: '4',
-                price: '5',
+                quantity: '46.4',
+                price: '95.9',
             },
         ],
     },
     {
+        _id:'123EG5',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -94,7 +96,147 @@ const testInvoices = [
         items_list: [
             {
                 name: 'bread',
-                quantity: '2',
+                quantity: '29',
+                price: '6',
+            },
+        ],
+    },
+    {
+        _id:'E1235',
+        type: 'draft' as invoiceTypes,
+        from: {
+            street: 'Borelowskiego 6B',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'Polska',
+        },
+        to: {
+            name: 'eeeeee',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Oświęcim',
+            street: 'Wyszyńskiego',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-05-15',
+        items_list: [
+            {
+                name: 'bread',
+                quantity: '29',
+                price: '6',
+            },
+        ],
+    },
+    {
+        _id:'125G35',
+        type: 'draft' as invoiceTypes,
+        from: {
+            street: 'Borelowskiego 6B',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'Polska',
+        },
+        to: {
+            name: 'eeeeee',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Oświęcim',
+            street: 'Wyszyńskiego',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-05-15',
+        items_list: [
+            {
+                name: 'bread',
+                quantity: '29',
+                price: '6',
+            },
+        ],
+    },
+    {
+        _id:'124G35',
+        type: 'paid' as invoiceTypes,
+        from: {
+            street: 'Borelowskiego 6B',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'Polska',
+        },
+        to: {
+            name: 'eeeeee',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Oświęcim',
+            street: 'Wyszyńskiego',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-05-15',
+        items_list: [
+            {
+                name: 'bread',
+                quantity: '29',
+                price: '6',
+            },
+        ],
+    },
+    {
+        _id:'12G335',
+        type: 'paid' as invoiceTypes,
+        from: {
+            street: 'Borelowskiego 6B',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'Polska',
+        },
+        to: {
+            name: 'eeeeee',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Oświęcim',
+            street: 'Wyszyńskiego',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-05-15',
+        items_list: [
+            {
+                name: 'bread',
+                quantity: '29',
+                price: '6',
+            },
+        ],
+    },
+    {
+        _id:'12G352',
+        type: 'pending' as invoiceTypes,
+        from: {
+            street: 'Borelowskiego 6B',
+            city: 'Jawiszowice',
+            post_code: '32-626',
+            country: 'Polska',
+        },
+        to: {
+            name: 'eeeeee',
+            email: 'grabowskikamil@vp.pl',
+            country: 'Poland',
+            post_code: '32-626',
+            city: 'Oświęcim',
+            street: 'Wyszyńskiego',
+        },
+        description: 'description about invoice details',
+        invoice_date: '2022-05-01',
+        payment_term: '2022-05-15',
+        items_list: [
+            {
+                name: 'bread',
+                quantity: '29',
                 price: '6',
             },
         ],

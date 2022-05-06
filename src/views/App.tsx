@@ -1,6 +1,6 @@
 import React from 'react'
 import MainTemplate from '../templates/mainTemplate'
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LoginRegister from './LoginRegister'
 import Home from './Home'
 import { store } from '../store'

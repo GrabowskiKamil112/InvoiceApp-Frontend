@@ -7,11 +7,11 @@ import Button from '../components/Atoms/Button'
 import arrowLeft from '../../public/assets/icon-arrow-left.svg'
 import DetailsController from '../components/Molecules/DetailsController'
 import { Invoice } from '../Types/Invoice'
-import DetailsBody from '../components/Molecules/DetailsBody'
+import DetailsBody from '../components/Molecules/DetailsBody/DetailsBody'
 import { getWindowWidth, themeNavigator } from '../utils/utils'
 import { useOnClickOutsideForm } from '../utils/hooks'
 import InvoiceForm from '../components/Organisms/InvoiceForm/InvoiceForm'
-import { useAppDispatch } from '../store/hooks/hooks'
+import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
 import { deleteItem, updateItem } from '../store/actions'
 import ConfirmDeleteModal from '../components/Molecules/ConfirmDeleteModal'
 import PageContext from '../context/pageContext'
@@ -70,7 +70,9 @@ const InvoiceDetails: React.FC = () => {
     const [fetchAgain, toggleFetchAgain] = useState<boolean>(false)
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
     const invoiceFormRef = createRef<HTMLDivElement>()
+
     const dispatch = useAppDispatch()
+    const invoicesForAdmin=useAppSelector(state=>state.invoices)
 
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
 
@@ -80,7 +82,10 @@ const InvoiceDetails: React.FC = () => {
 
             return data as Invoice
         } catch (e) {
+            const res =invoicesForAdmin.filter(invoice=>invoice._id == id)          
+            
             console.error(e)
+            return res[0]
         }
     }
 
