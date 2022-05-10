@@ -1,7 +1,6 @@
-import { motion, MotionConfig } from 'framer-motion'
+import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
-import { useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
@@ -25,6 +24,7 @@ const Loading = styled.button<{ visible: boolean; display: boolean }>`
     width: 100%;
     left: 0;
     top: 0;
+
     &::before {
         content: 'NOW LOADING';
         color: #e0e0e0e2;

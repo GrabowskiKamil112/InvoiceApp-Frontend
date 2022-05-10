@@ -42,4 +42,4 @@ const InvoiceShort: React.FC<Props> = ({ content, transitionDelay }) => {
     )
 }
 
-export default InvoiceShort
+export default React.memo(InvoiceShort)

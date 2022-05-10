@@ -54,10 +54,12 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.REGISTER_SUCCESS:
+           const { data:dataRegister } = payload
+            
             return {
                 ...state,
-                userID: payload.data._id,
-                username: payload.data.username,
+                userID: dataRegister._id,
+                username: dataRegister.username,
             }
 
         case ActionType.LOGOUT:
@@ -70,10 +72,12 @@ const rootReducer = (state: State = initialState, action: any) => {
 
         case ActionType.AUTH_SUCCESS:
             console.log('payload in reducer', payload.data)
+            const { data: dataAuth } = payload
             return {
                 ...state,
-                userID: payload.data._id,
-                username: payload.data.username,
+                userID: dataAuth._id,
+                username: dataAuth.username,
+                invoices:[ ...state.invoices, ...dataAuth.invoices]
             }
 
         default:
