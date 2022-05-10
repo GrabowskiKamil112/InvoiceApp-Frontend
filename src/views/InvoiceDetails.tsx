@@ -16,6 +16,7 @@ import { deleteItem, updateItem } from '../store/actions'
 import ConfirmDeleteModal from '../components/Molecules/ConfirmDeleteModal'
 import PageContext from '../context/pageContext'
 import { CSSTransition } from 'react-transition-group'
+import { motion } from 'framer-motion'
 
 const StyledWrapper = styled.div`
     flex-direction: column;
@@ -141,6 +142,12 @@ const InvoiceDetails: React.FC = () => {
         )
     }
 
+    const invoiceDetailsMotion = {
+        initial: { opacity: 0, x: -100 },
+        animate: { opacity: 1, x: 0, transition: { duration: 0.8 } },
+        exit: { opacity: 0, x: 100, transition: { duration: 0.5 } },
+    }
+
     return (
         <>
             <CSSTransition in={isDeleteModal} timeout={200} classNames="fade" unmountOnExit>
@@ -162,27 +169,33 @@ const InvoiceDetails: React.FC = () => {
                 />
             )}
             <NavigationTemplate>
-                <NavLink to={`/home`}>
-                    <StyledReturnButton disabled={isFormOpen} variant="back">
-                        <img src={arrowLeft} alt="arrow-left"></img>
-                        <span>Go back</span>
-                    </StyledReturnButton>
-                </NavLink>
-                {invoice ? (
-                    <>
-                        <StyledWrapper>
-                            <DetailsController
-                                type={invoice.type}
-                                getButtons={() => getButtons(invoice.type)}
-                                windowWidth={windowWidth}
-                            />
+                <motion.div
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    variants={invoiceDetailsMotion}>
+                    <NavLink to={`/home`}>
+                        <StyledReturnButton disabled={isFormOpen} variant="back">
+                            <img src={arrowLeft} alt="arrow-left"></img>
+                            <span>Go back</span>
+                        </StyledReturnButton>
+                    </NavLink>
+                    {invoice ? (
+                        <>
+                            <StyledWrapper>
+                                <DetailsController
+                                    type={invoice.type}
+                                    getButtons={() => getButtons(invoice.type)}
+                                    windowWidth={windowWidth}
+                                />
 
-                            <DetailsBody invoice={invoice} />
-                        </StyledWrapper>
-                    </>
-                ) : (
-                    <StyledWrapper> No invoice / Something went wrong </StyledWrapper>
-                )}
+                                <DetailsBody invoice={invoice} />
+                            </StyledWrapper>
+                        </>
+                    ) : (
+                        <StyledWrapper> No invoice / Something went wrong </StyledWrapper>
+                    )}
+                </motion.div>
             </NavigationTemplate>
             {invoice && windowWidth < 650 && (
                 <ButtonsWrapper themectx={activeTheme}>{getButtons(invoice.type)}</ButtonsWrapper>

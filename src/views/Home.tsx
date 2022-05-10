@@ -1,3 +1,4 @@
+import { motion, MotionConfig } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { useLocation } from 'react-router-dom'
@@ -49,30 +50,34 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
-    const { pathname } = useLocation()
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
     const invoiceFormRef = React.createRef<HTMLDivElement>()
     const numOfInvoicesInStore = useAppSelector((state) => state.invoices).length
 
-    const dispatch = useAppDispatch()
-
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
+
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         numOfInvoicesInStore === 0 && dispatch(fetchInvoices())
     }, [])
 
+    const homeMotion = {
+        initial: { opacity: 0, x: -100 },
+        animate: { opacity: 1, x: 0, transition: { duration: 0.8 } },
+        exit: { opacity: 0, x: 100, transition: { duration: 0.5 } },
+    }
     let transitionDelay = 0
 
     return (
-        <CSSTransition in={pathname == '/home'} timeout={600} classNames="homeFade" unmountOnExit>
-            <>
-                <CSSTransition in={isFormOpen} timeout={600} classNames="form" unmountOnExit>
-                    <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
-                </CSSTransition>
+        <>
+            <CSSTransition in={isFormOpen} timeout={600} classNames="form" unmountOnExit>
+                <InvoiceForm ref={invoiceFormRef} closeFn={() => setIsFormOpen(false)} />
+            </CSSTransition>
 
-                {!invoices && <Loading visible display={false} />}
-                <NavigationTemplate>
+            {!invoices && <Loading visible display={false} />}
+            <NavigationTemplate>
+                <motion.div initial="initial" animate="animate" exit="exit" variants={homeMotion}>
                     <InvoiceControllerBar
                         openFormFn={() => setIsFormOpen(true)}
                         isFormOpen={isFormOpen}
@@ -98,9 +103,9 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                                 )
                             })}
                     </StyledTransitionGroup>
-                </NavigationTemplate>
-            </>
-        </CSSTransition>
+                </motion.div>
+            </NavigationTemplate>
+        </>
     )
 }
 
