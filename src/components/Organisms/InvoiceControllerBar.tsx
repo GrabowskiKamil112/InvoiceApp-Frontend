@@ -69,13 +69,17 @@ const InvoiceControllerBar = ({
     openFormFn: () => void
     isFormOpen: boolean
 }) => {
+    const [windowWidth, setWindowWidth] = useState(getWindowWidth())
+    const { activeTheme } = useContext(PageContext)
+    const ref1 = useRef<HTMLDivElement>(null)
+
     const [invoiceFilter, setInvoiceFilter] = useState<string>(
         useAppSelector((state) => state.filterBy) || 'total'
     )
-    const [windowWidth, setWindowWidth] = useState(getWindowWidth())
-    const [numOfInvoices, setNumOfInvoices] = useState<number>()
-    const { activeTheme } = useContext(PageContext)
-    const ref1 = useRef<HTMLDivElement>(null)
+
+    const numOfInvoicesByFilter = useAppSelector((state) =>
+        state.invoices.filter((e) => (invoiceFilter !== 'total' ? e.type === invoiceFilter : true))
+    ).length
 
     const dispatch = useAppDispatch()
 
@@ -101,9 +105,7 @@ const InvoiceControllerBar = ({
         return () => window.removeEventListener('resize', handleResize)
     }, [dispatch, invoiceFilter])
 
-    useLayoutEffect(() => {
-        setNumOfInvoices(ref1.current?.nextElementSibling?.getElementsByTagName('a').length)
-    })
+    useLayoutEffect(() => {})
 
     return (
         <StyledWrapper ref={ref1}>
@@ -112,7 +114,7 @@ const InvoiceControllerBar = ({
                     Invoices
                 </Header>
                 <Paragraph themeCtx={activeTheme}>
-                    {generateInfo(invoiceFilter, numOfInvoices)}
+                    {generateInfo(invoiceFilter, numOfInvoicesByFilter)}
                 </Paragraph>
             </div>
             <StyledDiv>

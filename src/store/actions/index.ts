@@ -44,9 +44,9 @@ export enum ActionType {
 export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveCompleted
 
 const API_URL = 'http://localhost:9001/api'
-const testInvoices = [
+const adminInvoices = [
     {
-        _id:'1234',
+        _id: '1234',
         type: 'pending' as invoiceTypes,
         from: {
             street: 'Piotrowska 7A',
@@ -74,7 +74,7 @@ const testInvoices = [
         ],
     },
     {
-        _id:'123EG5',
+        _id: '123EG5',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -97,12 +97,12 @@ const testInvoices = [
             {
                 name: 'bread',
                 quantity: '29',
-                price: '6',
+                price: '6.5',
             },
         ],
     },
     {
-        _id:'E1235',
+        _id: 'E1235',
         type: 'draft' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -111,7 +111,7 @@ const testInvoices = [
             country: 'Polska',
         },
         to: {
-            name: 'eeeeee',
+            name: 'Jan Kowalski',
             email: 'grabowskikamil@vp.pl',
             country: 'Poland',
             post_code: '32-626',
@@ -124,13 +124,13 @@ const testInvoices = [
         items_list: [
             {
                 name: 'bread',
-                quantity: '29',
+                quantity: '9',
                 price: '6',
             },
         ],
     },
     {
-        _id:'125G35',
+        _id: '125G35',
         type: 'draft' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -139,7 +139,7 @@ const testInvoices = [
             country: 'Polska',
         },
         to: {
-            name: 'eeeeee',
+            name: 'Lidl',
             email: 'grabowskikamil@vp.pl',
             country: 'Poland',
             post_code: '32-626',
@@ -152,13 +152,13 @@ const testInvoices = [
         items_list: [
             {
                 name: 'bread',
-                quantity: '29',
-                price: '6',
+                quantity: '55',
+                price: '1.50',
             },
         ],
     },
     {
-        _id:'124G35',
+        _id: '124G35',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -167,7 +167,7 @@ const testInvoices = [
             country: 'Polska',
         },
         to: {
-            name: 'eeeeee',
+            name: 'Kamil Grabowski',
             email: 'grabowskikamil@vp.pl',
             country: 'Poland',
             post_code: '32-626',
@@ -181,12 +181,12 @@ const testInvoices = [
             {
                 name: 'bread',
                 quantity: '29',
-                price: '6',
+                price: '5',
             },
         ],
     },
     {
-        _id:'12G335',
+        _id: '12G335',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -195,7 +195,7 @@ const testInvoices = [
             country: 'Polska',
         },
         to: {
-            name: 'eeeeee',
+            name: 'Asdf-BsdfB-CsdfC',
             email: 'grabowskikamil@vp.pl',
             country: 'Poland',
             post_code: '32-626',
@@ -209,12 +209,12 @@ const testInvoices = [
             {
                 name: 'bread',
                 quantity: '29',
-                price: '6',
+                price: '9.9',
             },
         ],
     },
     {
-        _id:'12G352',
+        _id: '12G352',
         type: 'pending' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -223,7 +223,7 @@ const testInvoices = [
             country: 'Polska',
         },
         to: {
-            name: 'eeeeee',
+            name: 'AAA-BBB-CCC',
             email: 'grabowskikamil@vp.pl',
             country: 'Poland',
             post_code: '32-626',
@@ -237,7 +237,7 @@ const testInvoices = [
             {
                 name: 'bread',
                 quantity: '29',
-                price: '6',
+                price: '6.79',
             },
         ],
     },
@@ -256,7 +256,7 @@ export const authenticate =
                     data: {
                         _id: 1234,
                         username: 'admin',
-                        invoices: [...testInvoices],
+                        invoices: [...adminInvoices],
                     },
                 },
             })
@@ -294,7 +294,7 @@ export const registration = (username: string, email: string, password: string):
             .then((payload) => {
                 dispatch({ type: ActionType.REGISTER_SUCCESS, payload })
 
-                testInvoices.forEach((invoice) => {
+                adminInvoices.forEach((invoice) => {
                     axios.post(`${API_URL}/invoice`, {
                         userID: getState().userID,
                         ...invoice,

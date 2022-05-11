@@ -54,8 +54,8 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.REGISTER_SUCCESS:
-           const { data:dataRegister } = payload
-            
+            const { data: dataRegister } = payload
+
             return {
                 ...state,
                 userID: dataRegister._id,
@@ -71,13 +71,14 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.AUTH_SUCCESS:
-            console.log('payload in reducer', payload.data)
             const { data: dataAuth } = payload
+            const adminInvoices = ('invoices' in dataAuth && [...dataAuth.invoices]) || []
+
             return {
                 ...state,
                 userID: dataAuth._id,
                 username: dataAuth.username,
-                invoices:[ ...state.invoices, ...dataAuth.invoices]
+                invoices: [...state.invoices, ...adminInvoices],
             }
 
         default:

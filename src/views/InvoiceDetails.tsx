@@ -16,7 +16,8 @@ import { deleteItem, updateItem } from '../store/actions'
 import ConfirmDeleteModal from '../components/Molecules/ConfirmDeleteModal'
 import PageContext from '../context/pageContext'
 import { CSSTransition } from 'react-transition-group'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 
 const StyledWrapper = styled.div`
     flex-direction: column;
@@ -25,6 +26,7 @@ const StyledWrapper = styled.div`
     height: auto;
     margin: auto;
     width: 100%;
+    z-index: -1;
 `
 const StyledReturnButton = styled(Button)`
     justify-content: flex-start;
@@ -64,6 +66,7 @@ const ButtonsWrapper = styled.div<{ themectx: string }>`
 
 const InvoiceDetails: React.FC = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const { activeTheme } = useContext(PageContext)
     const [invoice, setInvoice] = useState<Invoice>()
     const [windowWidth, setWindowWidth] = useState(getWindowWidth())
@@ -73,7 +76,7 @@ const InvoiceDetails: React.FC = () => {
     const invoiceFormRef = createRef<HTMLDivElement>()
 
     const dispatch = useAppDispatch()
-    const invoicesForAdmin=useAppSelector(state=>state.invoices)
+    const invoicesForAdmin = useAppSelector((state) => state.invoices)
 
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
 
@@ -83,8 +86,8 @@ const InvoiceDetails: React.FC = () => {
 
             return data as Invoice
         } catch (e) {
-            const res =invoicesForAdmin.filter(invoice=>invoice._id == id)          
-            
+            const res = invoicesForAdmin.filter((invoice) => invoice._id == id)
+
             console.error(e)
             return res[0]
         }
@@ -162,17 +165,28 @@ const InvoiceDetails: React.FC = () => {
                     deleteFn={() => {
                         handleDelete()
                         setIsDeleteModal(false)
+                        setTimeout(() => {
+                            navigate('/home')
+                        }, 250)
                     }}
                 />
             </CSSTransition>
-            {isFormOpen && (
-                <InvoiceForm
-                    isEdit
-                    invoice={invoice}
-                    ref={invoiceFormRef}
-                    closeFn={() => setIsFormOpen(false)}
-                />
-            )}
+            <AnimatePresence>
+                {isFormOpen && (
+                    <motion.div
+                        initial={{ x: -700 }}
+                        animate={{ x: 0 }}
+                        exit={{ x: -700 }}
+                        transition={{ type: 'spring', duration: 0.4 }}>
+                        <InvoiceForm
+                            isEdit
+                            invoice={invoice}
+                            ref={invoiceFormRef}
+                            closeFn={() => setIsFormOpen(false)}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <NavigationTemplate>
                 <motion.div
                     initial="initial"

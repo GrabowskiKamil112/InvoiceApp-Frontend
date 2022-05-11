@@ -89,6 +89,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                             )
                             .map((invoice: Invoice) => {
                                 transitionDelay += 120
+
                                 return (
                                     <CSSTransition
                                         key={invoices.indexOf(invoice)}
