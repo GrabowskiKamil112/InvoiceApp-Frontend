@@ -15,11 +15,12 @@ export const generateInfo = (invoiceFilter: string, amount = 1): string => {
 
 export const getTotalPriceOfItemInForm = (item: ItemsListEntity): string => {
     const { price, quantity } = item || {}
+    const numRegex = /(?!^0*$)(?!^0*\.0*$)^\d{1,5}(\.\d{1,2})?$/
 
-    if (price && quantity && [price, quantity].every((s) => s.match(/^\d+$/))) {
-        return (parseInt(quantity) * parseInt(price)).toString() + '$'
+    if (price && quantity && [price, quantity].every((s) => s.match(numRegex))) {
+        return (parseFloat(quantity) * parseFloat(price)).toFixed(2) + '$'
     }
-    return '0'
+    return 'NaN'
 }
 
 export function calculateTotalOfItem(quantity?: string, price?: string): number {
