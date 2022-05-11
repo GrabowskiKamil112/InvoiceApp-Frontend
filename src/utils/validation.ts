@@ -1,6 +1,9 @@
 import * as Yup from 'yup'
 import { Invoice } from '../Types/Invoice'
 
+const emailRegex =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+
 export const SignupSchema = Yup.object().shape({
     username: Yup.string()
         .min(4, 'Too Short! Minimum is 4 signs')
@@ -9,6 +12,7 @@ export const SignupSchema = Yup.object().shape({
     email: Yup.string()
         .min(4, 'Too Short! Minimum is 4 signs')
         .max(24, 'Too Long! Maximum is 24 signs')
+        .matches(emailRegex, { message: 'email is incorrect', excludeEmptyString: true })
         .required('email is required'),
     password: Yup.string()
         .min(4, 'Too Short! Minimum is 4 signs')
@@ -32,10 +36,10 @@ export const draftInvoice = Yup.object().shape({
     }),
     to: Yup.object().shape({
         name: Yup.string(),
-        email: Yup.string().matches(
-            /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-            { message: 'email is incorrect', excludeEmptyString: true }
-        ),
+        email: Yup.string().matches(emailRegex, {
+            message: 'email is incorrect',
+            excludeEmptyString: true,
+        }),
         country: Yup.string(),
         post_code: Yup.string(),
         city: Yup.string(),
@@ -64,10 +68,7 @@ export const normalInvoice = Yup.object().shape({
     to: Yup.object().shape({
         name: Yup.string().required(),
         email: Yup.string()
-            .matches(
-                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                { message: 'email is incorrect', excludeEmptyString: true }
-            )
+            .matches(emailRegex, { message: 'email is incorrect', excludeEmptyString: true })
             .required(),
         country: Yup.string().required(),
         post_code: Yup.string().required(),
@@ -107,9 +108,7 @@ export const validateForm = async (values: Invoice) => {
     } else {
         await normalInvoice
             .validate(values, { abortEarly: false })
-            .then(() => {
-                // Success
-            })
+            .then(() => {})
             .catch((errors) => {
                 errors.inner.forEach((e: Yup.ValidationError) => {
                     if (e.path) {

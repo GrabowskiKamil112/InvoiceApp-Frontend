@@ -56,8 +56,6 @@ const LoginRegister: React.FC = () => {
     }
 
     const handleModalAfterRegistration = (username: string) => {
-        console.log('userrrrr', username)
-
         setState({ ...state, ['redirect']: true })
     }
 
@@ -92,7 +90,7 @@ const LoginRegister: React.FC = () => {
                           )
                 }}>
                 {({ errors, values }) => (
-                    <StyledForm ref={formRef}>
+                    <StyledForm ref={formRef} noValidate>
                         <Input
                             validationError={errors.username}
                             type="text"
