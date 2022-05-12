@@ -11,7 +11,7 @@ import plusIcon from '../../../public/assets/icon-plus.svg'
 import PageContext from '../../context/pageContext'
 
 const StyledWrapper = styled.div`
-    margin-bottom: 64px;
+    margin-bottom: 54px;
     height: 58px;
     display: flex;
     align-items: center;
@@ -23,6 +23,10 @@ const StyledWrapper = styled.div`
         @media (max-width: 550px) {
             margin-bottom: -2px;
         }
+    }
+
+    @media (max-width: 550px) {
+        margin-bottom: 44px;
     }
 `
 

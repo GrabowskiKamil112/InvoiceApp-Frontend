@@ -88,7 +88,7 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                                 filterBy !== 'total' ? type === filterBy : true
                             )
                             .map((invoice: Invoice) => {
-                                transitionDelay += 120
+                                transitionDelay += 140
 
                                 return (
                                     <CSSTransition

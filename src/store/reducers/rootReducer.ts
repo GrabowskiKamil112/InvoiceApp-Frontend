@@ -16,7 +16,6 @@ interface State {
 
 const rootReducer = (state: State = initialState, action: any) => {
     const { type, payload } = action
-    console.log(type)
 
     switch (type) {
         case ActionType.CHANGE_FILTER:
@@ -82,8 +81,6 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         default:
-            console.log('cached in default:', type)
-
             return { ...state }
     }
 }
