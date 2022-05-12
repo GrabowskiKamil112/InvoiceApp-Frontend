@@ -82,7 +82,9 @@ const InvoiceDetails: React.FC = () => {
 
     const fetchSingleInvoice = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:9001/api/invoice/${id}`)
+            const { data } = await axios.get(
+                `https://anotherinvoiceapp-backend.herokuapp.com/api/invoice/${id}`
+            )
 
             return data as Invoice
         } catch (e) {
@@ -95,8 +97,8 @@ const InvoiceDetails: React.FC = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const inside = await fetchSingleInvoice()
-            setInvoice(inside)
+            const fetchedInvoice = await fetchSingleInvoice()
+            setInvoice(fetchedInvoice)
         }
 
         fetch()
@@ -111,12 +113,13 @@ const InvoiceDetails: React.FC = () => {
 
     const handleDelete = () => {
         id && dispatch(deleteItem(id))
+        setIsDeleteModal(false)
     }
 
-    const markAsPaid = () => {
+    const markAsPaid = async () => {
         const paidInvoice = Object.assign({}, invoice)
         paidInvoice.type = 'paid'
-        dispatch(updateItem(paidInvoice, id as string))
+        await dispatch(updateItem(paidInvoice, id as string))
     }
 
     function getButtons(type: string): ReactNode {
@@ -139,8 +142,7 @@ const InvoiceDetails: React.FC = () => {
                     <Button
                         disabled={isFormOpen}
                         onClick={() => {
-                            markAsPaid()
-                            toggleFetchAgain(!fetchAgain)
+                            markAsPaid().then((_e) => toggleFetchAgain(!fetchAgain))
                         }}
                         color="rgb(124, 93, 250)">
                         Mark As Paid
@@ -164,7 +166,6 @@ const InvoiceDetails: React.FC = () => {
                     cancelFn={() => setIsDeleteModal(false)}
                     deleteFn={() => {
                         handleDelete()
-                        setIsDeleteModal(false)
                         setTimeout(() => {
                             navigate('/home')
                         }, 250)
@@ -183,6 +184,7 @@ const InvoiceDetails: React.FC = () => {
                             invoice={invoice}
                             ref={invoiceFormRef}
                             closeFn={() => setIsFormOpen(false)}
+                            updateAfterEditFn={() => toggleFetchAgain(!fetchAgain)}
                         />
                     </motion.div>
                 )}

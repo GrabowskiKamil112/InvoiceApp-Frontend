@@ -43,8 +43,8 @@ export enum ActionType {
 
 export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveCompleted
 
-const API_URL = 'http://localhost:9001/api'
-const adminInvoices = [
+const API_URL = 'https://anotherinvoiceapp-backend.herokuapp.com/api'
+const TestInvoices = [
     {
         _id: '1234',
         type: 'pending' as invoiceTypes,
@@ -256,7 +256,7 @@ export const authenticate =
                     data: {
                         _id: 1234,
                         username: 'admin',
-                        invoices: [...adminInvoices],
+                        invoices: [...TestInvoices],
                     },
                 },
             })
@@ -270,8 +270,6 @@ export const authenticate =
                 password,
             })
             .then((payload) => {
-                console.log('payload', payload)
-
                 sessionStorage.setItem('userID', payload.data._id)
 
                 dispatch({ type: ActionType.AUTH_SUCCESS, payload })
@@ -294,10 +292,19 @@ export const registration = (username: string, email: string, password: string):
             .then((payload) => {
                 dispatch({ type: ActionType.REGISTER_SUCCESS, payload })
 
-                adminInvoices.forEach((invoice) => {
-                    axios.post(`${API_URL}/invoice`, {
+                const promises = TestInvoices.map((invoice) => {
+                    return axios.post(`${API_URL}/invoice`, {
                         userID: getState().userID,
                         ...invoice,
+                    })
+                })
+
+                Promise.all(promises).then((results) => {
+                    results.forEach((result) => {
+                        dispatch({
+                            type: ActionType.ADD_INVOICE_SUCCESS,
+                            payload: { data: result.data },
+                        })
                     })
                 })
 
@@ -311,7 +318,6 @@ export const registration = (username: string, email: string, password: string):
 }
 
 export const logout = (): AppThunk => (dispatch, getState) => {
-    console.log(getState)
     sessionStorage.removeItem('userID')
     dispatch({ type: ActionType.LOGOUT })
 }
@@ -332,7 +338,6 @@ export const addItem =
                 userID: getState().userID,
                 ...invoiceContent,
             })
-            console.log('data', data)
 
             dispatch({
                 type: ActionType.ADD_INVOICE_SUCCESS,
@@ -381,7 +386,6 @@ export const fetchInvoices = (): AppThunk => async (dispatch, getState) => {
         const { data } = await axios.get(`${API_URL}/invoices`, {
             params: { userID: getState().userID || sessionStorage.getItem('userID') },
         })
-        console.log('fetched invpoices:', data)
         dispatch({ type: ActionType.FETCH_INVOICES_SUCCESS, payload: { data } })
     } catch (err) {
         console.log('error:' + err)
