@@ -29,7 +29,6 @@ const StyledModal = styled.div<{ themeCtx: string }>`
     top: 50vh;
     margin-top: -126px; /* Negative half of height. */
     margin-left: -220px; /* Negative half of width. */
-
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -38,6 +37,13 @@ const StyledModal = styled.div<{ themeCtx: string }>`
     border-radius: 8px;
     padding: 48px;
     transition: all 0.2s;
+
+    @media (max-width: 450px) {
+        height: 230px;
+        width: 340px;
+        margin-top: -115px;
+        margin-left: -170px;
+    }
 
     &.fade-enter {
         transform: scale(0.4);

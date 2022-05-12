@@ -25,9 +25,10 @@ type props = {
     isEdit?: boolean
     invoice?: Invoice
     closeFn: () => void
+    updateAfterEditFn?: () => void
 }
 const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
-    ({ isEdit = false, invoice, closeFn }, ref) => {
+    ({ isEdit = false, invoice, closeFn, updateAfterEditFn }, ref) => {
         const { activeTheme } = useContext(PageContext)
         const [windowWidth, setWindowWidth] = useState(getWindowWidth())
         const formToScrollRef = useRef<HTMLDivElement>(null)
@@ -94,7 +95,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
 
                         return errors
                     }}
-                    onSubmit={(values) => {
+                    onSubmit={async (values) => {
                         values.payment_term = moment(
                             moment(values.invoice_date).add(values.payment_term, 'days')
                         ).format('YYYY-MM-DD')
@@ -102,10 +103,10 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                         closeFn()
 
                         if (isEdit) {
-                            dispatch(updateItem(values as Invoice, values._id))
+                            await dispatch(updateItem(values as Invoice, values._id))
+                            updateAfterEditFn && updateAfterEditFn()
                             return
                         }
-                        console.log('submited: ', values)
 
                         dispatch(addItem(values as Invoice))
                     }}>
@@ -277,12 +278,7 @@ const InvoiceForm = React.forwardRef<HTMLDivElement, props>(
                                             onClick={() => closeFn()}>
                                             Cancel
                                         </Button>
-                                        <Button
-                                            color="#7c5dfa"
-                                            type="submit"
-                                            onClick={() => {
-                                                setFieldValue('type', 'pending')
-                                            }}>
+                                        <Button color="#7c5dfa" type="submit">
                                             Save Changes
                                         </Button>
                                     </>
