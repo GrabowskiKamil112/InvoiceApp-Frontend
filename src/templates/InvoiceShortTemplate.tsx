@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import PageContext from '../context/pageContext'
 import { themeNavigator } from '../utils/utils'
 
-const StyledNavLink = styled(NavLink)<{ themeCtx: string; transitionDelay: number }>`
-    background-color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceItem.bg`)};
+const StyledNavLink = styled(NavLink)<{ themectx: string; transitionDelay: number }>`
+    background-color: ${({ themectx }) => themeNavigator(`${themectx}.invoiceItem.bg`)};
     grid-template-columns: 80px 144px minmax(auto, 35%) 1fr repeat(2, auto);
     transition: opacity 400ms ease-out ${({ transitionDelay }) => `${transitionDelay}ms`},
         outline 0.3s ease;
@@ -25,8 +25,7 @@ const StyledNavLink = styled(NavLink)<{ themeCtx: string; transitionDelay: numbe
         grid-template-rows: 50% 1fr 1fr;
         gap: 0;
         height: 111px;
-        & > {
-        }
+        margin-bottom: 10px;
     }
 
     &.item-enter {
@@ -43,11 +42,11 @@ const StyledNavLink = styled(NavLink)<{ themeCtx: string; transitionDelay: numbe
     }
 
     & > div {
-        color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.invoiceStatus.text`)};
+        color: ${({ themectx }) => themeNavigator(`${themectx}.invoiceStatus.text`)};
 
         &:nth-child(2),
         &:nth-child(3) {
-            color: ${({ themeCtx }) => themeNavigator(`${themeCtx}.text.bodyA`)};
+            color: ${({ themectx }) => themeNavigator(`${themectx}.text.bodyA`)};
         }
 
         @media (max-width: 750px) {
@@ -90,7 +89,7 @@ export const InvoiceShortTemplate: React.FC<props> = ({ children, id, transition
     return (
         <StyledNavLink
             transitionDelay={transitionDelay}
-            themeCtx={activeTheme}
+            themectx={activeTheme}
             to={`/invoice/${id}`}>
             {children}
         </StyledNavLink>

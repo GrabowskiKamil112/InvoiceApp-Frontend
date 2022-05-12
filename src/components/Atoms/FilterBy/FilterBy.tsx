@@ -4,7 +4,6 @@ import PageContext from '../../../context/pageContext'
 import { useAppSelector } from '../../../store/hooks/hooks'
 import { Dropdown, StyledButton, StyledImg, StyledInput, StyledWrapper } from './FilterBy-styling'
 
-
 type FilterByProps = {
     handleRadioInput: (e: React.MouseEvent<HTMLInputElement>) => void
     shorter: boolean
@@ -31,6 +30,7 @@ const FilterBy = ({ handleRadioInput, shorter }: FilterByProps) => {
                             name="invoiceFilter"
                             onClick={(e) => handleRadioInput(e)}
                             checked={activeFilter === 'paid'}
+                            onChange={() => {}}
                         />
                         Paid
                     </label>
@@ -42,6 +42,7 @@ const FilterBy = ({ handleRadioInput, shorter }: FilterByProps) => {
                             name="invoiceFilter"
                             onClick={(e) => handleRadioInput(e)}
                             checked={activeFilter === 'pending'}
+                            onChange={() => {}}
                         />
                         Pending
                     </label>
@@ -53,6 +54,7 @@ const FilterBy = ({ handleRadioInput, shorter }: FilterByProps) => {
                             name="invoiceFilter"
                             onClick={(e) => handleRadioInput(e)}
                             checked={activeFilter === 'draft'}
+                            onChange={() => {}}
                         />
                         Draft
                     </label>

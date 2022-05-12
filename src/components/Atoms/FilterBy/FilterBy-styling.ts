@@ -1,5 +1,5 @@
-import styled, { css } from "styled-components"
-import { themeNavigator } from "../../../utils/utils"
+import styled, { css } from 'styled-components'
+import { themeNavigator } from '../../../utils/utils'
 import iconCheck from '../../../../public/assets/icon-check.svg'
 
 export const StyledWrapper = styled.div`
@@ -61,6 +61,13 @@ export const Dropdown = styled.div<{ themeCtx: string }>`
         color: white;
         font-size: 1.2rem;
         font-weight: 700;
+    }
+
+    @media (max-width: 550px) {
+        gap: 0;
+        & > label:not(:last-child) {
+            margin-bottom: 15px;
+        }
     }
 `
 export const StyledInput = styled.input`
