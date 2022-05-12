@@ -4,7 +4,7 @@
 
 
 ## Demo
-Here is a working live demo : [InvoiceApp](https://invoiceapp-frontend.netlify.app/){:target="_blank" rel="noopener"}
+Here is a working live demo : [InvoiceApp](https://invoiceapp-frontend.netlify.app/)
 
 
 ## General Information
