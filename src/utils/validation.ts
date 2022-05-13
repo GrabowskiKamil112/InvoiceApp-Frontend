@@ -10,14 +10,16 @@ export const SignupSchema = Yup.object().shape({
         .max(24, 'Too Long! Maximum is 24 signs')
         .required('Username is required'),
     email: Yup.string()
-        .min(4, 'Too Short! Minimum is 4 signs')
+        .min(8, 'Too Short! Minimum is 8 signs')
         .max(24, 'Too Long! Maximum is 24 signs')
         .matches(emailRegex, { message: 'email is incorrect', excludeEmptyString: true })
         .required('email is required'),
     password: Yup.string()
         .min(4, 'Too Short! Minimum is 4 signs')
         .max(24, 'Too Long! Maximum is 24 signs')
-        .matches(/[a-zA-Z]/, 'Password must also contain Latin letters.')
+        .matches(/[a-zA-Z]{2,}/, 'Must contain more than one Latin letter.')
+        .matches(/(?=.*[A-Z])/, 'Must contain at least one uppercase letter.')
+        .matches(/(?=.*\d)/, 'Must must contain at least one digit.')
         .required('password is required'),
     passwordConfirm: Yup.string().test(
         'passwords-match',

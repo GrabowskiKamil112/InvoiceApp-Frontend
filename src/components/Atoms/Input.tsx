@@ -81,7 +81,7 @@ const FancyBar = styled.div`
 `
 
 interface InputProps {
-    validationError?: string
+    validationError?: string | boolean
     value?: string
     id?: string
     type: string
@@ -91,6 +91,7 @@ interface InputProps {
 
 const Input: React.FC<InputProps> = ({ type, placeholder, name, validationError, value }) => {
     const [active, setActive] = useState(false)
+    const [wasChanged, setWasChanged] = useState(false)
 
     useEffect(() => {
         if (active) {
@@ -108,6 +109,7 @@ const Input: React.FC<InputProps> = ({ type, placeholder, name, validationError,
                 name={name}
                 value={value}
                 autocomplete="off"
+                //onChange={() => setWasChanged(true)}
             />
             <FancyBar />
             {validationError && (
