@@ -8,25 +8,23 @@ Here is a working live demo : [InvoiceApp](https://invoiceapp-frontend.netlify.a
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
+- 
 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
+- React + Typescript
+- Redux for state managment
+- Framer motion for animations + transition group
+- Formik + Yup
+- Styled Components
+- other libraries like: react-select, moment, classnames, axios etc.
 
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+
 
 
 ## Acknowledgements
@@ -34,7 +32,7 @@ List the ready features here:
 
 
 ## Contact
-Created by [@flynerdpl](https://www.flynerd.pl/) - feel free to contact me!
+Email: grabowskikamil@vp.pl - feel free to contact me!
 
 
 <!-- Optional -->
