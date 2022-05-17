@@ -72,7 +72,7 @@ const LoginRegister: React.FC = () => {
         <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={state.isRegister}>
             <StyledHeader>{state.isRegister ? 'Create your account' : 'welcome'}</StyledHeader>
             <Formik
-                validateOnChange={false}
+                validateOnChange={true}
                 validateOnBlur={false}
                 initialValues={{
                     username: '',
@@ -108,10 +108,10 @@ const LoginRegister: React.FC = () => {
                               )
                     }, 1100)
                 }}>
-                {({ errors, values }) => (
+                {({ errors, values, touched }) => (
                     <StyledForm ref={formRef} noValidate>
                         <Input
-                            validationError={errors.username}
+                            validationError={touched.username && errors.username}
                             type="text"
                             name="username"
                             placeholder="Username"
@@ -119,7 +119,7 @@ const LoginRegister: React.FC = () => {
                         />
                         {state.isRegister && (
                             <Input
-                                validationError={errors.email}
+                                validationError={touched.email && errors.email}
                                 type="email"
                                 name="email"
                                 placeholder="Email"
@@ -127,7 +127,7 @@ const LoginRegister: React.FC = () => {
                             />
                         )}
                         <Input
-                            validationError={errors.password}
+                            validationError={touched.password && errors.password}
                             type="password"
                             name="password"
                             placeholder="Password"
@@ -135,7 +135,7 @@ const LoginRegister: React.FC = () => {
                         />
                         {state.isRegister && (
                             <Input
-                                validationError={errors.passwordConfirm}
+                                validationError={touched.passwordConfirm && errors.passwordConfirm}
                                 type="password"
                                 name="passwordConfirm"
                                 placeholder="Confirm password"
@@ -149,13 +149,15 @@ const LoginRegister: React.FC = () => {
                     </StyledForm>
                 )}
             </Formik>
-            <Paragraph themeCtx={activeTheme}>Don&apos;t have an account?</Paragraph>
+            <Paragraph themeCtx={activeTheme}>
+                {state.isRegister ? 'Already' : "Don't"} have an account?
+            </Paragraph>
             <Button
                 variant="loginToggle"
                 onClick={() => {
                     setState((prevState) => ({ ...prevState, isRegister: !prevState.isRegister }))
                 }}>
-                Sign up
+                Sign {state.isRegister ? 'in' : 'up'}
             </Button>
         </LoginRegisterTemplate>
     )
