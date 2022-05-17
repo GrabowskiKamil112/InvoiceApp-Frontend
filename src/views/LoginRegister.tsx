@@ -39,7 +39,12 @@ interface Values {
 }
 
 const LoginRegister: React.FC = () => {
-    const [state, setState] = useState({ isRegister: false, redirect: false })
+    const [state, setState] = useState({
+        isRegister: false,
+        redirect: false,
+        isLoading: false,
+        isAuthFailed: false,
+    })
     const [numOfErrors, setNumOfErrors] = useState<number>(0)
     const { activeTheme } = useContext(PageContext)
     const formRef = useRef<HTMLFormElement>(null)
@@ -56,7 +61,7 @@ const LoginRegister: React.FC = () => {
     }
 
     const handleModalAfterRegistration = (username: string) => {
-        setState({ ...state, ['redirect']: true })
+        setState((prevState) => ({ ...prevState, redirect: true }))
     }
 
     if ((userID && !state.isRegister) || state.redirect) {
@@ -77,17 +82,31 @@ const LoginRegister: React.FC = () => {
                 }}
                 validationSchema={state.isRegister ? SignupSchema : undefined}
                 onSubmit={async (values: Values) => {
-                    const { username, email, password } = values
+                    setState((prevState) => ({ ...prevState, isLoading: true }))
 
-                    !state.isRegister
-                        ? dispatch(authenticate(username, password))
-                        : await dispatch(registration(username, email, password)).then(
-                              (username: string) => {
-                                  if (username) {
-                                      handleModalAfterRegistration(username) // WIP
+                    setTimeout(async () => {
+                        const { username, email, password } = values
+
+                        !state.isRegister
+                            ? await dispatch(authenticate(username, password)).then(
+                                  (result?: Error) => {
+                                      setState((prevState) => ({ ...prevState, isLoading: false }))
+                                      if (result instanceof Error) {
+                                          setState((prevState) => ({
+                                              ...prevState,
+                                              isAuthFailed: true,
+                                          }))
+                                      }
                                   }
-                              }
-                          )
+                              )
+                            : await dispatch(registration(username, email, password)).then(
+                                  (username: string) => {
+                                      if (username) {
+                                          handleModalAfterRegistration(username) // WIP
+                                      }
+                                  }
+                              )
+                    }, 1100)
                 }}>
                 {({ errors, values }) => (
                     <StyledForm ref={formRef} noValidate>
@@ -124,7 +143,7 @@ const LoginRegister: React.FC = () => {
                             />
                         )}
 
-                        <Button type="submit" variant="submit">
+                        <Button type="submit" variant="submit" disabled={state.isLoading}>
                             <MagicDiv onClick={() => handleNumOfErrors()}>Submit</MagicDiv>
                         </Button>
                     </StyledForm>
@@ -134,7 +153,7 @@ const LoginRegister: React.FC = () => {
             <Button
                 variant="loginToggle"
                 onClick={() => {
-                    return setState({ ...state, ['isRegister']: !state.isRegister })
+                    setState((prevState) => ({ ...prevState, isRegister: !prevState.isRegister }))
                 }}>
                 Sign up
             </Button>

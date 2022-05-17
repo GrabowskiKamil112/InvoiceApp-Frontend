@@ -37,12 +37,13 @@ const Button = styled.button<{
     ${({ disabled }) =>
         disabled &&
         css`
-            cursor: default;
+            cursor: wait;
+            pointer-events: none;
             &:hover::after {
                     display: none;
                 }
             }
-        `};
+        `}
 
     &::after {
         transition: all 0.3s ease;

@@ -245,7 +245,7 @@ const TestInvoices = [
 
 export const authenticate =
     (username: string, password: string): AppThunk =>
-    (dispatch) => {
+    async (dispatch) => {
         dispatch({ type: ActionType.AUTH_REQUEST })
 
         if (username == 'admin' && password == 'admin') {
@@ -273,10 +273,12 @@ export const authenticate =
                 sessionStorage.setItem('userID', payload.data._id)
 
                 dispatch({ type: ActionType.AUTH_SUCCESS, payload })
+                return true
             })
             .catch((err) => {
                 console.log(err)
                 dispatch({ type: ActionType.AUTH_FAILURE })
+                return err
             })
     }
 
