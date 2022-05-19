@@ -6,6 +6,8 @@
 ## Demo
 Here is a working live demo : [InvoiceApp](https://invoice-application-kamilgrabowski.netlify.app/)
 
+If there is a problem with account registration (usually it takes few seconds), you can use application offline logging as "login: admin, password: admin"
+
 ## Technologies Used
 - React + Typescript
 - Redux for state managment
