@@ -10,6 +10,8 @@ import PageContext from '../context/pageContext'
 import { authenticate, registration } from '../store/actions'
 import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
 import { Navigate } from 'react-router-dom'
+import UserCreatedModal from '../components/Molecules/UserCreatedModal'
+import faviconLoading from '../../public/assets/favicon.ico'
 
 const StyledHeader = styled.h3`
     font-family: 'Poppins', sans-serif;
@@ -41,125 +43,138 @@ interface Values {
 const LoginRegister: React.FC = () => {
     const [state, setState] = useState({
         isRegister: false,
-        redirect: false,
+        isRedirect: false,
         isLoading: false,
         isAuthFailed: false,
+        isSuccesModal: false,
     })
     const [numOfErrors, setNumOfErrors] = useState<number>(0)
     const { activeTheme } = useContext(PageContext)
     const formRef = useRef<HTMLFormElement>(null)
 
     const userID = useAppSelector((state) => state.userID)
-
     const dispatch = useAppDispatch()
 
-    const handleNumOfErrors = () => {
+    const handleNumOfErrors = (): void => {
         setTimeout(() => {
             const numOfErrors = formRef.current?.getElementsByTagName('label').length
             setNumOfErrors(numOfErrors ? numOfErrors : 0)
         }, 1)
     }
 
-    const handleModalAfterRegistration = (username: string) => {
-        setState((prevState) => ({ ...prevState, redirect: true }))
+    const handleFavicon = (): void => {
+        const favicon = document.getElementById('favicon') // Accessing favicon element
+        favicon.href = faviconLoading
     }
 
-    if ((userID && !state.isRegister) || state.redirect) {
-        return <Navigate to="/home" />
+    const toggleStateProp = (property: keyof typeof state) => {
+        setState((prevState) => ({ ...prevState, [property]: !state[property] }))
+    }
+
+    if ((userID && !state.isRegister) || state.isRedirect) {
+        //  return <Navigate to="/home" />
     }
 
     return (
-        <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={state.isRegister}>
-            <StyledHeader>{state.isRegister ? 'Create your account' : 'welcome'}</StyledHeader>
-            <Formik
-                validateOnChange={true}
-                validateOnBlur={false}
-                initialValues={{
-                    username: '',
-                    email: '',
-                    password: '',
-                    passwordConfirm: '',
-                }}
-                validationSchema={state.isRegister ? SignupSchema : undefined}
-                onSubmit={async (values: Values) => {
-                    setState((prevState) => ({ ...prevState, isLoading: true }))
+        <>
+            {state.isSuccesModal && <UserCreatedModal />}
+            <LoginRegisterTemplate numOfErrors={numOfErrors} isRegister={state.isRegister}>
+                <StyledHeader>{state.isRegister ? 'Create your account' : 'welcome'}</StyledHeader>
+                <Formik
+                    validateOnChange={true}
+                    validateOnBlur={false}
+                    initialValues={{
+                        username: '',
+                        email: '',
+                        password: '',
+                        passwordConfirm: '',
+                    }}
+                    validationSchema={state.isRegister ? SignupSchema : undefined}
+                    onSubmit={async (values: Values) => {
+                        toggleStateProp('isLoading')
 
-                    setTimeout(async () => {
-                        const { username, email, password } = values
+                        setTimeout(async () => {
+                            const { username, email, password } = values
 
-                        !state.isRegister
-                            ? await dispatch(authenticate(username, password)).then(
-                                  (result?: Error) => {
-                                      setState((prevState) => ({ ...prevState, isLoading: false }))
-                                      if (result instanceof Error) {
-                                          setState((prevState) => ({
-                                              ...prevState,
-                                              isAuthFailed: true,
-                                          }))
+                            !state.isRegister
+                                ? await dispatch(authenticate(username, password)).then(
+                                      (result?: Error) => {
+                                          toggleStateProp('isLoading')
+                                          if (result instanceof Error) {
+                                              toggleStateProp('isAuthFailed')
+                                          }
                                       }
-                                  }
-                              )
-                            : await dispatch(registration(username, email, password)).then(
-                                  (username: string) => {
-                                      if (username) {
-                                          handleModalAfterRegistration(username) // WIP
+                                  )
+                                : await dispatch(registration(username, email, password)).then(
+                                      (username: string) => {
+                                          if (username) {
+                                              toggleStateProp('isSuccesModal')
+                                              setTimeout(() => {
+                                                  toggleStateProp('isRedirect')
+                                              }, 1000)
+                                          } else {
+                                              toggleStateProp('isAuthFailed')
+                                              toggleStateProp('isLoading')
+                                          }
                                       }
-                                  }
-                              )
-                    }, 1100)
-                }}>
-                {({ errors, values, touched }) => (
-                    <StyledForm ref={formRef} noValidate>
-                        <Input
-                            validationError={touched.username && errors.username}
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                            value={values.username}
-                        />
-                        {state.isRegister && (
+                                  )
+                        }, 1100)
+                    }}>
+                    {({ errors, values, touched }) => (
+                        <StyledForm ref={formRef} noValidate>
                             <Input
-                                validationError={touched.email && errors.email}
-                                type="email"
-                                name="email"
-                                placeholder="Email"
-                                value={values.email}
+                                validationError={touched.username && errors.username}
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                value={values.username}
                             />
-                        )}
-                        <Input
-                            validationError={touched.password && errors.password}
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={values.password}
-                        />
-                        {state.isRegister && (
+                            {state.isRegister && (
+                                <Input
+                                    validationError={touched.email && errors.email}
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email"
+                                    value={values.email}
+                                />
+                            )}
                             <Input
-                                validationError={touched.passwordConfirm && errors.passwordConfirm}
+                                validationError={touched.password && errors.password}
                                 type="password"
-                                name="passwordConfirm"
-                                placeholder="Confirm password"
-                                value={values.passwordConfirm}
+                                name="password"
+                                placeholder="Password"
+                                value={values.password}
                             />
-                        )}
+                            {state.isRegister && (
+                                <Input
+                                    validationError={
+                                        touched.passwordConfirm && errors.passwordConfirm
+                                    }
+                                    type="password"
+                                    name="passwordConfirm"
+                                    placeholder="Confirm password"
+                                    value={values.passwordConfirm}
+                                />
+                            )}
 
-                        <Button type="submit" variant="submit" disabled={state.isLoading}>
-                            <MagicDiv onClick={() => handleNumOfErrors()}>Submit</MagicDiv>
-                        </Button>
-                    </StyledForm>
-                )}
-            </Formik>
-            <Paragraph themeCtx={activeTheme}>
-                {state.isRegister ? 'Already' : "Don't"} have an account?
-            </Paragraph>
-            <Button
-                variant="loginToggle"
-                onClick={() => {
-                    setState((prevState) => ({ ...prevState, isRegister: !prevState.isRegister }))
-                }}>
-                Sign {state.isRegister ? 'in' : 'up'}
-            </Button>
-        </LoginRegisterTemplate>
+                            <Button type="submit" variant="submit" disabled={state.isLoading}>
+                                <MagicDiv onClick={() => handleNumOfErrors()}>Submit</MagicDiv>
+                            </Button>
+                        </StyledForm>
+                    )}
+                </Formik>
+                <Paragraph themeCtx={activeTheme}>
+                    {state.isRegister ? 'Already' : "Don't"} have an account?
+                </Paragraph>
+                <Button
+                    variant="loginToggle"
+                    onClick={() => {
+                        toggleStateProp('isRegister')
+                    }}>
+                    Sign {state.isRegister ? 'in' : 'up'}
+                </Button>
+            </LoginRegisterTemplate>
+        </>
     )
 }
 
