@@ -11,7 +11,6 @@ import { authenticate, registration } from '../store/actions'
 import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
 import { Navigate } from 'react-router-dom'
 import UserCreatedModal from '../components/Molecules/UserCreatedModal'
-import faviconLoading from '../../public/assets/favicon.ico'
 
 const StyledHeader = styled.h3`
     font-family: 'Poppins', sans-serif;
