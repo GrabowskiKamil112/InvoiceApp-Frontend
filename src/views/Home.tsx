@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
+import { useLocation } from 'react-router-dom'
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import styled, { css } from 'styled-components'
 import InvoiceShort from '../components/Molecules/InvoiceShort'
@@ -52,15 +53,15 @@ interface HomeProps {
 const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
     const [isFormOpen, setIsFormOpen] = useState<boolean>(false)
     const invoiceFormRef = React.createRef<HTMLDivElement>()
-    const numOfInvoicesInStore = useAppSelector((state) => state.invoices).length
+    const location = useLocation();
 
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
-
+    
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        numOfInvoicesInStore === 0 && dispatch(fetchInvoices())
-    }, [])
+        dispatch(fetchInvoices())
+    }, [location])
 
     const homeMotion = {
         initial: { opacity: 0, x: -100 },
@@ -84,8 +85,8 @@ const Home: React.FC<HomeProps> = ({ invoices, filterBy }) => {
                     />
                     <StyledTransitionGroup>
                         {invoices
-                            ?.filter(({ type }: { type: string }) =>
-                                filterBy !== 'total' ? type === filterBy : true
+                            ?.filter(item =>
+                               item ? (filterBy !== 'total' ? item.type === filterBy : true) : false
                             )
                             .map((invoice: Invoice) => {
                                 transitionDelay += 140

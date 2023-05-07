@@ -5,7 +5,7 @@ import Paragraph from '../Atoms/Paragraph'
 import Header from '../Atoms/Header'
 import FilterBy from '../Atoms/FilterBy/FilterBy'
 import { useAppDispatch, useAppSelector } from '../../store/hooks/hooks'
-import { changeFilter } from '../../store/actions'
+import { changeFilter, fetchInvoices } from '../../store/actions'
 import { generateInfo, getWindowWidth } from '../../utils/utils'
 import plusIcon from '../../../public/assets/icon-plus.svg'
 import PageContext from '../../context/pageContext'
@@ -62,6 +62,8 @@ const StyledButton = styled(Button)`
         `};
 `
 
+export type FilterType = 'total' | 'paid' | 'pending' | 'draft';
+
 const StyledDiv = styled.div`
     display: flex;
 `
@@ -77,7 +79,7 @@ const InvoiceControllerBar = ({
     const { activeTheme } = useContext(PageContext)
     const ref1 = useRef<HTMLDivElement>(null)
 
-    const [invoiceFilter, setInvoiceFilter] = useState<string>(
+    const [invoiceFilter, setInvoiceFilter] = useState<FilterType>(
         useAppSelector((state) => state.filterBy) || 'total'
     )
 
@@ -90,12 +92,14 @@ const InvoiceControllerBar = ({
     const handleRadioInput = (e: React.MouseEvent<HTMLInputElement>) => {
         const { value } = e.target as HTMLInputElement
         if (invoiceFilter === value) {
-            ;(e.target as HTMLInputElement).checked = false
-            setInvoiceFilter('total')
-            return
+            ;(e.target as HTMLInputElement).checked = false;
+            setInvoiceFilter('total');
+            dispatch(fetchInvoices());
+            return;
         }
 
-        setInvoiceFilter(value)
+        setInvoiceFilter(value as FilterType);
+        dispatch(fetchInvoices());
     }
 
     useEffect(() => {

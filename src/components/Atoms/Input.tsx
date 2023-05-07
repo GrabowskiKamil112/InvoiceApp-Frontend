@@ -108,7 +108,7 @@ const Input: React.FC<InputProps> = ({ type, placeholder, name, validationError,
                 placeholder={placeholder}
                 name={name}
                 value={value}
-                autocomplete="off"
+                autoComplete="off"
                 //onChange={() => setWasChanged(true)}
             />
             <FancyBar />

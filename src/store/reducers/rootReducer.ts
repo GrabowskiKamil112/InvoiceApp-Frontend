@@ -1,8 +1,9 @@
+import { FilterType } from '../../components/Organisms/InvoiceControllerBar'
 import { Invoice } from '../../Types/Invoice'
 import { ActionType } from '../actions'
 
 const initialState = {
-    filterBy: 'total',
+    filterBy: 'total' as FilterType,
     username: null,
     userID: sessionStorage.getItem('userID') || null,
     invoices: [],
@@ -10,7 +11,7 @@ const initialState = {
 interface State {
     username: string | null
     userID: string | null
-    filterBy: string
+    filterBy: FilterType
     invoices: Invoice[]
 }
 
@@ -33,23 +34,25 @@ const rootReducer = (state: State = initialState, action: any) => {
             }
 
         case ActionType.FETCH_INVOICES_SUCCESS:
+            
             return {
                 ...state,
-                invoices: [...state.invoices, ...payload.data],
+                invoices: [...payload.data],
             }
         case ActionType.UPDATE_INVOICE_SUCCESS:
+            
             return {
                 ...state,
                 invoices: [
-                    ...state.invoices.filter((invoice) => invoice._id !== payload.data._id),
-                    payload.data,
+                    ...state.invoices.filter((invoice) => invoice.invoiceId !== payload.invoiceContent.invoiceId),
+                    payload.invoiceContent,
                 ],
             }
 
         case ActionType.REMOVE_INVOICE_SUCCESS:
             return {
                 ...state,
-                invoices: [...state.invoices.filter((item) => item._id !== payload.id)],
+                invoices: [...state.invoices.filter((item) => item.invoiceId !== payload.id)],
             }
 
         case ActionType.REGISTER_SUCCESS:

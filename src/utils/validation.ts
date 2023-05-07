@@ -12,8 +12,8 @@ export const SignupSchema = Yup.object().shape({
     email: Yup.string()
         .min(8, 'Too Short! Minimum is 8 signs')
         .max(24, 'Too Long! Maximum is 24 signs')
-        .matches(emailRegex, { message: 'email is incorrect', excludeEmptyString: true })
-        .required('email is required'),
+        .matches(emailRegex, { message: 'email is incorrect', excludeEmptyString: true }),
+        //.required('email is required'),
     password: Yup.string()
         .min(4, 'Too Short! Minimum is 4 signs')
         .max(24, 'Too Long! Maximum is 24 signs')

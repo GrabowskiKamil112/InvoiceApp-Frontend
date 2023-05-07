@@ -8,11 +8,12 @@ import moment from 'moment'
 import { InvoiceShortTemplate } from '../../templates/InvoiceShortTemplate'
 
 interface Props {
-    content: Invoice & { _id: string }
+    content: Invoice
     transitionDelay: number
 }
 const InvoiceShort: React.FC<Props> = ({ content, transitionDelay }) => {
-    const { type, _id: id, payment_term, to, items_list } = content
+
+    const { type, invoiceId, payment_term, to, items_list } = content
     const [windowWidth, setWindowWidth] = useState(getWindowWidth())
 
     useEffect(() => {
@@ -25,12 +26,12 @@ const InvoiceShort: React.FC<Props> = ({ content, transitionDelay }) => {
     }, [])
 
     return (
-        <InvoiceShortTemplate transitionDelay={transitionDelay} id={id}>
+        <InvoiceShortTemplate transitionDelay={transitionDelay} id={invoiceId}>
             <Header size="small">
                 <span>#</span>
-                {id?.substring(id.length - 6)}
+                {invoiceId?.toString().substring(0, 6)}
             </Header>
-            <div>Due {moment(payment_term).format('DD MMM YYYY')}</div>
+            <div>{payment_term && 'Due' + moment(payment_term).format('DD MMM YYYY')}</div>
             <div>{to?.name}</div>
             <Header size="medium">
                 &#163;

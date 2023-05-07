@@ -16,7 +16,7 @@ const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
         payment_term,
         invoice_date,
         description,
-        _id: id,
+        invoiceId: id,
     } = invoice
     const { activeTheme } = useContext(PageContext)
 
@@ -32,7 +32,7 @@ const DetailsBody: React.FC<{ invoice: Invoice }> = ({ invoice }) => {
                 <Title>
                     <Header size="medium">
                         <span>#</span>
-                        {id.substring(id.length - 6).toUpperCase()}
+                        {id?.toString().substring(id.length - 6).toUpperCase()}
                     </Header>
                     {P(description)}
                 </Title>

@@ -72,7 +72,7 @@ const LoginRegister: React.FC = () => {
     }
 
     if ((userID && !state.isRegister) || state.isRedirect) {
-        //  return <Navigate to="/home" />
+        return <Navigate to="/home" />
     }
 
     return (

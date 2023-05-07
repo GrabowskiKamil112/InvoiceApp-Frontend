@@ -1,7 +1,13 @@
 import { AppThunk } from './../index'
 import axios from 'axios'
-import { Invoice, invoiceTypes } from '../../Types/Invoice'
+import { Invoice, invoiceTypes, ItemsListEntity } from '../../Types/Invoice'
+import { axelote } from '../../views/App'
+import { AxeloteError,  QueryBuilderResult, AxeloteResponse, AxeloteTransaction} from '@axelote/js'
+import { mapData, mapDataToSend, mapInvoiceToStore } from '../../utils/utils'
+import { FilterType } from '../../components/Organisms/InvoiceControllerBar'
+import { repository } from './axeloteRepository'
 
+export interface Params{type?: FilterType, user_id: number}
 export interface IAddItem {
     type: 'ADD_ITEM'
     payload: Invoice
@@ -43,10 +49,10 @@ export enum ActionType {
 
 export type Action = IAddItem | IRemoveItem | IChangeCompletion | IRemoveCompleted
 
-const API_URL = 'https://anotherinvoiceapp-backend.herokuapp.com/api'
+const API_URL = 'http://localhost:8074'
 const TestInvoices = [
     {
-        _id: '1234',
+        invoiceId: '1234',
         type: 'pending' as invoiceTypes,
         from: {
             street: 'Piotrowska 7A',
@@ -74,7 +80,7 @@ const TestInvoices = [
         ],
     },
     {
-        _id: '123EG5',
+        invoiceId: '123EG5',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -102,7 +108,7 @@ const TestInvoices = [
         ],
     },
     {
-        _id: 'E1235',
+        invoiceId: 'E1235',
         type: 'draft' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -130,7 +136,7 @@ const TestInvoices = [
         ],
     },
     {
-        _id: '125G35',
+        invoiceId: '125G35',
         type: 'draft' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -158,7 +164,7 @@ const TestInvoices = [
         ],
     },
     {
-        _id: '124G35',
+        invoiceId: '124G35',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -186,7 +192,7 @@ const TestInvoices = [
         ],
     },
     {
-        _id: '12G335',
+        invoiceId: '12G335',
         type: 'paid' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -214,7 +220,7 @@ const TestInvoices = [
         ],
     },
     {
-        _id: '12G352',
+        invoiceId: '12G352',
         type: 'pending' as invoiceTypes,
         from: {
             street: 'Borelowskiego 6B',
@@ -243,13 +249,14 @@ const TestInvoices = [
     },
 ]
 
+
 export const authenticate =
     (username: string, password: string): AppThunk =>
     async (dispatch) => {
         dispatch({ type: ActionType.AUTH_REQUEST })
 
         if (username == 'admin' && password == 'admin') {
-            sessionStorage.setItem('userID', '1234')
+            sessionStorage.setItem('userID', '2211')
             dispatch({
                 type: ActionType.AUTH_SUCCESS,
                 payload: {
@@ -261,11 +268,10 @@ export const authenticate =
                 },
             })
 
-            return
         }
 
         return axios
-            .post(`${API_URL}/user/login`, {
+            .post(`${API_URL}/api/auth/login`, {
                 username,
                 password,
             })
@@ -287,28 +293,28 @@ export const registration = (username: string, email: string, password: string):
         dispatch({ type: ActionType.REGISTER_REQUEST })
 
         return axios
-            .post(`${API_URL}/user/register`, {
+            .post(`${API_URL}/api/auth/register`, {
                 username,
                 password,
             })
             .then((payload) => {
                 dispatch({ type: ActionType.REGISTER_SUCCESS, payload })
 
-                const promises = TestInvoices.map((invoice) => {
-                    return axios.post(`${API_URL}/invoice`, {
-                        userID: getState().userID,
-                        ...invoice,
-                    })
-                })
+                // const promises = TestInvoices.map((invoice) => {
+                //     return axios.post(`${API_URL}/invoice`, {
+                //         userID: getState().userID,
+                //         ...invoice,
+                //     })
+                // })
 
-                Promise.all(promises).then((results) => {
-                    results.forEach((result) => {
-                        dispatch({
-                            type: ActionType.ADD_INVOICE_SUCCESS,
-                            payload: { data: result.data },
-                        })
-                    })
-                })
+                // Promise.all(promises).then((results) => {
+                //     results.forEach((result) => {
+                //         dispatch({
+                //             type: ActionType.ADD_INVOICE_SUCCESS,
+                //             payload: { data: result.data },
+                //         })
+                //     })
+                // })
 
                 return payload.data.username
             })
@@ -324,59 +330,111 @@ export const logout = (): AppThunk => (dispatch, getState) => {
     dispatch({ type: ActionType.LOGOUT })
 }
 
-export const changeFilter =
-    (filter: string): AppThunk =>
-    (dispatch) => {
-        dispatch({ type: ActionType.CHANGE_FILTER, payload: { filter } })
+export const changeFilter = (filter: string): AppThunk => (dispatch) => {
+    dispatch({ type: ActionType.CHANGE_FILTER, payload: { filter } })
+}
+
+export const addItem = (invoiceContent: Invoice): AppThunk => async (dispatch) => {
+    dispatch({ type: ActionType.ADD_INVOICE_REQUEST });
+
+    const invoiceData = structuredClone(invoiceContent);
+    const invoiceItems: ItemsListEntity[] = mapDataToSend(invoiceData, true);
+    const user_id: number = Number(sessionStorage.getItem('userID'));
+
+    const queryInvoice: QueryBuilderResult = repository.get('createInvoice');
+    const queryItem: QueryBuilderResult = repository.get('createItem');
+
+    let tx: AxeloteTransaction = axelote.transaction();
+
+    const resultWithId: AxeloteResponse<any> = await tx.returning<any>(queryInvoice, {
+        ...invoiceData,
+        ...{user_id: user_id}
+    });
+
+    if(resultWithId instanceof AxeloteError) {
+        tx.rollback;
+        return;
     }
 
-export const addItem =
-    (invoiceContent: Invoice): AppThunk =>
-    async (dispatch, getState) => {
-        dispatch({ type: ActionType.ADD_INVOICE_REQUEST })
+    let result: any = null;
 
-        try {
-            const { data } = await axios.post(`${API_URL}/invoice`, {
-                userID: getState().userID,
-                ...invoiceContent,
-            })
-
-            dispatch({
-                type: ActionType.ADD_INVOICE_SUCCESS,
-                payload: { data },
-            })
-        } catch (err) {
-            console.log('error:' + err)
-            dispatch({ type: ActionType.ADD_INVOICE_FAILURE })
+    await Promise.all(invoiceItems.map(async (item) => {
+        
+        if(result instanceof AxeloteError) {
+            tx.rollback;
+            return;
         }
-    }
-export const updateItem =
-    (invoiceContent: Invoice, invoiceId: string): AppThunk =>
-    async (dispatch, getState) => {
-        dispatch({ type: ActionType.UPDATE_INVOICE_REQUEST })
-        try {
-            const { data } = await axios.put(`${API_URL}/invoice/${invoiceId}`, {
-                userID: getState().userID,
-                ...invoiceContent,
-            })
 
-            dispatch({ type: ActionType.UPDATE_INVOICE_SUCCESS, payload: { data } })
-        } catch (err) {
-            console.log('error:' + err)
-            dispatch({ type: ActionType.UPDATE_INVOICE_FAILURE })
+        result = await tx.void(queryItem, {
+            ...item,
+            ...{invoice_id: resultWithId[0].invoiceId}
+        });
+    }))
+    
+    await tx.commit();
+
+    dispatch({
+        type: ActionType.ADD_INVOICE_SUCCESS,
+        payload: { data: null },
+    });
+}
+    
+export const updateItem = (invoiceContent: Invoice, invoiceId: string, markAsPaid = false, createItems?: boolean): AppThunk => async (dispatch) => {
+    dispatch({ type: ActionType.UPDATE_INVOICE_REQUEST })
+    
+    if(markAsPaid){
+        const query = repository.get('markAsPaid');
+        await axelote.void(query, {invoice_id: parseInt(invoiceId)});
+        dispatch({ type: ActionType.UPDATE_INVOICE_SUCCESS, payload: { invoiceContent } });
+        return;
+    }
+
+    const invoiceData = structuredClone(invoiceContent);
+    const invoiceItems: ItemsListEntity[] = mapDataToSend(invoiceData);
+
+    const invoiceQuery = repository.get('updateInvoice', invoiceData);
+    
+    let tx: AxeloteTransaction = axelote.transaction();
+    
+    let result = await tx.void(invoiceQuery, {
+        ...invoiceData,
+        ...{invoice_id: Number(invoiceId)}
+    });
+    
+    await Promise.all(invoiceItems.map(async (item) => {
+        const invoiceUpdateItemsQuery = repository.get('updateItem', item);
+        const invoiceCreateItemQuery = repository.get('createItem', item);
+        const itemId = Number(item.itemId);
+        delete item.itemId;
+
+        if(result instanceof AxeloteError) {
+            dispatch({ type: ActionType.UPDATE_INVOICE_FAILURE });
+            tx.rollback;
+            return;
         }
-    }
 
-export const deleteItem =
-    (invoiceId: string): AppThunk =>
+        result = await tx.void(createItems ? invoiceCreateItemQuery : invoiceUpdateItemsQuery, {
+            ...item,
+            ...(!createItems && {item_id: itemId}),
+            ...(createItems && {invoice_id: Number(invoiceId)})
+        });
+
+    }))
+    
+    await tx.commit();
+
+    dispatch({ type: ActionType.UPDATE_INVOICE_SUCCESS, payload: { invoiceContent } });       
+}
+
+export const deleteItem = (invoiceId: string): AppThunk =>
     async (dispatch) => {
         dispatch({ type: ActionType.REMOVE_INVOICE_REQUEST })
         try {
-            await axios.delete(`${API_URL}/invoice/${invoiceId}`)
+            const query = repository.get('deleteInvoice');
+            await axelote.void(query, {invoice_id: Number(invoiceId)});
 
             dispatch({ type: ActionType.REMOVE_INVOICE_SUCCESS, payload: { id: invoiceId } })
         } catch (err) {
-            console.log('error:' + err)
             dispatch({ type: ActionType.REMOVE_INVOICE_FAILURE })
         }
     }
@@ -384,13 +442,49 @@ export const deleteItem =
 export const fetchInvoices = (): AppThunk => async (dispatch, getState) => {
     dispatch({ type: ActionType.FETCH_INVOICES_REQUEST })
 
+    try{
+        await axios.get(`${API_URL}/api/test`);
+    }catch(err){
+        console.error(err)
+    }    
+
     try {
-        const { data } = await axios.get(`${API_URL}/invoices`, {
-            params: { userID: getState().userID || sessionStorage.getItem('userID') },
-        })
+        const params: Params = {
+            user_id: Number(sessionStorage.getItem('userID')),
+            type: getState().filterBy,
+        }
+
+        let query: QueryBuilderResult = repository.get('getShortInvoices', params);
+
+        const data: AxeloteResponse<Array<Invoice>> = await axelote.returning<Array<Invoice>>(query, params)
+    
+        if(data instanceof AxeloteError) return;
+        
+        mapData(data);
+
         dispatch({ type: ActionType.FETCH_INVOICES_SUCCESS, payload: { data } })
     } catch (err) {
-        console.log('error:' + err)
+        console.log('fetchInvoices error: ' + err)
         dispatch({ type: ActionType.FETCH_INVOICES_FAILURE })
     }
+}
+
+export const fetchInvoiceDetails = async (invoiceId: string): Promise<Invoice> => {
+    
+    try {
+        let invoiceDetails: QueryBuilderResult = repository.get('getInvoiceDetails');
+        let items: QueryBuilderResult = repository.get('getInvoiceItems');
+
+        const invoiceData: AxeloteResponse<Invoice> = await axelote.returningOne<Invoice>(invoiceDetails, {invoice_id: parseInt(invoiceId)});
+        const itemsData: AxeloteResponse<Array<ItemsListEntity>> = await axelote.returning<Array<ItemsListEntity>>(items, {invoice_id: parseInt(invoiceId)});
+        
+        if(invoiceData instanceof AxeloteError || itemsData instanceof AxeloteError) return {} as Invoice;
+        
+        mapData(invoiceData, itemsData);
+        
+        return invoiceData
+    } catch (err) {
+        return {} as Invoice;
+    }
+
 }

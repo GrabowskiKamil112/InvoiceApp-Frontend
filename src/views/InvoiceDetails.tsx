@@ -6,13 +6,13 @@ import styled, { css } from 'styled-components'
 import Button from '../components/Atoms/Button'
 import arrowLeft from '../../public/assets/icon-arrow-left.svg'
 import DetailsController from '../components/Molecules/DetailsController'
-import { Invoice } from '../Types/Invoice'
+import { Invoice, ItemsListEntity } from '../Types/Invoice'
 import DetailsBody from '../components/Molecules/DetailsBody/DetailsBody'
 import { getWindowWidth, themeNavigator } from '../utils/utils'
 import { useOnClickOutsideForm } from '../utils/hooks'
 import InvoiceForm from '../components/Organisms/InvoiceForm/InvoiceForm'
 import { useAppDispatch, useAppSelector } from '../store/hooks/hooks'
-import { deleteItem, updateItem } from '../store/actions'
+import { deleteItem, fetchInvoiceDetails, updateItem } from '../store/actions'
 import ConfirmDeleteModal from '../components/Molecules/ConfirmDeleteModal'
 import PageContext from '../context/pageContext'
 import { CSSTransition } from 'react-transition-group'
@@ -80,24 +80,9 @@ const InvoiceDetails: React.FC = () => {
 
     useOnClickOutsideForm(invoiceFormRef, isFormOpen, () => setIsFormOpen(false))
 
-    const fetchSingleInvoice = async () => {
-        try {
-            const { data } = await axios.get(
-                `https://anotherinvoiceapp-backend.herokuapp.com/api/invoice/${id}`
-            )
-
-            return data as Invoice
-        } catch (e) {
-            const res = invoicesForAdmin.filter((invoice) => invoice._id == id)
-
-            console.error(e)
-            return res[0]
-        }
-    }
-
     useEffect(() => {
         const fetch = async () => {
-            const fetchedInvoice = await fetchSingleInvoice()
+            const fetchedInvoice = await fetchInvoiceDetails(id as string)
             setInvoice(fetchedInvoice)
         }
 
@@ -109,7 +94,7 @@ const InvoiceDetails: React.FC = () => {
 
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
-    }, [fetchAgain, isFormOpen])
+    }, [])
 
     const handleDelete = () => {
         id && dispatch(deleteItem(id))
@@ -117,9 +102,11 @@ const InvoiceDetails: React.FC = () => {
     }
 
     const markAsPaid = async () => {
+        console.log(id);
+        
         const paidInvoice = Object.assign({}, invoice)
         paidInvoice.type = 'paid'
-        await dispatch(updateItem(paidInvoice, id as string))
+        await dispatch(updateItem(paidInvoice, id as string, true))
     }
 
     function getButtons(type: string): ReactNode {

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import MainTemplate from '../templates/mainTemplate'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import LoginRegister from './LoginRegister'
@@ -8,8 +8,22 @@ import { Provider } from 'react-redux'
 import InvoiceDetails from './InvoiceDetails'
 import { useAppSelector } from '../store/hooks/hooks'
 import { AnimatePresence } from 'framer-motion'
+import {Axelote, AxeloteError, AxeloteQueryBuilder, AxeloteResponse, QueryBuilderResult} from '@axelote/js'
+import { Invoice } from '../Types/Invoice'
+
+export const axelote = new Axelote({url: "http://localhost:8074"});
 
 const App: React.FC = () => {
+
+  useEffect(() => {
+    const fetchData = async() => {
+      
+      
+    }
+
+    fetchData();
+  }, [])
+  
     return (
         <Provider store={store}>
             <MainTemplate>
