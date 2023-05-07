@@ -62,17 +62,12 @@ const LoginRegister: React.FC = () => {
         }, 1)
     }
 
-    const handleFavicon = (): void => {
-        const favicon = document.getElementById('favicon') // Accessing favicon element
-        favicon.href = faviconLoading
-    }
-
     const toggleStateProp = (property: keyof typeof state) => {
         setState((prevState) => ({ ...prevState, [property]: !state[property] }))
     }
 
     if ((userID && !state.isRegister) || state.isRedirect) {
-        //  return <Navigate to="/home" />
+        return <Navigate to="/home" />
     }
 
     return (
