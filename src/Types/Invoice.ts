@@ -1,4 +1,4 @@
-﻿export type invoiceTypes = 'draft' | 'pending' | 'paid'
+﻿export type invoiceTypes = 'draft' | 'pending' | 'paid' | 'delayed payment'
 
 export interface Invoice {
     _id: string
