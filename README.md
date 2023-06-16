@@ -35,12 +35,12 @@ If there is a problem with account registration (usually it takes few seconds), 
 - Design of this application was based on [Frontend Mentor - Invoice App](https://www.frontendmentor.io/challenges/invoice-app-i7KaLTQjl).
 
 
-## Contact
-Email: grabowskikamil@vp.pl - feel free to contact me!
-tel:(+48) 518 823 778
-
-
-
 <!-- You don't have to include all sections - just the one's relevant to your project -->
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=GrabowskiKamil112&hide=prs,issues,contribs,stars)](https://github.com/anuraghazra/github-readme-stats)
+
+
+## Axelote
+
+- you need to configure youur axelote provider, axelote adapter and log in via axelote cli to use axelote version of application
+- more information on official axelote documentation you can find here: [Axelote documentation](https://axelote.com/docs)
 
